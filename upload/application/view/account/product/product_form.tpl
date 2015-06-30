@@ -66,7 +66,7 @@
           </ul>
           <ul id="productLicenseHints">
             <li><?php echo tt('Select your favorite license from the free templates list or add your custom terms') ?></li>
-            <li><?php echo tt('The custom terms will be saved to use at the next time') ?></li>
+            <li><?php echo tt('Custom terms will be save to use them at the next time') ?></li>
           </ul>
         </div>
       </div>
