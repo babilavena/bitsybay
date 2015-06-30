@@ -1,6 +1,7 @@
 BitsyBay Engine is an OpenSource, simple and minimalistic platform to help you build your indie digital online store with BitCoin.
 
-By donating to the foundation, you are helping us fund and manage this project: BTC 13t5kVqpFgKzPBLYtRNShSU2dMSTP4wQYx
+By donating to the foundation, you are helping us fund and manage this project:  
+BTC 13t5kVqpFgKzPBLYtRNShSU2dMSTP4wQYx
 
 == FEATURES ==
 
@@ -12,7 +13,7 @@ Account
 
 * File quota for each seller
 * Basic brute force protection
-* Profile page and account settings 
+* Profile page and account settings
 
 Catalog
 
@@ -22,7 +23,6 @@ Catalog
 * Product Specials
 * Product Licenses
 * Basic Search
-
 * Automatic image resizing
 * Optional watermarking
 * Abuse reporting
