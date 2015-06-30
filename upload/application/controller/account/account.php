@@ -115,7 +115,7 @@ class ControllerAccountAccount extends Controller {
                                                                              USER_IMAGE_ORIGINAL_HEIGHT,
                                                                              IMG_FILTER_GRAYSCALE), true);
 
-                    $image->save(DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR . 'u' . $this->auth->getId() . '.' . ALLOWED_IMAGE_EXTENSION);
+                    $image->save(DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR . 'thumb.' . ALLOWED_IMAGE_EXTENSION);
 
                     // Send user email
                     $mail = new Mail();
