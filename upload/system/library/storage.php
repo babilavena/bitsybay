@@ -111,7 +111,7 @@ final class Storage {
             // Collect storage
             $storage = scandir(DIR_STORAGE . $user_id);
             foreach ($storage as $item) {
-                if ($item != '.' && $item != '..' && !strpos($item, '_') && !in_array($item, $registry)) {
+                if ($item != '.' && $item != '..' && !strpos($item, '_') && !strpos($item, 'thumb' . '.' . ALLOWED_FILE_EXTENSION) && !in_array($item, $registry)) {
                     unlink(DIR_STORAGE . $user_id . DIR_SEPARATOR . $item);
                 }
             }
