@@ -1,4 +1,4 @@
-BitsyBay Engine is an OpenSource, simple and minimalistic SaaS platform to help you build your indie digital online store with BitCoin.
+BitsyBay Engine is a simple and minimalistic SaaS platform to help you buy or sell digital creative with cryptocurrency like BitCoin.
 
 By donating to the foundation, you are helping us fund and manage this project:  
 BTC 13t5kVqpFgKzPBLYtRNShSU2dMSTP4wQYx
@@ -49,7 +49,7 @@ Payment
 
 == INSTALL ==
 
-1. Create the database from the dump /database/bitsybay.sql 
+1. Create the database from the dump /database/bitsybay.sql
 2. Set your server settings in the config.php file
 3. Set write-access to the following directories:
 
