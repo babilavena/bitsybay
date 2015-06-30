@@ -149,7 +149,7 @@ class ControllerCatalogCategory extends Controller {
 
         // Create SEO title
         array_multisort($categories, SORT_ASC, SORT_NUMERIC);
-        $this->document->setTitle(sprintf(tt('Buy %s for BitCoin'), implode(' ', $categories)));
+        $this->document->setTitle(sprintf(tt('Buy %s with BitCoin'), implode(' ', $categories)));
 
         // Load layout
         $data['title']  = $category_info->title;
