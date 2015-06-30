@@ -1,4 +1,4 @@
-BitsyBay Engine is an OpenSource, simple and minimalistic platform to help you build your indie digital online store with BitCoin.
+BitsyBay Engine is an OpenSource, simple and minimalistic SaaS platform to help you build your indie digital online store with BitCoin.
 
 By donating to the foundation, you are helping us fund and manage this project:  
 BTC 13t5kVqpFgKzPBLYtRNShSU2dMSTP4wQYx
