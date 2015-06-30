@@ -1,0 +1,19 @@
+Options +FollowSymlinks
+
+# Prevent Directoy listing
+Options -Indexes
+
+# SEO URL Settings
+RewriteEngine On
+RewriteBase /
+
+RewriteCond %{HTTP_HOST} ^www\.bitsybay\.com
+RewriteRule ^(.*)$ http://bitsybay.com$1 [R=permanent,L]
+RewriteCond %{HTTPS_HOST} ^www\.bitsybay\.com
+RewriteRule ^(.*)$ https://bitsybay.com$1 [R=permanent,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !.*\.(ico|gif|jpg|jpeg|png|js|css)
+RewriteRule ^([^?]*) index.php?_route_=$1 [L,QSA]
+
