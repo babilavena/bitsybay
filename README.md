@@ -71,7 +71,11 @@ REQUIREMENTS
 INSTALL
 -------
 
-* Create the database from the dump **/database/bitsybay.sql**
+* Copy all content from **/upload** directory to your host root directory
+* Change **/pulic** directory as public root directory
+* Enable rewrite module
+* Create the database from the dump **/database/structure.sql**
+* Import custom database content from the dump **/database/data/*.sql**
 * Set your server settings in the **config.php** file
 * Set write-access to the following directories:
 
