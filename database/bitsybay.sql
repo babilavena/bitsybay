@@ -848,16 +848,6 @@ SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
--- -----------------------------------------------------
--- Data for table `bitsybay`.`license`
--- -----------------------------------------------------
-START TRANSACTION;
-USE `bitsybay`;
-INSERT INTO `bitsybay`.`license` (`license_id`, `user_id`, `date_added`) VALUES (1, NULL, '1000-01-01 00:00:00');
-INSERT INTO `bitsybay`.`license` (`license_id`, `user_id`, `date_added`) VALUES (2, NULL, '1000-01-01 00:00:00');
-
-COMMIT;
-
 
 -- -----------------------------------------------------
 -- Data for table `bitsybay`.`category`
