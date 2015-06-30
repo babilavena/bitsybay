@@ -229,7 +229,7 @@ class ControllerAccountProduct extends Controller {
                 }
 
                 $identicon = new Identicon();
-                $image     = new Image($identicon->generateImageResource(sha1($product_id . $this->auth->getId()),
+                $image     = new Image($identicon->generateImageResource(sha1($product_id),
                                                                          PRODUCT_IMAGE_ORIGINAL_WIDTH,
                                                                          PRODUCT_IMAGE_ORIGINAL_HEIGHT), true);
 
@@ -446,7 +446,7 @@ class ControllerAccountProduct extends Controller {
                 }
 
                 $identicon = new Identicon();
-                $image     = new Image($identicon->generateImageResource(sha1($product_id . $this->auth->getId()),
+                $image     = new Image($identicon->generateImageResource(sha1($product_id),
                                                                          PRODUCT_IMAGE_ORIGINAL_WIDTH,
                                                                          PRODUCT_IMAGE_ORIGINAL_HEIGHT), true);
 
