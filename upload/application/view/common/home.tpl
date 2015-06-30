@@ -24,13 +24,13 @@
       <div class="bs-component welcome">
         <div class="jumbotron">
           <div class="col-lg-7">
-            <h3>Sell or buy the digital content with BitCoin?</h3>
+            <h3>Looking for digital trading with BitCoin?</h3>
             <p>
               Then here you are:
               <ul>
                 <li><?php echo $total_products ?> by <?php echo $total_sellers ?> for <?php echo $total_buyers ?></li>
                 <li>Trade from any country without bank commissions and other restrictions</li>
-                <li>Royalty Free and Exclusive licenses support</li>
+                <li>Royalty Free and Exclusive licenses</li>
                 <li><?php echo QUOTA_FILE_SIZE_BY_DEFAULT ?> Mb free disk space for all new sellers and +<?php echo QUOTA_BONUS_SIZE_PER_ORDER ?> Mb for every next sale</li>
                 <li>0% seller commission up to 2016, <?php echo FEE_PER_ORDER ?>% later</li>
               </ul>
