@@ -38,8 +38,8 @@
           </p>
           <h2>Open Source Engine</h2>
           <p>
-            The project is 100% open source licensed under the GNU GPL version 3. You can <a href="https://github.com/bitsybay/bitsybay" target="_blank" rel="nofollow">use this</a> as an example project for your own BitCoin services.<br />
-            Or fork us on <a href="http://github.com/bitsybay" target="_blank" rel="nofollow">GitHub</a> to help improve this project!</a>
+            The project is 100% open source licensed under the GNU GPL version 3.<br />
+            You can fork us on <a href="http://github.com/bitsybay" target="_blank" rel="nofollow">GitHub</a> to help improve this project or use this engine as an example project for your own BitCoin service.
           </p>
           <h2>Other</h2>
           <p>

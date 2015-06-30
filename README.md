@@ -1,7 +1,7 @@
 BitsyBay Engine
 ===============
 
-Simple and minimalistic SaaS platform to help you buy or sell digital creative with cryptocurrency like BitCoin. This is an Open Source project of the BitsyBay Store http://bitsybay.com
+Simple and minimalistic SaaS platform to help you buy or sell digital creative with cryptocurrency like BitCoin. This is a free and Open Source project of the BitsyBay Store http://bitsybay.com
 
 By donating to the foundation, you are helping us fund and manage this project: 
 
@@ -16,6 +16,7 @@ FEATURES
 
 **Account**
 
+* Email approving
 * File quota for each seller
 * Basic brute force protection
 * Profile page and account settings
@@ -28,6 +29,9 @@ FEATURES
 * Product Specials
 * Product Licenses
 * Basic Search
+* Comment form
+* AJAX file uploading
+* Automatic image generation based on IdentIcon algorithm
 * Automatic image resizing
 * Optional watermarking
 * Abuse reporting
@@ -48,12 +52,12 @@ REQUIREMENTS
 ------------
 
 
-    apache2
-    php5
-    mysql-server
-    bitcoind
-    php-gd
-    php-imagick
+    apache2 
+    php5 
+    mysql-server 
+    bitcoind 
+    php-gd 
+    php-imagick 
 
 INSTALL
 -------
@@ -63,17 +67,17 @@ INSTALL
 * Set write-access to the following directories:
 
 
-    /storage
-    /public/image/cache
-    /system/log
+    /storage 
+    /public/image/cache 
+    /system/log 
 
 * Setup crontab: **/cron/order_processor.php** - hourly
 * Do not forget:
 
 
-    upload_max_filesize
-    post_max_size
-    memory_limit
-    allow_url_fopen
+    upload_max_filesize 
+    post_max_size 
+    memory_limit 
+    allow_url_fopen 
 
 **Enjoy!**
