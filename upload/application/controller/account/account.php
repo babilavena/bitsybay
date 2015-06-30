@@ -127,7 +127,7 @@ class ControllerAccountAccount extends Controller {
                     $mail->setText(
                         tt("Welcome and thank you for registering!\n\n").
                         sprintf(tt("Here is your BitsyBay account information:\n\nUsername: %s\nE-mail: %s\nPassword: %s\n\n"), $this->request->post['username'], $this->request->post['email'], $this->request->post['password']).
-                        sprintf(tt("Please, approve your email at the following URL: \n%s"), $this->url->link('account/account', 'approve=' . $approval_code, 'SSL'))
+                        sprintf(tt("Please, approve your email at the following URL: \n%s"), $this->url->link('account/account/approve', 'approval_code=' . $approval_code, 'SSL'))
                     );
                     $mail->send();
 
@@ -398,13 +398,13 @@ class ControllerAccountAccount extends Controller {
         }
 
         // Redirect if required parameters is missing
-        if (!isset($this->request->get['approve']) || empty($this->request->get['approve'])) {
+        if (!isset($this->request->get['approval_code']) || empty($this->request->get['approval_code'])) {
             $this->security_log->write('Try to approve email without approve param');
             $this->response->redirect($this->url->link('account/account', '', 'SSL'));
         }
 
         // Try to approve
-        if (!$this->model_account_user->approveEmail($this->auth->getId(), $this->auth->getEmail(), $this->request->get['approve'])) {
+        if (!$this->model_account_user->approveEmail($this->auth->getId(), $this->auth->getEmail(), $this->request->get['approval_code'])) {
             $this->security_log->write('Try to approve email with invalid approve param');
             $this->session->setUserMessage(array('danger' => tt('Invalid approval code!')));
         } else {

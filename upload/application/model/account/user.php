@@ -231,13 +231,14 @@ class ModelAccountUser extends Model {
     *
     * @param int $user_id
     * @param string $email
+    * @param string $approval_code
     * @return int|bool Email approved status (affected rows) or false if throw exception
     */
-    public function approveEmail($user_id, $email) {
+    public function approveEmail($user_id, $email, $approval_code) {
 
         try {
-            $statement = $this->db->prepare('UPDATE `user_email` SET `approved` = 1 WHERE `email` = ? AND `user_id` = ? LIMIT 1');
-            $statement->execute(array(mb_strtolower($email), $user_id));
+            $statement = $this->db->prepare('UPDATE `user_email` SET `approved` = 1, approval_code = "" WHERE `user_id` = ? AND `email` = ? AND `approval_code` = ? LIMIT 1');
+            $statement->execute(array($user_id, mb_strtolower($email), $approval_code));
 
             return $statement->rowCount();
 

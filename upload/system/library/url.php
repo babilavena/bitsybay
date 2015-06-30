@@ -64,6 +64,7 @@ final class Url {
 
         // Create account rewrite rules
         $this->_addRewrite('account/account', 'profile');
+        $this->_addRewrite('account/account/approve', 'approve');
         $this->_addRewrite('account/account/create', 'signup');
         $this->_addRewrite('account/account/update', 'account-settings');
         $this->_addRewrite('account/account/login', 'signin');
