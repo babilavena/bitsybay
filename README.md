@@ -58,6 +58,7 @@ REQUIREMENTS
     bitcoind 
     php-gd 
     php-imagick 
+    php-curl
 
 INSTALL
 -------
