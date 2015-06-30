@@ -1,4 +1,4 @@
-BitsyBay Engine is a simple and minimalistic SaaS platform to help you buy or sell digital creative with cryptocurrency like BitCoin.
+BitsyBay Engine is a simple and minimalistic SaaS platform to help you buy or sell digital creative with cryptocurrency like BitCoin. This is an Open Source project of the BitsyBay Store http://bitsybay.com
 
 By donating to the foundation, you are helping us fund and manage this project:  
 BTC 13t5kVqpFgKzPBLYtRNShSU2dMSTP4wQYx
