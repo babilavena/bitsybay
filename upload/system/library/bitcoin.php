@@ -105,7 +105,7 @@ class BitCoin {
             CURLOPT_MAXREDIRS      => 10,
             CURLOPT_HTTPHEADER     => array('Content-type: application/json'),
             CURLOPT_POST           => TRUE,
-            CURLOPT_POSTFIELDIR_SEPARATOR     => $request
+            CURLOPT_POSTFIELDS     => $request
         );
 
         // This prevents users from getting the following warning when open_basedir is set:
