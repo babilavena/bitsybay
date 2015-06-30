@@ -13,22 +13,30 @@ FEATURES
 * Unlimited Categories
 * Unlimited Products
 * Unlimited Users
+* Multi-currency
+* Multi-language
 
 **Account**
 
 * Email approving
 * File quota for each seller
 * Basic brute force protection
+* IP / access logging
 * Profile page and account settings
 
 **Catalog**
 
+* SEF support
+* Auto redirects 301 from old to new url
 * Product Reviews
 * Product Demos
 * Product Videos
 * Product Specials
 * Product Licenses
+* Product Favorites
+* Product Tags
 * Basic Search
+* Search requests logging
 * Comment form
 * AJAX file uploading
 * Automatic image generation based on IdentIcon algorithm
@@ -45,8 +53,8 @@ FEATURES
 COMING SOON
 -----------
 
-* Multi Currency
-* Multi Language
+* Multi-currency implementation
+* Multi-language implementation
 
 REQUIREMENTS
 ------------
