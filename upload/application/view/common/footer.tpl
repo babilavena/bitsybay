@@ -48,7 +48,17 @@
           </div>
           <div class="col-lg-3 col-md-6 col-sm-4 col-xs-4">
             <ul class="list-unstyled pull-right">
-              <li><?php echo tt('The') ?> <a href="/"><?php echo tt('BitsyBay') ?></a> <?php echo tt('Project') ?> &copy; <?php echo date('Y') ?> Beta</li>
+              <li>
+                <?php echo tt('The') ?> <a href="/"><?php echo tt('BitsyBay') ?></a> <?php echo tt('Project') ?> &copy; <?php echo date('Y') ?> Beta
+                <div style="font-size:9px">
+                  <?php echo tt('Powered by') ?> <a href="https://github.com/bitsybay" target="_blank" rel="nofollow"><?php echo tt('BitsyBay Engine') ?></a>,
+                  <!--
+                  BitsyBay Engine is an open source software and you are free to remove the powered by BitsyBay Engine if you want, but its generally accepted practise to make a small donation.
+                  Please donate via BitCoin to 13t5kVqpFgKzPBLYtRNShSU2dMSTP4wQYx
+                  //-->
+                  <?php echo tt('Bitcoin-accepting') ?> <a href="https://www.yourserver.se/portal/aff.php?aff=135" target="_blank" rel="nofollow">VPS</a>
+                </div>
+              </li>
             </ul>
             <div class="input-group pull-right" id="footerSearchForm">
               <input name="query" type="text" class="form-control" value="" placeholder="<?php echo tt('Search in catalog') ?>" />
