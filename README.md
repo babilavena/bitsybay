@@ -7,6 +7,12 @@ By donating to the foundation, you are helping us fund and manage this project:
 
     BTC 13t5kVqpFgKzPBLYtRNShSU2dMSTP4wQYx
 
+STATUS
+------
+
+Beta, only for developers
+
+
 FEATURES
 --------
 
@@ -88,9 +94,9 @@ INSTALL
 * Do not forget:
 
 
-    upload_max_filesize 
-    post_max_size 
-    memory_limit 
-    allow_url_fopen 
+    upload_max_filesize  
+    post_max_size  
+    memory_limit  
+    allow_url_fopen  
 
 **Enjoy!**
