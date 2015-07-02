@@ -60,8 +60,6 @@
           <ul id="productPriceHints">
             <li><?php echo tt('Еnter a price for at least one license') ?> (<a href="licenses" target="_blank"><?php echo tt('Available Licenses') ?></a>)</li>
             <li><?php echo tt('The regular price should not be greater than exclusive price') ?></li>
-            <li><?php echo tt('Set the special price if required') ?></li>
-            <li><?php echo tt('The special pricing based at the offer reverse timer') ?></li>
             <li><?php echo sprintf(tt('Allowed specials per product: %s'), QUOTA_SPECIALS_PER_PRODUCT) ?></li>
           </ul>
           <ul id="productLicenseHints">
