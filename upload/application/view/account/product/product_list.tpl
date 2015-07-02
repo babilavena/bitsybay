@@ -52,23 +52,31 @@
               <td><?php echo $product['title'] ?></td>
               <td><?php echo $product['date_added'] ?></td>
               <td class="text-center">
-                <?php if ($product['special_regular_price']) { ?>
-                  <div class="special-price"><?php echo $product['special_regular_price'] ?></div>
-                  <div class="default-price"><?php echo $product['regular_price'] ?></div>
+                <?php if ($product['regular_status']) { ?>
+                  <?php if ($product['special_regular_price']) { ?>
+                    <div class="special-price"><?php echo $product['special_regular_price'] ?></div>
+                    <div class="default-price"><?php echo $product['regular_price'] ?></div>
+                  <?php } else { ?>
+                    <div class="price">
+                      <div class="regular-price"><?php echo $product['regular_price'] ?></div>
+                    </div>
+                  <?php } ?>
                 <?php } else { ?>
-                  <div class="price">
-                    <div class="regular-price"><?php echo $product['regular_price'] ?></div>
-                  </div>
+                  <div class="text-muted glyphicon glyphicon-remove-sign"></div>
                 <?php } ?>
               </td>
               <td class="text-center">
-                <?php if ($product['special_exclusive_price']) { ?>
-                  <div class="special-price"><?php echo $product['special_exclusive_price'] ?></div>
-                  <div class="default-price exclusive-price"><?php echo $product['exclusive_price'] ?></div>
+                <?php if ($product['exclusive_status']) { ?>
+                  <?php if ($product['special_exclusive_price']) { ?>
+                    <div class="special-price"><?php echo $product['special_exclusive_price'] ?></div>
+                    <div class="default-price exclusive-price"><?php echo $product['exclusive_price'] ?></div>
+                  <?php } else { ?>
+                    <div class="price">
+                      <div class="exclusive-price"><?php echo $product['exclusive_price'] ?></div>
+                    </div>
+                  <?php } ?>
                 <?php } else { ?>
-                  <div class="price">
-                    <div class="exclusive-price"><?php echo $product['exclusive_price'] ?></div>
-                  </div>
+                  <div class="exclusive-price glyphicon glyphicon-remove-sign"></div>
                 <?php } ?>
               </td>
               <td class="text-center"><?php echo $product['viewed'] ?></td>

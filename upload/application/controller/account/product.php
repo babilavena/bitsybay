@@ -83,6 +83,8 @@ class ControllerAccountProduct extends Controller {
                     'special_exclusive_price' => $product->special_exclusive_price ? $this->currency->format($product->special_exclusive_price, $product->currency_id) : 0,
                     'regular_price'           => $this->currency->format($product->regular_price, $product->currency_id),
                     'exclusive_price'         => $this->currency->format($product->exclusive_price, $product->currency_id),
+                    'regular_status'          => $product->special_regular_price > 0 || $product->regular_price > 0 ? true : false,
+                    'exclusive_status'        => $product->special_exclusive_price > 0 || $product->exclusive_price > 0 ? true : false,
                     'sales'                   => $product->sales,
                     'favorites'               => $product->favorites,
                     'viewed'                  => $product->viewed,
