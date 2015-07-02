@@ -73,11 +73,11 @@
         <h3><?php echo tt('Do not forget') ?></h3>
         <ul>
           <li>Visit the <a href="<?php echo $href_common_information_faq ?>">F.A.Q. page</a></li>
-          <li>Use the search to find specific content</li>
-          <li>View <a href="<?php echo $href_common_information_terms ?>">Terms of Service</a> and <a href="<?php echo $href_common_information_licenses ?>">Licenses Policy</a></li>
+          <li>Use search to find specific content</li>
+          <li>View <a href="<?php echo $href_common_information_terms ?>">Terms of Service</a> and <a href="<?php echo $href_common_information_licenses ?>">License Policy</a></li>
         </ul>
         <h3><?php echo tt('Physical address') ?></h3>
-        <p>At this time the <a href="/">BitsyBay</a> project is completely software resource that supported by few enthusiasts. So currently we are received only email messages for all questions.</p>
+        <p><a href="/">BitsyBay</a> do not have a physical address at present as its only a software resource supported by a few enthusiasts. We can however be contacted by means of email through the above form.</p>
       </div>
     </div>
   </div>
