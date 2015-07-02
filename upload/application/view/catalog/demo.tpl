@@ -70,6 +70,6 @@
       </div>
     </nav>
   </header>
-  <iframe class="demo fs" frameborder="0" width="100%" src="http://demo.opencart.com"><?php echo tt('The external iframe view is not alowed from your browser') ?></iframe>
+  <iframe class="demo fs" frameborder="0" width="100%" src="http://demo.opencart.com"><?php echo tt('The external iframe view is not allowed from your browser') ?></iframe>
 </body>
 </html>
