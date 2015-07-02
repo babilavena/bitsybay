@@ -25,7 +25,13 @@
         <div class="jumbotron">
           <div class="col-lg-7">
             <h3>Looking for digital trading with BitCoin?</h3>
-            <p>
+
+            <div class="social-buttons">
+              <div class="fb-follow" data-href="https://www.facebook.com/bitsybay" data-layout="button_count" data-show-faces="true"></div>
+              <iframe frameborder="0" border="0" scrolling="no" allowtransparency="true" height="20" width="65" src="https://platform.tumblr.com/v2/follow_button.html?type=follow&amp;tumblelog=bitsybay&amp;color=white"></iframe>
+              <a class="github-button" href="https://github.com/bitsybay/bitsybay" data-count-href="/bitsybay/bitsybay/stargazers" data-count-api="/repos/bitsybay/bitsybay#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star bitsybay/bitsybay on GitHub">Star</a>
+            </div>
+
               Then here you are:
               <ul>
                 <li><?php echo $total_products ?> by <?php echo $total_sellers ?> for <?php echo $total_buyers ?></li>

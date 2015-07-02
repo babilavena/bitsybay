@@ -40,7 +40,8 @@
             <ul class="list-unstyled">
               <li><h5><?php echo tt('Network') ?></h5>
                 <ul class="list-unstyled menu">
-                  <li><a href="http://github.com/bitsybay" target="_blank"><?php echo tt('GitHub') ?></a></li>
+                  <li><a href="https://github.com/bitsybay" target="_blank" rel="nofollow"><?php echo tt('GitHub') ?></a></li>
+                  <li><a href="https://facebook.com/bitsybay" target="_blank" rel="nofollow"><?php echo tt('Facebook') ?></a></li>
                   <li><a href="#bitsybay" target="_blank"><?php echo tt('Twister') ?></a></li>
                 </ul>
               </li>
@@ -124,5 +125,19 @@
         </div>
       </div>
     <?php } ?>
+
+  <!-- Github //-->
+  <script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
+
+  <!-- Facebook //-->
+  <div id="fb-root"></div>
+  <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/uk_EN/sdk.js#xfbml=1&version=v2.3";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));</script>
+
   </body>
 </html>
