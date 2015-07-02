@@ -529,3 +529,18 @@ table img {
     margin-top: 20px;
     cursor: pointer;
 }
+
+/* Social plugins */
+
+.social-buttons {
+    opacity: 0.8;
+    margin: 10px 0
+}
+
+.social-buttons:hover {
+    opacity: 1
+}
+
+.social-buttons .fb-follow {
+    vertical-align: top
+}
