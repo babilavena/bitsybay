@@ -30,66 +30,66 @@
       <section>
         <article>
           <h2 class="text-right"><a class="anchor" name="purchases"></a><a href="faq#purchases"><i class="glyphicon glyphicon-link" style="font-size:0.8em;color:#CCC"></i></a> Purchases</h2>
-          <h4>How quickly will I receive the goods after my payment?</h4>
+          <h4>How soon after my payment will I receive the purchased product?</h4>
           <div class="well">
-            <p>You will be able to download the purchased goods when your transaction will be confirmed by network.</p>
+            <p>You will be able to download the purchased product as soon as your transaction has been confirmed by the network.</p>
           </div>
           <h4>How many times can I download the purchased product?</h4>
           <div class="well">
-            <p>You can download the purchased product an unlimited number of times until the merchant does not remove it for some reason.</p>
-            <p>After confirmation of payment, you are guaranteed to get at least one product download.</p>
-          </div>
-          <h4>What rights to the product do I get after purchase?</h4>
+            <p>You are guaranteed at least one product download after confirmation of your payment.</p>
+<p>There is however no limit on the number of times you may download the purchased product as long as it's not removed by the merchant.</p>
+           </div>
+          <h4>What rights to the product do I receive after purchase?</h4>
           <div class="well">
-            <p>You will get those rights which the author specify in the product license.</p>
+            <p>You will receive the rights as specified by the author in the product license.</p>
           </div>
 
           <h2 class="text-right"><a class="anchor" name="payouts"></a><a href="faq#payouts"><i class="glyphicon glyphicon-link" style="font-size:0.8em;color:#CCC"></i></a> Payouts</h2>
-          <h4>How fast can I receive the money if my product will be purchased?</h4>
+          <h4>How soon after a sale do I receive my money?</h4>
           <div class="well">
-            <p>At this time we provide all payouts manually estimated at once of the month.</p>
-            <p>When will be introduced the seller verification system, then sellers will be able to withdraw theirs profit instantly.</p>
+            <p>We estimate to make payouts once a month as all payments are currently being processed manually.</p>
+            <p>Sellers will however be able to withdraw their profits instantly once the Seller Verification System has been implemented.</p>
           </div>
-          <h4>Can I use the different withdraw addresses for each of my products?</h4>
+          <h4>Can a different withdrawal addresses be used for each product?</h4>
           <div class="well">
-            <p>Of course, you can change it at the Withdraw Address field in the product form.</p>
-            <p>You can specify the same Withdraw Address for all products, if you do not want to identify the source of payments.</p>
+            <p>Yes, the withdrawal address can be changed in the Withdraw Address field in the product form. Giving each product a different address allows you to identify the source of each payment.</p>
+            <p>You can use the same withdrawal address for each product if you do not need to see the source of each payment.</p>
           </div>
 
           <h2 class="text-right"><a class="anchor" name="interface"></a><a href="faq#interface"><i class="glyphicon glyphicon-link" style="font-size:0.8em;color:#CCC"></i></a> Interface</h2>
-          <h4>Can&rsquo;t remove my product, Help</h4>
+          <h4>I can&rsquo;t remove my product, Help</h4>
           <div class="well">
-            <p>We do not block the product removal, since your realized content is your property. If you get an error when trying to remove the product, it may be due to the fact that it was just ordered and payment is expected. Please try again in 10 minutes when the transaction of order will be finished.</p>
-            <p>Also, the product can be removed when it was bought, paid but not downloaded yet. Every customer must download the purchased product at least once before you can remove it.</p>
+            <p>We do not block the removal of products as the content belongs to you. If you do get an error while trying to remove a product, it may be due to a pending order which is awaiting payment. Please try removing the product again in 10 minutes time when the transaction has completed.</p>
+            <p>Please note that every client is guaranteed at least one download of the product after purchase. Any product which was purchased and paid for but not yet downloaded cannot be removed until the client has downloaded the product.</p>
           </div>
 
           <h2 class="text-right"><a class="anchor" name="quota"></a><a href="faq#quota"><i class="glyphicon glyphicon-link" style="font-size:0.8em;color:#CCC"></i></a> Disk quota</h2>
-          <h4>What is the initial amount of disk space available for the each seller?</h4>
+          <h4>What is the initial amount of disk space available to each seller?</h4>
           <div class="well">
-            <p>After registration every seller receives 100 MB of disk space to publish their products.</p>
+            <p>Every seller receives 100 MB of disk space to publish their products after registration.</p>
           </div>
           <h4>How to obtain additional disk space?</h4>
           <div class="well">
-            <p>We provide a free 1 MB for each sale of product. If a product is sold 100 times, you will get 100 MB of additional disk space.</p>
+            <p>An additional 1 MB of disk space is provided for each completed sale. If you for example make a 100 sales you will receive an additional 100 MB of disk space.</p>
           </div>
           <h4>Is it possible to purchase additional disk space?</h4>
           <div class="well">
-            <p>We do not sell disk space under the different tariff plans for catalog quality reasons. Try to sell the most salable products at first time.</p>
-            <p>However, if your product has justified the need for additional space, we will consider such a request. Please <a href="contact">Contact Us</a> if you have a need.</p>
+            <p>We do not sell disk space under the different tariff plans.</p>
+            <p>However, if your product has justified the need for additional space, we will consider such a request. Please send your request via our <a href="contact">Contact Us</a> page.</p>
           </div>
 
           <h2 class="text-right"><a class="anchor" name="other"></a><a href="faq#other"><i class="glyphicon glyphicon-link" style="font-size:0.8em;color:#CCC"></i></a> Other</h2>
-          <h4>Do you plan to support other currencies like Litecoin, Dogecoin, Paycoin, etc?</h4>
+          <h4>Do you plan on supporting additional currencies like Litecoin, Dogecoin, Paycoin, etc?</h4>
           <div class="well">
-            <p>Of course, this is what we will focus in the short term.</p>
+            <p>Yes we will be focussing on including additional currencies in the short term.</p>
           </div>
-          <h4>How about an additional languages implementation?</h4>
+          <h4>How about additional language implementations?</h4>
           <div class="well">
-            <p>It is technically provided. The implementation priority will depend on the audience received from anlytics.</p>
+            <p>This is already provided for but not yet fully implemented. Priority of implementation will depend on the audience as per the site analytics.</p>
           </div>
           <h4>I found a bug on the site</h4>
           <div class="well">
-            <p>Please let us know via the <a href="contact">contact form</a>. If you're a developer and would like to contribute, fork us on <a href="http://github.com/bitsybay" target="_blank" rel="nofollow">GitHub</a>. </p>
+            <p>Please send the details via the <a href="contact">contact form</a>. If you're a developer and would like to contribute, fork us on <a href="http://github.com/bitsybay" target="_blank" rel="nofollow">GitHub</a>. </p>
           </div>
         </article>
       </section>
