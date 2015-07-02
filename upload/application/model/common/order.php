@@ -94,7 +94,7 @@ class ModelCommonOrder extends Model {
 
         try {
 
-            $statement = $this->db->prepare('SELECT `order_status_id` FROM `order` WHERE `product_id` = ? WHERE `user_id` = ? LIMIT 1');
+            $statement = $this->db->prepare('SELECT `order_status_id` FROM `order` WHERE `product_id` = ? AND `user_id` = ? LIMIT 1');
             $statement->execute(array($product_id, $user_id));
 
             if ($statement->rowCount()) {
