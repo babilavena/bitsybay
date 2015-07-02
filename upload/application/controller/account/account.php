@@ -26,6 +26,7 @@ class ControllerAccountAccount extends Controller {
         $this->load->helper('validator/upload');
         $this->load->library('mail');
         $this->load->library('identicon');
+        $this->load->library('captcha/captcha');
     }
 
     public function index() {
@@ -156,7 +157,12 @@ class ControllerAccountAccount extends Controller {
 
         $data = array();
 
-        $data['error']  = $this->_error;
+        $data['error'] = $this->_error;
+
+        $captcha = new Captcha();
+        $this->session->setCaptcha($captcha->getCode());
+        $data['captcha'] = $this->url->link('account/account/captcha', '', 'SSL');
+
         $data['action'] = $this->url->link('account/account/create', isset($this->request->get['redirect']) ? 'redirect=' . $this->request->get['redirect'] : false, 'SSL');
         $data['href_account_account_login'] = $this->url->link('account/account/login', '', 'SSL');
         $data['href_account_account_forgot'] = $this->url->link('account/account/forgot', '', 'SSL');
@@ -183,6 +189,12 @@ class ControllerAccountAccount extends Controller {
 
         // Renter the template
         $this->response->setOutput($this->load->view('account/account/create.tpl', $data));
+    }
+
+    public function captcha() {
+
+        $captcha = new Captcha();
+        $captcha->getImage($this->session->getCaptcha());
     }
 
     public function update() {
@@ -564,6 +576,13 @@ class ControllerAccountAccount extends Controller {
             $this->_error['confirm'] = tt('Confirm is required');
         } else if ($this->request->post['confirm'] != $this->request->post['password']) {
             $this->_error['confirm'] = tt('Password confirmation does not match password');
+        }
+
+        // Captcha verification
+        if (!isset($this->request->post['captcha']) || empty($this->request->post['captcha'])) {
+            $this->_error['captcha'] = tt('Magic word is required');
+        } else if (strtoupper($this->request->post['captcha']) != strtoupper($this->session->getCaptcha())) {
+            $this->_error['captcha'] = tt('Incorrect magic word');
         }
 
         // Accept terms

@@ -24,6 +24,11 @@ final class Session {
      */
     private $_user_message   = array();
 
+    /**
+     * @var array
+     */
+    private $_captcha = false;
+
     public function __construct() {
         if (!session_id()) {
             ini_set('session.use_only_cookies', 'On');
@@ -41,6 +46,10 @@ final class Session {
         if (isset($_SESSION['user_message'])) {
             $this->setUserMessage($_SESSION['user_message']);
         }
+
+        if (isset($_SESSION['captcha'])) {
+            $this->setCaptcha($_SESSION['captcha']);
+        }
     }
 
     /**
@@ -51,6 +60,16 @@ final class Session {
     */
     public function setUserId($user_id = 0) {
         $this->_user_id = $_SESSION['user_id'] = (int) $user_id;
+    }
+
+    /**
+    * Set captcha code
+    *
+    * @param string $code
+    * @return null
+    */
+    public function setCaptcha($code) {
+        $this->_captcha = $_SESSION['captcha'] = $code;
     }
 
     /**
@@ -72,6 +91,15 @@ final class Session {
     */
     public function getUserId() {
         return $this->_user_id;
+    }
+
+    /**
+    * Get captcha code
+    *
+    * @return int Returns stored captcha code
+    */
+    public function getCaptcha() {
+        return $this->_captcha;
     }
 
     /**
