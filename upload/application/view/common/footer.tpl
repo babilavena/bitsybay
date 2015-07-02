@@ -79,7 +79,7 @@
           </div>
           <div class="modal-body">
             <input type="hidden" id="reportProductId" name="report_product_id" value="" />
-            <textarea placeholder="<?php echo tt('Please, explain your report reason and click on the Submit button') ?>" id="reportMessage" name="report_message" class="form-control"></textarea>
+            <textarea placeholder="<?php echo tt('Please, explain the reason for your report and click on the Submit button') ?>" id="reportMessage" name="report_message" class="form-control"></textarea>
             <p></p>
           </div>
           <div class="modal-footer">
