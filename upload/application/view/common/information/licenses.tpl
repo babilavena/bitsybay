@@ -30,7 +30,7 @@
       <section>
         <article>
           <h2></h2>
-          <p>Currently, we support next options:</p>
+          <p>We currently support the following options:</p>
           <p>
             <ul>
               <li>Regular (Royalty Free) License</li>
@@ -39,12 +39,12 @@
           </p>
 
           <h2>Regular License</h2>
-          <p>This license provides multiple sales. Usually, products licensed by Regular License have a relatively low price and recovered due to the large number of sales.</p>
-          <p>However, the sellers can set the price that considers justified and act in accordance with theirs business plan.</p>
+          <p>This license provides for multiple sales of the same item. Products covered by this licence usually have a lower selling price and focussed on selling large volumes.</p>
+          <p>However, sellers can set any price they consider reasonable and act in accordance with their business plan.</p>
 
           <h2 class="text-warning">Exclusive License</h2>
-          <p>An Exclusive License involves removing the product from sale immediately when the product has been sold. The seller agrees to do not publish up that product again.</p>
-          <p>Products with an Exclusive License have relatively higher prices, generally formed on the basis provided total number of orders under the Regular License pricing.</p>
+          <p>An Exclusive License involves removing the product from sale immediately once it has been sold. The seller agrees not to publish the product again.</p>
+          <p>Products with an Exclusive License have relatively higher prices as the product will only be sold once and not multiple times as with products that are licenced under the Regular License option.</p>
         </article>
       </section>
     </div>
