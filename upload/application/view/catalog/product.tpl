@@ -82,6 +82,9 @@
     <div class="col-lg-8 col-md-7 col-sm-12 col-xs-12">
       <div class="bs-component catalog-product-info">
         <div class="product-misc">
+          <?php if ($verified) { ?>
+            <div class="text-success"><span class="glyphicon glyphicon-ok"></span> <strong><?php echo tt('Verified Seller') ?></strong></div>
+          <?php } ?>
           <div><?php echo tt('Release:') ?> <?php echo $product_date_added ?></div>
           <div><?php echo tt('Update:') ?> <?php echo $product_date_modified ?></div>
           <div><?php echo $product_sales ? tt('Sales:') . ' ' . $product_sales : false ?></div>

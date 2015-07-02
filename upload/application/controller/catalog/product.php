@@ -104,6 +104,7 @@ class ControllerCatalogProduct extends Controller {
         $data['product_status']    = $product_info->status;
         $data['product_is_self']   = $product_info->user_id == $this->auth->getId() ? true : false;
         $data['user_is_logged']    = $this->auth->isLogged() ? true : false;
+        $data['verified']          = $product_info->verified;
 
         $image_info = $this->model_catalog_product->getProductImageInfo($product_info->main_product_image_id);
         $data['product_image_url']     = $this->cache->image($product_info->main_product_image_id, $product_info->user_id, 350, 350, $image_info->watermark);

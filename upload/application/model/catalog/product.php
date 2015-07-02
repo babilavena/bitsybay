@@ -47,6 +47,7 @@ class ModelCatalogProduct extends Model {
             `ld`.`title` AS `license_title`,
             `ld`.`description` AS `license_description`,
             (SELECT `u`.`username` FROM `user` AS `u` WHERE `u`.`user_id` = `p`.`user_id` LIMIT 1) AS `username`,
+            (SELECT `uv`.`verified` FROM `user` AS `uv` WHERE `uv`.`user_id` = `p`.`user_id` LIMIT 1) AS `verified`,
             (SELECT `o`.`order_status_id` FROM `order` AS `o` WHERE `o`.`product_id` = `p`.`product_id` AND `o`.`user_id` = :session_user_id ORDER BY `o`.`order_status_id` DESC  LIMIT 1) AS `order_status_id`,
             (SELECT COUNT(*) FROM `product_favorite` AS `pf` WHERE `pf`.`product_id` = `p`.`product_id`) AS `favorites`,
             (SELECT COUNT(*) FROM `product_favorite` AS `pf` WHERE `pf`.`product_id` = `p`.`product_id` AND `user_id` = :session_user_id LIMIT 1) AS `favorite`,
