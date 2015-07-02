@@ -24,7 +24,7 @@
       <div class="bs-component welcome">
         <div class="jumbotron">
           <div class="col-lg-7">
-            <h3>Looking for digital trading with BitCoin?</h3>
+            <h3>Looking for a Marketplace to buy or sell digital creative in Bitcoin?</h3>
 
             <div class="social-buttons">
               <div class="fb-follow" data-href="https://www.facebook.com/bitsybay" data-layout="button_count" data-show-faces="true"></div>

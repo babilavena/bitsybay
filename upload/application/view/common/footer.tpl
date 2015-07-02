@@ -40,10 +40,10 @@
             <ul class="list-unstyled">
               <li><h5><?php echo tt('Network') ?></h5>
                 <ul class="list-unstyled menu">
-                  <li><a href="https://github.com/bitsybay" target="_blank" rel="nofollow"><?php echo tt('GitHub') ?></a></li>
                   <li><a href="https://facebook.com/bitsybay" target="_blank" rel="nofollow"><?php echo tt('Facebook') ?></a></li>
                   <li><a href="http://bitsybay.tumblr.com" target="_blank" rel="nofollow"><?php echo tt('Tumblr') ?></a></li>
                   <li><a href="#bitsybay" target="_blank"><?php echo tt('Twister') ?></a></li>
+                  <li><a href="https://github.com/bitsybay" target="_blank" rel="nofollow"><?php echo tt('GitHub') ?></a></li>
                 </ul>
               </li>
             </ul>
