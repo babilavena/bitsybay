@@ -318,17 +318,20 @@ class ModelAccountUser extends Model {
 
             $statement = $this->db->prepare('INSERT INTO `user` SET
 
-                                            `file_quota` = :file_quota,
-                                            `status`     = :status,
-                                            `buyer`      = :buyer,
-                                            `seller`     = :seller,
-                                            `verified`   = :verified,
-                                            `username`   = :username,
-                                            `password`   = :password,
-                                            `salt`       = :salt,
-                                            `email`      = :email,
+                                            `file_quota`    = :file_quota,
+                                            `status`        = :status,
+                                            `buyer`         = :buyer,
+                                            `seller`        = :seller,
+                                            `verified`      = :verified,
+                                            `username`      = :username,
+                                            `password`      = :password,
+                                            `salt`          = :salt,
+                                            `email`         = :email,
 
-                                            `date_added` = NOW()');
+                                            `date_added`    = NOW(),
+                                            `date_modified` = NOW(),
+                                            `date_visit`    = NOW()
+                                            ');
 
             $statement->execute(array(  ':file_quota' => $file_quota,
                                         ':status'     => $status,

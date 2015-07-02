@@ -76,8 +76,11 @@ final class Auth {
                 $this->_verified    = $user->verified;
                 $this->_date_added  = $user->date_added;
 
+                // Set last visit date
+                $this->_setVisitDate($user->user_id);
+
                 // Update IP Log
-                $this->_saveIP($this->session->getUserId(), $this->request->getRemoteAddress());
+                $this->_saveIP($user->user_id, $this->request->getRemoteAddress());
 
             } else {
                 $this->logout();
@@ -108,6 +111,33 @@ final class Auth {
             }
 
             return true;
+
+        } catch (PDOException $e) {
+
+            if ($this->db->inTransaction()) {
+                $this->db->rollBack();
+            }
+
+            trigger_error($e->getMessage());
+
+            return false;
+        }
+    }
+
+    /**
+    * Register last visit
+    *
+    * @param int $user_id
+    * @return int|bool Return affected int row, or bool true if row already exists or false if throw exception
+    */
+    private function _setVisitDate($user_id) {
+
+        try {
+
+            $statement = $this->db->prepare('UPDATE `user` SET `date_visit` = NOW() WHERE `user_id` = ? LIMIT 1');
+            $statement->execute(array($user_id));
+
+            return $statement->rowCount();
 
         } catch (PDOException $e) {
 
@@ -194,7 +224,7 @@ final class Auth {
             $this->_date_added  = $user->date_added;
 
             // Update IP Log
-            $this->_saveIP($this->session->getUserId(), $this->request->getRemoteAddress());
+            $this->_saveIP($user->user_id, $this->request->getRemoteAddress());
 
             return true;
 

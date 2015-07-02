@@ -734,8 +734,9 @@ CREATE TABLE `user` (
   `salt` varchar(9) NOT NULL,
   `date_added` datetime NOT NULL,
   `date_modified` datetime NOT NULL,
+  `date_visit` datetime NOT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
