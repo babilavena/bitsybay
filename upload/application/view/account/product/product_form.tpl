@@ -40,7 +40,7 @@
             <li><?php echo sprintf(tt('The package file must be %sped'), ALLOWED_FILE_EXTENSION) ?></li>
           </ul>
           <ul id="productDemoHints">
-            <li><?php echo tt('The demo pages uses for product online preview in the iframe wrapper') ?></li>
+            <li><?php echo tt('The demo pages used for online product preview in the iframe wrapper') ?></li>
             <li><?php echo sprintf(tt('Allowed demos per product: %s'), QUOTA_DEMO_PER_PRODUCT) ?></li>
           </ul>
           <ul id="productImageHints">
@@ -48,25 +48,25 @@
             <li><?php echo sprintf(tt('Min image Width: %s px'), PRODUCT_IMAGE_ORIGINAL_MIN_WIDTH) ?></li>
             <li><?php echo sprintf(tt('Min image Height: %s px'), PRODUCT_IMAGE_ORIGINAL_MIN_HEIGHT) ?></li>
             <li><?php echo sprintf(tt('Allowed images per product: %s'), QUOTA_IMAGES_PER_PRODUCT) ?></li>
-            <li><?php echo tt('If image will not be changed then we generate it for you') ?></li>
+            <li><?php echo tt('If image will not be changed we will generate it for you') ?></li>
           </ul>
           <ul id="productVideoHints">
-            <li><?php echo tt('The video uses for demonstration or tutorial for your product') ?></li>
-            <li><?php echo tt('Upload your videos to supported video hosting') ?></li>
+            <li><?php echo tt('The video used for demonstration or tutorial of your product') ?></li>
+            <li><?php echo tt('Upload your videos to supported video hosting site') ?></li>
             <li><?php echo tt('Then copy share ID to this form') ?></li>
             <li><?php echo sprintf(tt('Allowed videos per product: %s'), QUOTA_VIDEO_PER_PRODUCT) ?></li>
 
           </ul>
           <ul id="productPriceHints">
-            <li><?php echo tt('Еnter a price at least for one license') ?> (<a href="licenses" target="_blank"><?php echo tt('Available Licenses') ?></a>)</li>
-            <li><?php echo tt('Of cource, the regular price should not be greater than exclusive price') ?></li>
-            <li><?php echo tt('Set the special price if you want') ?></li>
+            <li><?php echo tt('Еnter a price for at least one license') ?> (<a href="licenses" target="_blank"><?php echo tt('Available Licenses') ?></a>)</li>
+            <li><?php echo tt('The regular price should not be greater than exclusive price') ?></li>
+            <li><?php echo tt('Set the special price if required') ?></li>
             <li><?php echo tt('The special pricing based at the offer reverse timer') ?></li>
             <li><?php echo sprintf(tt('Allowed specials per product: %s'), QUOTA_SPECIALS_PER_PRODUCT) ?></li>
           </ul>
           <ul id="productLicenseHints">
             <li><?php echo tt('Select your favorite license from the free templates list or add your custom terms') ?></li>
-            <li><?php echo tt('Custom terms will be save to use them at the next time') ?></li>
+            <li><?php echo tt('Custom terms will be saved to be used again') ?></li>
           </ul>
         </div>
       </div>
