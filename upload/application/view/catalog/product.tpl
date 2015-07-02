@@ -84,6 +84,8 @@
         <div class="product-misc">
           <?php if ($verified) { ?>
             <div class="text-success"><span class="glyphicon glyphicon-ok"></span> <strong><?php echo tt('Verified Seller') ?></strong></div>
+          <?php } else { ?>
+            <div><span class="glyphicon glyphicon-eye-close"></span> <strong><?php echo tt('Unverified Seller') ?></strong></div>
           <?php } ?>
           <div><?php echo tt('Release:') ?> <?php echo $product_date_added ?></div>
           <div><?php echo tt('Update:') ?> <?php echo $product_date_modified ?></div>
