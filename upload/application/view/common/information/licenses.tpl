@@ -40,10 +40,10 @@
 
           <h2>Regular License</h2>
           <p>This license provides for multiple sales of the same item. Products covered by this licence are usually sold in high volumes at a lower price.</p>
-          <p>However, sellers can set any price they consider reasonable and act in accordance with their business plan.</p>
+          <p>Sellers can however set any price they consider reasonable and act in accordance with their business plan.</p>
 
           <h2 class="text-warning">Exclusive License</h2>
-          <p>An Exclusive License involves selling only one item of the product after which the product is removed from sale and the seller agrees not to publish the product again.</p>
+          <p>An Exclusive License covers items that will only be sold once after which the product is removed from sale and the seller agrees not to publish the product again.</p>
           <p>Products with an Exclusive License have relatively higher prices as the product will only be sold once and not multiple times.</p>
         </article>
       </section>
