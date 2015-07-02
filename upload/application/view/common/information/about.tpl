@@ -30,21 +30,21 @@
       <section>
         <article>
           <p>
-            BitsyBay is a simple and minimalistic service to help you buy or sell digital creative with cryptocurrency like BitCoin.
-            It includes marketplace for legal CMS extensions, illustrations, photos, themes and other creative assets from them authors.
+            BitsyBay is a simple and minimalistic service to help you buy and or sell creative digital products with cryptocurrency like BitCoin.
+            It includes a marketplace for legal CMS extensions, illustrations, photos, themes and other creative assets from various authors.
           </p>
           <p>
-            Sell or buy any available content from any country without bank commissions and other restrictions fast and directly.
+            Buy or sell any available content fast and directly, from any country without bank commissions and other restrictions.
           </p>
           <h2>Open Source Engine</h2>
           <p>
-            The project is 100% open source licensed under the GNU GPL version 3.<br />
+            The project is 100% open source and licensed under GNU GPL version 3.<br />
             You can fork us on <a href="http://github.com/bitsybay" target="_blank" rel="nofollow">GitHub</a> to help improve this project or use this engine as an example project for your own BitCoin service.
           </p>
           <h2>Other</h2>
           <p>
-            Currently this project works in the Beta mode, so if you find any bug, we would greatly appreciate your <a href="contact">notice</a> us about it.<br />
-            Also if you have any questions, please visit the <a href="faq">F.A.Q. page</a> or <a href="contact">Contact Us</a>
+            This project is currently in Beta mode, so if you find any bug, we would greatly appreciate it if you <a href="contact">notify</a> us.<br />
+            Also, if you have any questions, please visit the <a href="faq">F.A.Q.</a> or <a href="contact">Contact Us</a> pages.
           </p>
           <p>&mdash;</p>
           <p>With best regards, <br />
