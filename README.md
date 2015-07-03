@@ -1,8 +1,7 @@
 The BitsyBay Project
 ====================
 
-BitsyBay is an experimental minimalistic service to help you buy or sell digital creative with cryptocurrency like BitCoin.  
-It includes marketplace for legal CMS extensions, illustrations, photos, themes and other creative assets from them authors.  
+BitsyBay is an experimental minimalistic service to help you buy or sell digital creative with cryptocurrency like BitCoin. It includes marketplace for legal CMS extensions, illustrations, photos, themes and other creative assets from them authors.  
 It was made by and for creative peoples who love a freedom and looking to easy trading around the world.  
 
 BitsyBay Engine
