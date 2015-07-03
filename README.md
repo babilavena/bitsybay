@@ -1,7 +1,18 @@
+The BitsyBay Project
+====================
+
+BitsyBay is an experimental minimalistic service to help you buy or sell digital creative with cryptocurrency like BitCoin.  
+It includes marketplace for legal CMS extensions, illustrations, photos, themes and other creative assets from them authors.  
+It was made by and for creative peoples who love a freedom and looking to easy trading around the world.  
+
 BitsyBay Engine
 ===============
 
-Simple and minimalistic SaaS platform to help you buy or sell digital creative with cryptocurrency like BitCoin. This is a 100% free and Open Source project of the BitsyBay Store http://bitsybay.com
+We believe that liberty service should be accessible to its users: it's 100% open source licensed under the GNU GPL version 3.  
+If you know how to make this world better, join to the party or use this engine as your own BitCoin service.  
+
+DONATE
+------
 
 By donating to the foundation, you are helping us fund and manage this project: 
 
