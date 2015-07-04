@@ -107,13 +107,6 @@ define('BITCOIN_RPC_HOST', 'localhost');
 define('BITCOIN_RPC_USERNAME', '');
 define('BITCOIN_RPC_PASSWORD', '');
 
-define('BITCOIN_ADDRESS_ORDER_PREFIX', 'order_');
-
-// ORDER PROCESSOR
-define('ORDER_PROCESSOR_DEBUG_MODE', true);
-define('ORDER_PROCESSOR_MIN_BTC_TRANSACTION_CONF_TO_ORDER_APPROVE', 6); // Minimum BTC transaction confirmations requires before the order will be marked as APPROVED
-
-// BANK
-define('BITCOIN_STORAGE_WITHDRAW_ENABLED', true);
-define('BITCOIN_STORAGE_WITHDRAW_MINIMUM_AMOUNT', 0.01);
-define('BITCOIN_STORAGE_WITHDRAW_ADDRESS', '');
+define('BITCOIN_FUND_ADDRESS', '');
+define('BITCOIN_ORDER_PREFIX', 'order_');
+define('BITCOIN_MIN_TRANSACTION_CONFIRMATIONS', 6); // Minimum BTC transaction confirmations requires before the order will be marked as APPROVED
