@@ -686,35 +686,6 @@ CREATE TABLE `tag_description` (
 ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
-
---
--- Table structure for table `transactions`
---
-
-DROP TABLE IF EXISTS `transactions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `transactions` (
-  `transaction_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `currency_id` int(10) unsigned NOT NULL,
-  `amount` decimal(16,8) NOT NULL,
-  `address_from` varchar(45) NOT NULL,
-  `address_to` varchar(45) NOT NULL,
-  PRIMARY KEY (`transaction_id`),
-  KEY `fk_transactions_currency_id` (`currency_id`),
-  CONSTRAINT `fk_transactions_currency_id` FOREIGN KEY (`currency_id`) REFERENCES `currency` (`currency_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `transactions`
---
-
-LOCK TABLES `transactions` WRITE;
-/*!40000 ALTER TABLE `transactions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `transactions` ENABLE KEYS */;
-UNLOCK TABLES;
-
 --
 -- Table structure for table `user`
 --
