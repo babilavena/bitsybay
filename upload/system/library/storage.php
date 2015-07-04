@@ -58,7 +58,7 @@ final class Storage {
               foreach ($dir_array as $key => $filename) {
 
                 // Images and temporary files will be ignored
-                if ($filename != '..' && $filename != '.' && false === strpos($filename, '_') && false === strpos($filename, '.' . ALLOWED_IMAGE_EXTENSION)) {
+                if ($filename != '..' && $filename != '.' && false === strpos($filename, '_') && false === strpos($filename, '.' . STORAGE_IMAGE_EXTENSION)) {
                    if (is_dir($directory . DIR_SEPARATOR . $filename)){
                       $new_foldersize = foldersize($directory . DIR_SEPARATOR . $filename);
                       $count_size = $count_size + $new_foldersize;
@@ -93,7 +93,7 @@ final class Storage {
             if ($statement->rowCount()) {
 
                 foreach ($statement->fetchAll() as $image) {
-                    $registry[] = $image->product_image_id . '.' . ALLOWED_IMAGE_EXTENSION;
+                    $registry[] = $image->product_image_id . '.' . STORAGE_IMAGE_EXTENSION;
                 }
             }
 
@@ -111,7 +111,7 @@ final class Storage {
             // Collect storage
             $storage = scandir(DIR_STORAGE . $user_id);
             foreach ($storage as $item) {
-                if ($item != '.' && $item != '..' && $item != 'thumb' . '.' . ALLOWED_IMAGE_EXTENSION && !strpos($item, '_') && !in_array($item, $registry)) {
+                if ($item != '.' && $item != '..' && $item != 'thumb' . '.' . STORAGE_IMAGE_EXTENSION && !strpos($item, '_') && !in_array($item, $registry)) {
                     unlink(DIR_STORAGE . $user_id . DIR_SEPARATOR . $item);
                 }
             }

@@ -55,6 +55,9 @@ final class Image {
             }
         }
 
+        // Set image format
+        $this->_image->setImageFormat(STORAGE_IMAGE_EXTENSION);
+
         // Write image to the disk
         return $this->_image->writeImage($filename);
     }

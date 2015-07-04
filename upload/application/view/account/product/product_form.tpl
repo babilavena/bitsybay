@@ -44,7 +44,7 @@
             <li><?php echo sprintf(tt('Allowed demos per product: %s'), QUOTA_DEMO_PER_PRODUCT) ?></li>
           </ul>
           <ul id="productImageHints">
-            <li><?php echo sprintf(tt('Upload only %s images'), ALLOWED_IMAGE_EXTENSION) ?></li>
+            <li><?php echo sprintf(tt('Allowed format: %s'), ALLOWED_IMAGE_EXTENSIONS) ?></li>
             <li><?php echo sprintf(tt('Min image Width: %s px'), PRODUCT_IMAGE_ORIGINAL_MIN_WIDTH) ?></li>
             <li><?php echo sprintf(tt('Min image Height: %s px'), PRODUCT_IMAGE_ORIGINAL_MIN_HEIGHT) ?></li>
             <li><?php echo sprintf(tt('Allowed images per product: %s'), QUOTA_IMAGES_PER_PRODUCT) ?></li>

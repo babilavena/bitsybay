@@ -33,7 +33,7 @@ class ValidatorUpload {
         } else {
 
             // Common test
-            if (mb_strtolower($allowed_file_extension) != @pathinfo(self::_extensionPrepare($file['name']), PATHINFO_EXTENSION)) {
+            if (mb_strtolower($allowed_file_extension) != @pathinfo($file['name'], PATHINFO_EXTENSION)) {
                 return false;
 
             } else if ($max_file_size < @filesize($file['tmp_name']) / 1000000) {
@@ -66,17 +66,29 @@ class ValidatorUpload {
     * @param int $max_file_size MB
     * @param int $min_width PX
     * @param int $min_height PX
-    * @param string $allowed_file_extension
+    * @param array $allowed_file_extension
     * @return bool TRUE if valid ot FALSE if else
     */
-    static public function imageValid($image, $max_file_size, $min_width, $min_height, $allowed_file_extension) {
+    static public function imageValid($image, $max_file_size, $min_width, $min_height, array $allowed_file_extension = array('jpg', 'jpeg', 'png')) {
 
-        if (!self::fileValid($image, $max_file_size, $allowed_file_extension)) {
+        // File validation
+        $file_validation = false;
+        $file_extension  = false;
+
+        foreach ($allowed_file_extension as $extension) {
+            if (self::fileValid($image, $max_file_size, $extension)) {
+                $file_validation = true;
+                $file_extension  = $extension;
+                break;
+            }
+        }
+
+        if (!$file_validation) {
             return false;
         }
 
         // Allowed image extension check
-        if (mb_strtolower($allowed_file_extension) != @pathinfo(self::_extensionPrepare($image['name']), PATHINFO_EXTENSION)) {
+        if (!in_array(@pathinfo($image['name'], PATHINFO_EXTENSION), $allowed_file_extension)) {
             return false;
         }
 
@@ -94,22 +106,22 @@ class ValidatorUpload {
         }
 
         // Image creation test
-        if (!$image_copy = @imagecreatefromjpeg($image['tmp_name'])) {
-            return false;
+        switch ($file_extension) {
+            case 'jpg':
+            case 'jpeg':
+                if (!$image_copy = @imagecreatefromjpeg($image['tmp_name'])) {
+                    imagedestroy($image_copy);
+                    return false;
+                }
+            break;
+            case 'png':
+                if (!$image_copy = @imagecreatefrompng($image['tmp_name'])) {
+                    imagedestroy($image_copy);
+                    return false;
+                }
+            break;
         }
 
-        imagedestroy($image_copy);
-
         return true;
-    }
-
-    /**
-    * Prepare file extension for validation
-    *
-    * @param string $filename
-    * @return string filename
-    */
-    static private function _extensionPrepare($filename) {
-        return str_replace(array('jpeg'), array('jpg'), mb_strtolower(trim($filename)));
     }
 }

@@ -116,7 +116,7 @@ class ControllerAccountAccount extends Controller {
                                                                              USER_IMAGE_ORIGINAL_HEIGHT,
                                                                              IMG_FILTER_GRAYSCALE), true);
 
-                    $image->save(DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR . 'thumb.' . ALLOWED_IMAGE_EXTENSION);
+                    $image->save(DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR . 'thumb.' . STORAGE_IMAGE_EXTENSION);
 
                     // Send user email
                     $mail = new Mail();
@@ -453,7 +453,7 @@ class ControllerAccountAccount extends Controller {
             }
 
             // Return result
-            $filename = DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR . 'thumb' . '.' . ALLOWED_IMAGE_EXTENSION;
+            $filename = DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR . 'thumb' . '.' . STORAGE_IMAGE_EXTENSION;
 
             if ($image->save($filename)) {
                 $json = array('success_message' => tt('Image successfully uploaded!'),
@@ -669,10 +669,9 @@ class ControllerAccountAccount extends Controller {
                                                       'tmp_name' => $this->request->files['avatar']['tmp_name']),
                                                       QUOTA_IMAGE_MAX_FILE_SIZE,
                                                       USER_IMAGE_ORIGINAL_MIN_WIDTH,
-                                                      USER_IMAGE_ORIGINAL_MIN_HEIGHT,
-                                                      ALLOWED_IMAGE_EXTENSION)) {
+                                                      USER_IMAGE_ORIGINAL_MIN_HEIGHT)) {
 
-            $this->_error['common'] = sprintf(tt('The image is not valid %s file!'), mb_strtoupper(ALLOWED_IMAGE_EXTENSION));
+            $this->_error['common'] = tt('This is a not valid image file!');
             $this->security_log->write('Uploaded image file is not valid');
         }
 

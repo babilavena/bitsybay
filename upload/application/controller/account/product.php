@@ -212,8 +212,8 @@ class ControllerAccountProduct extends Controller {
                         // Rename temporary file
                         $directory = DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR;
                         rename(
-                            $directory . $image['product_image_id'] . '.' . ALLOWED_IMAGE_EXTENSION,
-                            $directory . $product_image_id . '.' . ALLOWED_IMAGE_EXTENSION
+                            $directory . $image['product_image_id'] . '.' . STORAGE_IMAGE_EXTENSION,
+                            $directory . $product_image_id . '.' . STORAGE_IMAGE_EXTENSION
                         );
 
                 }
@@ -235,7 +235,7 @@ class ControllerAccountProduct extends Controller {
                                                                          PRODUCT_IMAGE_ORIGINAL_WIDTH,
                                                                          PRODUCT_IMAGE_ORIGINAL_HEIGHT), true);
 
-                $image->save(DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR . $product_image_id . '.' . ALLOWED_IMAGE_EXTENSION);
+                $image->save(DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR . $product_image_id . '.' . STORAGE_IMAGE_EXTENSION);
             }
 
             // Add videos
@@ -430,8 +430,8 @@ class ControllerAccountProduct extends Controller {
                     // Rename temporary file
                     $directory = DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR;
                     rename(
-                        $directory . $image['product_image_id'] . '.' . ALLOWED_IMAGE_EXTENSION,
-                        $directory . $product_image_id . '.' . ALLOWED_IMAGE_EXTENSION
+                        $directory . $image['product_image_id'] . '.' . STORAGE_IMAGE_EXTENSION,
+                        $directory . $product_image_id . '.' . STORAGE_IMAGE_EXTENSION
                     );
                 }
 
@@ -452,7 +452,7 @@ class ControllerAccountProduct extends Controller {
                                                                          PRODUCT_IMAGE_ORIGINAL_WIDTH,
                                                                          PRODUCT_IMAGE_ORIGINAL_HEIGHT), true);
 
-                $image->save(DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR . $product_image_id . '.' . ALLOWED_IMAGE_EXTENSION);
+                $image->save(DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR . $product_image_id . '.' . STORAGE_IMAGE_EXTENSION);
             }
 
 
@@ -566,7 +566,7 @@ class ControllerAccountProduct extends Controller {
         // Delete images
         $product_images = $this->model_catalog_product->getProductImages($product_id, DEFAULT_LANGUAGE_ID);
         foreach ($product_images as $product_image) {
-            unlink(DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR . $product_image->product_image_id . '.' . ALLOWED_IMAGE_EXTENSION);
+            unlink(DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR . $product_image->product_image_id . '.' . STORAGE_IMAGE_EXTENSION);
         }
 
         $this->model_catalog_product->deleteProductImages($product_id);
@@ -739,7 +739,7 @@ class ControllerAccountProduct extends Controller {
             $image_filename = '_' . sha1(rand().microtime().$this->auth->getId());
 
             // Save image to the temporary file
-            if ($image->save($image_path . $image_filename . '.' . ALLOWED_IMAGE_EXTENSION)) {
+            if ($image->save($image_path . $image_filename . '.' . STORAGE_IMAGE_EXTENSION)) {
                 $json = array('success_message'   => tt('Image successfully uploaded!'),
                               'url'               => $this->cache->image($image_filename, $this->auth->getId(), 36, 36),
                               'product_image_id'  => $image_filename);
@@ -919,7 +919,7 @@ class ControllerAccountProduct extends Controller {
                 // If image already stored in exist product
                 if ( isset($image['product_image_id']) &&
                     !empty($image['product_image_id']) &&
-                    file_exists(DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR . $image['product_image_id'] . '.' . ALLOWED_IMAGE_EXTENSION)) {
+                    file_exists(DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR . $image['product_image_id'] . '.' . STORAGE_IMAGE_EXTENSION)) {
 
                     $product_image_url = $this->cache->image($image['product_image_id'], $this->auth->getId(), 36, 36);
                 }
@@ -1182,10 +1182,9 @@ class ControllerAccountProduct extends Controller {
                                                       'tmp_name' => $this->request->files['image']['tmp_name'][$this->request->get['row']]),
                                                       QUOTA_IMAGE_MAX_FILE_SIZE,
                                                       PRODUCT_IMAGE_ORIGINAL_MIN_WIDTH,
-                                                      PRODUCT_IMAGE_ORIGINAL_MIN_HEIGHT,
-                                                      ALLOWED_IMAGE_EXTENSION)) {
+                                                      PRODUCT_IMAGE_ORIGINAL_MIN_HEIGHT)) {
 
-            $this->_error['image']['common'] = sprintf(tt('The image is not valid %s file!'), mb_strtoupper(ALLOWED_IMAGE_EXTENSION));
+            $this->_error['image']['common'] = tt('This is a not valid image file!');
             $this->security_log->write('Uploaded image file is not valid');
         }
 
@@ -1456,7 +1455,7 @@ class ControllerAccountProduct extends Controller {
                 }
 
                 // Check temporary image file if exists
-                if (!file_exists(DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR . $image['product_image_id'] . '.' . ALLOWED_IMAGE_EXTENSION)) {
+                if (!file_exists(DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR . $image['product_image_id'] . '.' . STORAGE_IMAGE_EXTENSION)) {
 
                     $this->_error['image']['common'] = tt('Temporary image ID is wrong');
                     $this->security_log->write('Try to access not own\'s temporary image file');
