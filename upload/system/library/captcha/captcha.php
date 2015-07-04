@@ -92,7 +92,7 @@ final class Captcha {
     public function getImage($code) {
 
         // Pick random background, get info, and start captcha
-        $background = dirname(__FILE__) . $this->_config['backgrounds'][rand(0, count($this->_config['backgrounds']) - 1)];
+        $background = DIR_BASE . 'system' . DIR_SEPARATOR . 'library' . DIR_SEPARATOR . 'captcha' . $this->_config['backgrounds'][rand(0, count($this->_config['backgrounds']) - 1)];
         list($bg_width, $bg_height) = getimagesize($background);
 
         $captcha = imagecreatefrompng($background);
@@ -104,7 +104,7 @@ final class Captcha {
         $angle = rand($this->_config['angle_min'], $this->_config['angle_max']) * (rand(0, 1) == 1 ? -1 : 1);
 
         // Select font randomly
-        $font = dirname(__FILE__) . $this->_config['fonts'][rand(0, count($this->_config['fonts']) - 1)];
+        $font = DIR_BASE . 'system' . DIR_SEPARATOR . 'library' . DIR_SEPARATOR . 'captcha' . $this->_config['fonts'][rand(0, count($this->_config['fonts']) - 1)];
 
         //Set the font size.
         $font_size = rand($this->_config['min_font_size'], $this->_config['max_font_size']);
