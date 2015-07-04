@@ -29,9 +29,9 @@ final class Storage {
     */
     public function getProductFile($product_file_id, $user_id, $name) {
 
-        $file = DIR_STORAGE . $user_id . DIR_SEPARATOR . $product_file_id . '.' . ALLOWED_FILE_EXTENSION;
+        $file = DIR_STORAGE . $user_id . DIR_SEPARATOR . $product_file_id . '.' . STORAGE_FILE_EXTENSION;
 
-        header('Content-Disposition: attachment; filename=' . $name . '.' . ALLOWED_FILE_EXTENSION);
+        header('Content-Disposition: attachment; filename=' . $name . '.' . STORAGE_FILE_EXTENSION);
         header('Content-Type: application/zip');
         header('Content-Length: ' . filesize($file));
 
@@ -104,7 +104,7 @@ final class Storage {
             if ($statement->rowCount()) {
 
                 foreach ($statement->fetchAll() as $file) {
-                    $registry[] = $file->product_file_id . '.' . ALLOWED_FILE_EXTENSION;
+                    $registry[] = $file->product_file_id . '.' . STORAGE_FILE_EXTENSION;
                 }
             }
 

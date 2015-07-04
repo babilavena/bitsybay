@@ -37,14 +37,14 @@
             <li><?php echo tt('Use only plain text without any special chars and links') ?></li>
           </ul>
           <ul id="productPackageHints">
-            <li><?php echo sprintf(tt('The package file must be %sped'), ALLOWED_FILE_EXTENSION) ?></li>
+            <li><?php echo sprintf(tt('The package file must be %sped'), STORAGE_FILE_EXTENSION) ?></li>
           </ul>
           <ul id="productDemoHints">
             <li><?php echo tt('The demo pages used for online product preview in the iframe wrapper') ?></li>
             <li><?php echo sprintf(tt('Allowed demos per product: %s'), QUOTA_DEMO_PER_PRODUCT) ?></li>
           </ul>
           <ul id="productImageHints">
-            <li><?php echo sprintf(tt('Allowed format: %s'), ALLOWED_IMAGE_EXTENSIONS) ?></li>
+            <li><?php echo tt('Allowed format: JPEG, PNG') ?></li>
             <li><?php echo sprintf(tt('Min image Width: %s px'), PRODUCT_IMAGE_ORIGINAL_MIN_WIDTH) ?></li>
             <li><?php echo sprintf(tt('Min image Height: %s px'), PRODUCT_IMAGE_ORIGINAL_MIN_HEIGHT) ?></li>
             <li><?php echo sprintf(tt('Allowed images per product: %s'), QUOTA_IMAGES_PER_PRODUCT) ?></li>

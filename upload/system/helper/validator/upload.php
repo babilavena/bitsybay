@@ -19,10 +19,10 @@ class ValidatorUpload {
     *
     * @param array $file
     * @param int $max_file_size MB
-    * @param string $allowed_file_extension
+    * @param string $STORAGE_FILE_EXTENSION
     * @return bool TRUE if valid ot FALSE if else
     */
-    static public function fileValid($file, $max_file_size, $allowed_file_extension) {
+    static public function fileValid($file, $max_file_size, $STORAGE_FILE_EXTENSION) {
 
         // Dependencies test
         if (!isset($file['tmp_name']) || !isset($file['name'])) {
@@ -33,7 +33,7 @@ class ValidatorUpload {
         } else {
 
             // Common test
-            if (mb_strtolower($allowed_file_extension) != @pathinfo($file['name'], PATHINFO_EXTENSION)) {
+            if (mb_strtolower($STORAGE_FILE_EXTENSION) != @pathinfo($file['name'], PATHINFO_EXTENSION)) {
                 return false;
 
             } else if ($max_file_size < @filesize($file['tmp_name']) / 1000000) {
@@ -41,7 +41,7 @@ class ValidatorUpload {
             }
 
             // Extension test
-            if (mb_strtolower($allowed_file_extension) == 'zip') {
+            if (mb_strtolower($STORAGE_FILE_EXTENSION) == 'zip') {
                 $zip = new ZipArchive();
                 if (true !== $zip->open($file['tmp_name'], ZipArchive::CHECKCONS)) {
 
@@ -66,16 +66,16 @@ class ValidatorUpload {
     * @param int $max_file_size MB
     * @param int $min_width PX
     * @param int $min_height PX
-    * @param array $allowed_file_extension
+    * @param array $STORAGE_FILE_EXTENSION
     * @return bool TRUE if valid ot FALSE if else
     */
-    static public function imageValid($image, $max_file_size, $min_width, $min_height, array $allowed_file_extension = array('jpg', 'jpeg', 'png')) {
+    static public function imageValid($image, $max_file_size, $min_width, $min_height, array $STORAGE_FILE_EXTENSION = array('jpg', 'jpeg', 'png')) {
 
         // File validation
         $file_validation = false;
         $file_extension  = false;
 
-        foreach ($allowed_file_extension as $extension) {
+        foreach ($STORAGE_FILE_EXTENSION as $extension) {
             if (self::fileValid($image, $max_file_size, $extension)) {
                 $file_validation = true;
                 $file_extension  = $extension;
@@ -88,7 +88,7 @@ class ValidatorUpload {
         }
 
         // Allowed image extension check
-        if (!in_array(@pathinfo($image['name'], PATHINFO_EXTENSION), $allowed_file_extension)) {
+        if (!in_array(@pathinfo($image['name'], PATHINFO_EXTENSION), $STORAGE_FILE_EXTENSION)) {
             return false;
         }
 

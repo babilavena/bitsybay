@@ -166,14 +166,14 @@ class ControllerAccountProduct extends Controller {
             // Add file
             $directory = DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR;
 
-            if ($file_content = file_get_contents($directory . $this->request->post['product_file_id'] . '.' . ALLOWED_FILE_EXTENSION)) {
+            if ($file_content = file_get_contents($directory . $this->request->post['product_file_id'] . '.' . STORAGE_FILE_EXTENSION)) {
 
                 $product_file_id = $this->model_catalog_product->createProductFile( $product_id,
                                                                                     md5($file_content),
                                                                                     sha1($file_content));
                 rename(
-                    $directory . $this->request->post['product_file_id'] . '.' . ALLOWED_FILE_EXTENSION,
-                    $directory . $product_file_id . '.' . ALLOWED_FILE_EXTENSION
+                    $directory . $this->request->post['product_file_id'] . '.' . STORAGE_FILE_EXTENSION,
+                    $directory . $product_file_id . '.' . STORAGE_FILE_EXTENSION
                 );
             }
 
@@ -385,15 +385,15 @@ class ControllerAccountProduct extends Controller {
 
             // Add file
             $directory = DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR;
-            if ($file_content = file_get_contents($directory . $this->request->post['product_file_id'] . '.' . ALLOWED_FILE_EXTENSION)) {
+            if ($file_content = file_get_contents($directory . $this->request->post['product_file_id'] . '.' . STORAGE_FILE_EXTENSION)) {
 
                 $this->model_catalog_product->deleteProductFiles($product_id);
                 $product_file_id = $this->model_catalog_product->createProductFile( $product_id,
                                                                                     md5($file_content),
                                                                                     sha1($file_content));
                 rename(
-                    $directory . $this->request->post['product_file_id'] . '.' . ALLOWED_FILE_EXTENSION,
-                    $directory . $product_file_id . '.' . ALLOWED_FILE_EXTENSION
+                    $directory . $this->request->post['product_file_id'] . '.' . STORAGE_FILE_EXTENSION,
+                    $directory . $product_file_id . '.' . STORAGE_FILE_EXTENSION
                 );
             }
 
@@ -557,7 +557,7 @@ class ControllerAccountProduct extends Controller {
 
         // Delete product files
         $product_file_info = $this->model_catalog_product->getProductFileInfo($product_id);
-        unlink(DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR . $product_file_info->product_file_id . '.' . ALLOWED_FILE_EXTENSION);
+        unlink(DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR . $product_file_info->product_file_id . '.' . STORAGE_FILE_EXTENSION);
         $this->model_catalog_product->deleteProductFiles($product_id);
 
         // Delete demos
@@ -647,7 +647,7 @@ class ControllerAccountProduct extends Controller {
         if (isset($this->request->get['product_file_id'])) {
 
             $directory = DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR;
-            $filename  = $this->request->get['product_file_id'] . '.' . ALLOWED_FILE_EXTENSION;
+            $filename  = $this->request->get['product_file_id'] . '.' . STORAGE_FILE_EXTENSION;
             $file_size = (file_exists($directory . DIR_SEPARATOR . $filename)) ? filesize($directory . $filename) / 1000000 : false;
 
             if ($file_size > 0) {
@@ -691,7 +691,7 @@ class ControllerAccountProduct extends Controller {
             }
 
             // Return result
-            if (move_uploaded_file($this->request->files['package']['tmp_name'], DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR . $filename . '.' . ALLOWED_FILE_EXTENSION)) {
+            if (move_uploaded_file($this->request->files['package']['tmp_name'], DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR . $filename . '.' . STORAGE_FILE_EXTENSION)) {
                 $json = array('success_message'   => tt('Package file was successfully uploaded!'),
                               'product_file_id'   => $filename,
                               'hash_md5'          => 'MD5:  ' . md5($file_content),
@@ -781,8 +781,8 @@ class ControllerAccountProduct extends Controller {
         // File
         if ( isset($this->request->post['product_file_id']) &&
             !empty($this->request->post['product_file_id']) &&
-            file_exists(DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR . $this->request->post['product_file_id'] . '.' . ALLOWED_FILE_EXTENSION) &&
-            $file_content = file_get_contents(DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR . $this->request->post['product_file_id'] . '.' . ALLOWED_FILE_EXTENSION)) {
+            file_exists(DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR . $this->request->post['product_file_id'] . '.' . STORAGE_FILE_EXTENSION) &&
+            $file_content = file_get_contents(DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR . $this->request->post['product_file_id'] . '.' . STORAGE_FILE_EXTENSION)) {
 
             $data['package_hash_md5']    = 'MD5:  ' . md5($file_content);
             $data['package_hash_sha1']   = 'SHA1: ' . sha1($file_content);
@@ -790,7 +790,7 @@ class ControllerAccountProduct extends Controller {
             $data['module_quota_bar']    = $this->load->controller('module/quota_bar',
                                                                     array('custom_file_space' => $this->storage->getFileSize($this->request->post['product_file_id'],
                                                                                                                              $this->auth->getId(),
-                                                                                                                             ALLOWED_FILE_EXTENSION)));
+                                                                                                                             STORAGE_FILE_EXTENSION)));
 
         } else if ($product_info && $product_file_info = $this->model_catalog_product->getProductFileInfo($product_info->product_id)) {
 
@@ -800,7 +800,7 @@ class ControllerAccountProduct extends Controller {
 
             $file_size = $this->storage->getFileSize($product_file_info->product_file_id,
                                                      $this->auth->getId(),
-                                                     ALLOWED_FILE_EXTENSION);
+                                                     STORAGE_FILE_EXTENSION);
 
             $data['module_quota_bar'] = $this->load->controller('module/quota_bar',
                                                                 array('except_size' => $file_size,
@@ -1157,9 +1157,9 @@ class ControllerAccountProduct extends Controller {
 
         } else if (!ValidatorUpload::fileValid( $this->request->files['package'],
                                                 $this->auth->getFileQuota() - ($this->storage->getUsedSpace($this->auth->getId()) - filesize($this->request->files['package']['tmp_name']) / 1000000),
-                                                ALLOWED_FILE_EXTENSION)) {
+                                                STORAGE_FILE_EXTENSION)) {
 
-            $this->_error['file']['common'] = sprintf(tt('Package file is not valid %s archive!'), mb_strtoupper(ALLOWED_FILE_EXTENSION));
+            $this->_error['file']['common'] = sprintf(tt('Package file is a not valid %s archive!'), mb_strtoupper(STORAGE_FILE_EXTENSION));
             $this->security_log->write('Uploaded package file is not valid');
         }
 
@@ -1284,7 +1284,7 @@ class ControllerAccountProduct extends Controller {
             $this->_error['file']['common'] = tt('Package file input is wrong');
             $this->security_log->write('Wrong product package field');
 
-        } else if (!file_exists(DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR . $this->request->post['product_file_id'] . '.' . ALLOWED_FILE_EXTENSION)) {
+        } else if (!file_exists(DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR . $this->request->post['product_file_id'] . '.' . STORAGE_FILE_EXTENSION)) {
 
             $this->_error['file']['common'] = tt('Temporary package file is wrong');
             $this->security_log->write('Try to access not own\'s temporary package file');
