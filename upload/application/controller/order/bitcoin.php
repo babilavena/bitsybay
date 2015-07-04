@@ -99,7 +99,14 @@ class ControllerOrderBitcoin extends Controller {
         }
 
         // Create a new order in DB
-        if (!$order_id = $this->model_common_order->createOrder($this->auth->getId(), $product_info->product_id, $this->request->post['license'], ORDER_PENDING_STATUS_ID, $amount, DEFAULT_CURRENCY_ID)) {
+        if (!$order_id = $this->model_common_order->createOrder($this->auth->getId(),
+                                                                $product_info->product_id,
+                                                                $this->request->post['license'],
+                                                                $amount,
+                                                                FEE_PER_ORDER,
+                                                                ORDER_PENDING_STATUS_ID,
+                                                                DEFAULT_CURRENCY_ID)) {
+
             $this->security_log->write('Can not create the order');
             exit;
         }
@@ -107,7 +114,7 @@ class ControllerOrderBitcoin extends Controller {
         // Create a new BitCoin Address
         try {
             $bitcoin = new BitCoin(BITCOIN_RPC_USERNAME, BITCOIN_RPC_PASSWORD, BITCOIN_RPC_HOST, BITCOIN_RPC_PORT);
-            $address = $bitcoin->getaccountaddress(BITCOIN_ADDRESS_ORDER_PREFIX . $order_id);
+            $address = $bitcoin->getaccountaddress(BITCOIN_ORDER_PREFIX . $order_id);
         } catch (Exception $e) {
             $this->security_log->write('BitCoin connection error ' . var_dump($e));
             exit;
