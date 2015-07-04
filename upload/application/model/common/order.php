@@ -21,17 +21,18 @@ class ModelCommonOrder extends Model {
     * @param int $product_id
     * @param string $license
     * @param float $amount
+    * @param int $fee
     * @param int $order_status_id
     * @param int $currency_id
     * @return array|bool last insert id or available id or false if throw exception
     */
-    public function createOrder($user_id, $product_id, $license, $order_status_id, $amount, $currency_id) {
+    public function createOrder($user_id, $product_id, $license, $amount, $fee, $order_status_id, $currency_id) {
 
         try {
 
             // Check if configuration is exist
-            $statement = $this->db->prepare('SELECT `order_id` FROM `order` WHERE `user_id` = ? AND `product_id` = ? AND `license` = ? AND `amount` = ? LIMIT 1');
-            $statement->execute(array($user_id, $product_id, $license, $amount));
+            $statement = $this->db->prepare('SELECT `order_id` FROM `order` WHERE `user_id` = ? AND `product_id` = ? AND `license` = ? AND `amount` = ? AND `fee` = ? LIMIT 1');
+            $statement->execute(array($user_id, $product_id, $license, $amount, $fee));
 
             if ($statement->rowCount()) {
                 $order_info = $statement->fetch();
@@ -39,8 +40,8 @@ class ModelCommonOrder extends Model {
 
             // Insert if configuration is not exist
             } else {
-                $statement = $this->db->prepare('INSERT IGNORE INTO `order` SET `user_id` = ?, `product_id` = ?, `license` = ?, `order_status_id` = ?, `amount` = ?, `currency_id` = ?, `date_added` = NOW()');
-                $statement->execute(array($user_id, $product_id, $license, $order_status_id, $amount, $currency_id));
+                $statement = $this->db->prepare('INSERT IGNORE INTO `order` SET `user_id` = ?, `product_id` = ?, `license` = ?, `order_status_id` = ?, `amount` = ?, `fee` = ?, `currency_id` = ?, `date_added` = NOW()');
+                $statement->execute(array($user_id, $product_id, $license, $order_status_id, $amount, $fee, $currency_id));
 
                 return $this->db->lastInsertId();
             }
