@@ -74,9 +74,6 @@ define('ORDER_PENDING_STATUS_ID', 1);  // INT order_status_id in order_status ta
 define('ORDER_APPROVED_STATUS_ID', 2); // INT order_status_id in order_status table
 define('ORDER_PROCESSED_STATUS_ID', 3); // INT order_status_id in order_status table
 
-// PREFIX
-define('FILENAME_PREFIX_PRODUCT', 'product_');
-
 // QUOTA
 define('QUOTA_FILE_SIZE_BY_DEFAULT', 100); // int Mb
 define('QUOTA_BONUS_SIZE_PER_ORDER', 1);   // int Mb

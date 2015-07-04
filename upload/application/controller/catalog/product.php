@@ -319,7 +319,7 @@ class ControllerCatalogProduct extends Controller {
                 $this->storage->getProductFile(
                     $product_file_info->product_file_id,
                     $this->auth->getId(),
-                    FILENAME_PREFIX_PRODUCT . $this->request->get['product_id']
+                    'product_' . $this->request->get['product_id']
                 );
             }
         }
