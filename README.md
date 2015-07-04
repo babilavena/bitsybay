@@ -60,6 +60,11 @@ FEATURES
 * Optional watermarking
 * Abuse reporting
 
+**Analytics**
+
+* Search log
+* 404 log
+
 **Payment**
 
 * Standalone BitCoin payment processor
