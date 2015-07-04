@@ -107,7 +107,7 @@ class ControllerOrderBitcoin extends Controller {
         // Create a new BitCoin Address
         try {
             $bitcoin = new BitCoin(BITCOIN_RPC_USERNAME, BITCOIN_RPC_PASSWORD, BITCOIN_RPC_HOST, BITCOIN_RPC_PORT);
-            $address = $bitcoin->getaccountaddress($order_id);
+            $address = $bitcoin->getaccountaddress(BITCOIN_ADDRESS_ORDER_PREFIX . $order_id);
         } catch (Exception $e) {
             $this->security_log->write('BitCoin connection error ' . var_dump($e));
             exit;

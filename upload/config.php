@@ -74,7 +74,7 @@ define('ORDER_PENDING_STATUS_ID', 1);  // INT order_status_id in order_status ta
 define('ORDER_APPROVED_STATUS_ID', 2); // INT order_status_id in order_status table
 define('ORDER_PROCESSED_STATUS_ID', 3); // INT order_status_id in order_status table
 
-// DOWNLOADS
+// PREFIX
 define('FILENAME_PREFIX_PRODUCT', 'product_');
 
 // QUOTA
@@ -104,11 +104,13 @@ define('MAIL_INFO', '');
 define('MAIL_FROM', '');
 define('MAIL_SENDER', PROJECT_NAME);
 
-// BITCOIN PRC API
+// BITCOIN
 define('BITCOIN_RPC_PORT', '8332');
 define('BITCOIN_RPC_HOST', 'localhost');
 define('BITCOIN_RPC_USERNAME', '');
 define('BITCOIN_RPC_PASSWORD', '');
+
+define('BITCOIN_ADDRESS_ORDER_PREFIX', 'order_');
 
 // ORDER PROCESSOR
 define('ORDER_PROCESSOR_DEBUG_MODE', true);
