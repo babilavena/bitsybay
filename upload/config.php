@@ -49,8 +49,8 @@ define('DEFAULT_CURRENCY_ID', 1);
 define('DATE_FORMAT_DEFAULT', 'j M, Y');
 
 // EXTENSIONS
-define('ALLOWED_FILE_EXTENSION', 'zip');
-define('ALLOWED_IMAGE_EXTENSION', 'jpg');
+define('STORAGE_FILE_EXTENSION', 'zip');
+define('STORAGE_IMAGE_EXTENSION', 'jpg');
 
 // IMAGES
 define('PRODUCT_IMAGE_ORIGINAL_WIDTH', 800);
