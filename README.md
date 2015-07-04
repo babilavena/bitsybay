@@ -64,6 +64,7 @@ FEATURES
 
 * Search log
 * 404 log
+* Withdraw log
 
 **Payment**
 
