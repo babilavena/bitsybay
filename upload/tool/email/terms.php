@@ -57,7 +57,7 @@ try {
 }
 
 // Get registered users
-$statement = $db->prepare('SELECT `username`, `email` FROM `user');
+$statement = $db->prepare('SELECT `username`, `email` FROM `user`');
 
 $statement->execute();
 
