@@ -37,8 +37,8 @@
           <h4>How many times can I download the purchased product?</h4>
           <div class="well">
             <p>You are guaranteed at least one product download after confirmation of your payment.</p>
-<p>There is however no limit on the number of times you may download the purchased product as long as it's not removed by the merchant.</p>
-           </div>
+            <p>There is however no limit on the number of times you may download the purchased product as long as it's not removed by the merchant.</p>
+          </div>
           <h4>What rights to the product do I receive after purchase?</h4>
           <div class="well">
             <p>You will receive the rights as specified by the author in the product license.</p>
@@ -47,8 +47,7 @@
           <h2 class="text-right"><a class="anchor" name="payouts"></a><a href="faq#payouts"><i class="glyphicon glyphicon-link" style="font-size:0.8em;color:#CCC"></i></a> Payouts</h2>
           <h4>How soon after a sale do I receive my money?</h4>
           <div class="well">
-            <p>We estimate to make payouts once a month as all payments are currently being processed manually.</p>
-            <p>Sellers will however be able to withdraw their profits instantly once the Seller Verification System has been implemented.</p>
+            <p>We estimate to make payouts every five minutes as all payments are currently being processed automatically.</p>
           </div>
           <h4>Can a different withdrawal addresses be used for each product?</h4>
           <div class="well">
