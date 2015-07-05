@@ -537,9 +537,9 @@ class ControllerAccountProduct extends Controller {
         }
 
         // Check if all customers already download package files
-        if ($this->model_catalog_product->productHasRelations($product_id, ORDER_APPROVED_STATUS_ID, ORDER_PENDING_STATUS_ID)) {
+        if ($this->model_catalog_product->productHasRelations($product_id, ORDER_PENDING_STATUS_ID, ORDER_PROCESSED_STATUS_ID, ORDER_APPROVED_STATUS_ID)) {
 
-            $this->session->setUserMessage(array('danger' => tt('Some buyers have purchased but not have downloaded this product or payment is expected. Please try again later.')));
+            $this->session->setUserMessage(array('danger' => tt('Looks like someone has ordered this product, try again later!')));
             $this->response->redirect($this->url->link('account/product', '', 'SSL'));
         }
 
