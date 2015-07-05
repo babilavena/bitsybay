@@ -1747,20 +1747,22 @@ class ModelCatalogProduct extends Model {
     * Check if product has relations
     *
     * @param int $product_id
-    * @param int $approved_status_id
     * @param int $pending_status_id
-    * @return bool TRUE if user has relations or FALSE if others
+    * @param int $processed_status_is
+    * @param int $approved_status_id
+    * @return bool TRUE if user has relations or FALSE if no
     */
-    public function productHasRelations($product_id, $approved_status_id, $pending_status_id) {
+    public function productHasRelations($product_id, $pending_status_id, $processed_status_is, $approved_status_id) {
 
         try {
             $statement = $this->db->prepare('SELECT
             NULL FROM `product_file_download` AS `pfd`
             RIGHT JOIN `product_file` AS `pf` ON (`pf`.`product_file_id` = `pfd`.`product_file_id`)
             JOIN `order` AS `o` ON (`o`.`product_id` = `o`.`product_id`)
-            WHERE `o`.`product_id` = ? AND (`o`.`order_status_id` = ? OR `o`.`order_status_id` = ?) LIMIT 1');
+            WHERE `o`.`product_id` = ?
+            AND (`o`.`order_status_id` = ? OR `o`.`order_status_id` = ? OR (`o`.`order_status_id` = ? AND `o`.`date_added` > NOW() - INTERVAL 1 DAY)) LIMIT 1');
 
-            $statement->execute(array($product_id, $approved_status_id, $pending_status_id));
+            $statement->execute(array($product_id, $processed_status_is, $approved_status_id, $pending_status_id));
 
             return (bool) $statement->rowCount();
 

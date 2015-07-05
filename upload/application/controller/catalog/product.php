@@ -318,7 +318,7 @@ class ControllerCatalogProduct extends Controller {
                 // Get file
                 $this->storage->getProductFile(
                     $product_file_info->product_file_id,
-                    $this->auth->getId(),
+                    $product_file_info->user_id,
                     'product_' . $this->request->get['product_id']
                 );
             }
