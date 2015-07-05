@@ -47,7 +47,6 @@
               <ul>
                 <li>You represent and warrant that you are the owner of, or that you have all rights to all your submissions;</li>
                 <li>We charge a 11% fee (0% fee up to 2016) on the selling price;</li>
-                <li>At this time we estimate payouts to be made once a month as all payouts are processed manually;</li>
                 <li>We do not guarantee payment if your submission / account is blocked;</li>
                 <li>If your submitted content was purchased under the <a href="licenses">Exclusive License</a>, it can not be put up for sale again;</li>
                 <li>If you provide any content that is fraudulent, untrue, inaccurate, incomplete, not current, or illegal to <?php echo HOST_COUNTRY ?> laws, we reserve the right to suspend or terminate your account without notice and to refuse any and all current and future use of the Website.</li>
