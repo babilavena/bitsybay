@@ -39,7 +39,7 @@
                 <li>Trade from any country without bank commissions and other restrictions</li>
                 <li>Royalty Free and Exclusive licenses</li>
                 <li><?php echo QUOTA_FILE_SIZE_BY_DEFAULT ?> Mb free disk space for all new sellers and +<?php echo QUOTA_BONUS_SIZE_PER_ORDER ?> Mb for every next sale</li>
-                <li>0% seller commission up to 2016, <?php echo FEE_PER_ORDER ?>% later</li>
+                <li>0% seller commission up to 2016, 11% later</li>
               </ul>
             </p>
           </div>
