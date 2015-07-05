@@ -58,7 +58,7 @@
             <div class="glyphicon glyphicon-user" style="color:#CCC;float:left;font-size:5em"></div>
             <div style="margin-left:6em">
               <ul>
-                <li>We save and use your personal information only for processing your orders and for contacting you;</li>
+                <li>We save and use your personal information only for providing services of this website and for contacting you;</li>
                 <li>We do not give your personal information to third parties;</li>
                 <li>We add cookies in various places on our website. They serve only to ensure correct login;</li>
                 <li>Social plug-ins from Facebook, Twitter, Tumblr and GitHub are integrated into our Home web page in the guest mode only;</li>
