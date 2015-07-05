@@ -67,7 +67,7 @@
                   </div>
                 <?php } else if ($product['product_order_status'] == 'processed') { ?>
                 <div class="btn-group">
-                  <a class="btn btn-info disabled dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-hourglass"></i> <?php echo tt('Transaction...') ?></a>
+                  <a class="btn btn-info disabled dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-hourglass"></i> <?php echo tt('Confirmation...') ?></a>
                 </div>
                 <?php } else { ?>
                   <div class="btn-group">
