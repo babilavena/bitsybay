@@ -92,6 +92,7 @@ final class Url {
         $this->_addRewrite('common/information/terms', 'terms');
         $this->_addRewrite('common/information/licenses', 'licenses');
         $this->_addRewrite('common/information/faq', 'faq');
+        $this->_addRewrite('common/image/qr', 'qr');
 
         // Create error rewrite rules
         $this->_addRewrite('error/not_found',  '404');
