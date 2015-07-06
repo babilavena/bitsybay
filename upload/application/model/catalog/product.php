@@ -46,6 +46,7 @@ class ModelCatalogProduct extends Model {
             `ps`.`date_end` AS `special_date_end`,
             `ld`.`title` AS `license_title`,
             `ld`.`description` AS `license_description`,
+
             (SELECT `u`.`username` FROM `user` AS `u` WHERE `u`.`user_id` = `p`.`user_id` LIMIT 1) AS `username`,
             (SELECT `uv`.`verified` FROM `user` AS `uv` WHERE `uv`.`user_id` = `p`.`user_id` LIMIT 1) AS `verified`,
             (SELECT `o`.`order_status_id` FROM `order` AS `o` WHERE `o`.`product_id` = `p`.`product_id` AND `o`.`user_id` = :session_user_id ORDER BY `o`.`order_status_id` DESC  LIMIT 1) AS `order_status_id`,
@@ -57,10 +58,10 @@ class ModelCatalogProduct extends Model {
             (SELECT `pdm`.`product_demo_id` FROM `product_demo` AS `pdm` WHERE `pdm`.`product_id` = `p`.`product_id` AND `pdm`.`main` = 1 LIMIT 1) AS `main_product_demo_id`
 
             FROM `product` AS `p`
-            LEFT JOIN `product_description` AS `pd` ON (`pd`.`product_id` = `p`.`product_id`)
+            JOIN `product_description` AS `pd` ON (`pd`.`product_id` = `p`.`product_id`)
             LEFT JOIN `license` AS `l` ON (`l`.`license_id` = `p`.`license_id`)
             LEFT JOIN `license_description` AS `ld` ON (`ld`.`license_id` = `l`.`license_id`)
-            LEFT JOIN `product_special` AS `ps` ON (`ps`.`product_id` = `p`.`product_id` AND ((`ps`.`date_start` = "0000-00-00" OR `ps`.`date_start` < NOW()) AND (`ps`.`date_end` = "0000-00-00" OR `ps`.`date_end` > NOW())))
+            LEFT JOIN `product_special` AS `ps` ON (`ps`.`product_id` = `p`.`product_id` AND `ps`.`date_start` < NOW() AND `ps`.`date_end` > NOW())
 
             WHERE `p`.`product_id` = :product_id AND (`p`.`status` = 1 OR (`p`.`user_id` = :session_user_id AND `p`.`status` = 0))
             HAVING (`order_status_id` = :approved_order_status_id OR `sold_as_exclusive` <> 1 OR (`p`.`user_id` = :session_user_id AND `sold_as_exclusive` <> 0))
@@ -115,6 +116,7 @@ class ModelCatalogProduct extends Model {
                 `ps`.`regular_price` AS `special_regular_price`,
                 `ps`.`exclusive_price` AS `special_exclusive_price`,
                 `ps`.`date_end` AS `special_date_end`,
+
                 (SELECT `u`.`username` FROM `user` AS `u` WHERE `u`.`user_id` = `p`.`user_id` LIMIT 1) AS `username`,
                 (SELECT `o`.`order_status_id` FROM `order` AS `o` WHERE `o`.`product_id` = `p`.`product_id` AND `o`.`user_id` = :session_user_id ORDER BY `o`.`order_status_id` DESC LIMIT 1) AS `order_status_id`,
                 (SELECT COUNT(*) FROM `order` AS `o` WHERE `o`.`product_id` = `p`.`product_id` AND `o`.`order_status_id` = :approved_order_status_id) AS `sales`,
@@ -125,8 +127,8 @@ class ModelCatalogProduct extends Model {
                 (SELECT `pdm`.`product_demo_id` FROM `product_demo` AS `pdm` WHERE `pdm`.`product_id` = `p`.`product_id` AND `pdm`.`main` = 1 LIMIT 1) AS `main_product_demo_id`
 
                 FROM `product` AS `p`
-                LEFT JOIN `product_description` AS `pd` ON (`pd`.`product_id` = `p`.`product_id`)
-                LEFT JOIN `product_special` AS `ps` ON (`ps`.`product_id` = `p`.`product_id` AND ((`ps`.`date_start` = "0000-00-00" OR `ps`.`date_start` < NOW()) AND (`ps`.`date_end` = "0000-00-00" OR `ps`.`date_end` > NOW()))) ';
+                JOIN `product_description` AS `pd` ON (`pd`.`product_id` = `p`.`product_id`)
+                LEFT JOIN `product_special` AS `ps` ON (`ps`.`product_id` = `p`.`product_id` AND `ps`.`date_start` < NOW() AND `ps`.`date_end` > NOW()) ';
 
         // Filter by user ID
         if (isset($filter_data['user_id'])) {
