@@ -70,6 +70,7 @@ final class Url {
         $this->_addRewrite('account/account/login', 'signin');
         $this->_addRewrite('account/account/logout', 'logout');
         $this->_addRewrite('account/account/forgot', 'forgot-password');
+        $this->_addRewrite('account/account/verification', 'verify');
 
         $this->_addRewrite('account/product', 'product-list');
         $this->_addRewrite('account/product/create', 'add-product');
