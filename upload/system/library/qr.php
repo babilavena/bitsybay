@@ -359,7 +359,7 @@ final class Qr {
         }
     }
 
-    public function image($z = 4) {
+    public function image($z = 4, $border_x = 12, $border_y = 12) {
         $im = imagecreate($this->dim, $this->dim);//Initialize image
         imagecolorallocate($im, 255, 255, 255);
         $c = imagecolorallocate($im, 0, 0, 0);//Begin writing
@@ -370,10 +370,10 @@ final class Qr {
                 }
             }
         }
-        $img = imagecreate(($this->dim + 12) * $z, ($this->dim + 12) * $z);//New zoomed image with margin
+        $img = imagecreate(($this->dim + $border_x) * $z, ($this->dim + $border_y) * $z);//New zoomed image with margin
         imagecolorallocate($img, 255, 255, 255);
         imagecolorallocate($img, 0, 0, 0);
-        imagecopyresized($img, $im, 6 * $z, 6 * $z, 0, 0, $this->dim * $z, $this->dim * $z, $this->dim, $this->dim);
+        imagecopyresized($img, $im, ($border_x/2) * $z, ($border_y/2) * $z, 0, 0, $this->dim * $z, $this->dim * $z, $this->dim, $this->dim);
         imagedestroy($im);
         ob_start();
         imagepng($img);
