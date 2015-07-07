@@ -475,7 +475,7 @@ class ControllerAccountAccount extends Controller {
         $data['payment_instruction'] = sprintf(tt('Send exactly %s to this address:'), $this->currency->format(FEE_USER_VERIFICATION));
         $data['payment_address']     = $address;
         $data['payment_qr_href']     = $this->url->link('common/image/qr', 'code=' . $address, 'SSL');
-        $data['payment_wallet_href'] = sprintf('bitcoin:%s?amount=%s&label=%s [BitsyBay Verification Request] Account #%s', $address, FEE_USER_VERIFICATION, PROJECT_NAME, $this->auth->getId());
+        $data['payment_wallet_href'] = sprintf('bitcoin:%s?amount=%s&label=%s Verification Request for Account ID %s', $address, FEE_USER_VERIFICATION, PROJECT_NAME, $this->auth->getId());
 
         // Step 3
         $data['confirmation_code']   = $code;
