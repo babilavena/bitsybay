@@ -407,7 +407,7 @@ class ControllerAccountAccount extends Controller {
 
         // Redirect if user is not logged
         if (!$this->auth->isLogged()) {
-            $this->response->redirect($this->url->link('account/account/login', '', 'SSL'));
+            $this->response->redirect($this->url->link('account/account/login', 'redirect=' . base64_encode($this->url->getCurrentLink($this->request->getHttps())), 'SSL'));
         }
 
         // Redirect if user is already verified
