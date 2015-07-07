@@ -35,6 +35,7 @@ FEATURES
 **Account**
 
 * Email approving
+* User verification
 * File quota for each seller
 * Basic brute force protection
 * IP / access logging
