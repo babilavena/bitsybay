@@ -756,7 +756,7 @@ CREATE TABLE `user_ip` (
 --
 
 CREATE TABLE IF NOT EXISTS `user_verification_request` (
-  `user_verification_request_id` INT NOT NULL AUTO_INCREMENT,
+  `user_verification_request_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` INT UNSIGNED NOT NULL,
   `currency_id` INT UNSIGNED NOT NULL,
   `status` ENUM('pending', 'approved', 'declined') NOT NULL,
