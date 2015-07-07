@@ -38,13 +38,16 @@
       <div class="row">
         <div class="col-lg-12 form-group">
           <div class="well">
-            Verification feature is intended primarily for sellers. It's looks like <span class="text-success"><span class="glyphicon glyphicon-ok"></span> <strong><?php echo tt('Verified Seller') ?></strong></span> label in product cards.<br />
-            Offers from verified sellers haves more trust for theirs potential buyers.<br /><br />
-
-            <span class="glyphicon glyphicon-circle-arrow-right"></span>&nbsp;&nbsp;&nbsp;This function is based on expert judgment, so we charge a small fee for it.<br />
-            <span class="glyphicon glyphicon-circle-arrow-right"></span>&nbsp;&nbsp;&nbsp;Be sure that information you provided is correct and contain only facts with proof links.<br />
-            <span class="glyphicon glyphicon-circle-arrow-right"></span>&nbsp;&nbsp;&nbsp;We do not refund any payments and do not warrant that your request will be approved.<br />
-            <span class="glyphicon glyphicon-circle-arrow-right"></span>&nbsp;&nbsp;&nbsp;Average time to review your verification request varied in 1-7 days.<br />
+            <p>
+              The Verification feature is intended primarily for sellers. Verified seller can be identified by this label <span class="text-success"><span class="glyphicon glyphicon-ok"></span> <strong><?php echo tt('Verified Seller') ?></strong></span> in the product pages.
+              Verified sellers enjoy a greater deal of trust from buyers.
+            </p>
+            <p>
+              <span class="glyphicon glyphicon-circle-arrow-right"></span>&nbsp;&nbsp;&nbsp;The verification process is based on our expert judgement and we charge a small fee for this.<br />
+              <span class="glyphicon glyphicon-circle-arrow-right"></span>&nbsp;&nbsp;&nbsp;Be sure that the information provided is correct and that all relevant facts and links are provided.<br />
+              <span class="glyphicon glyphicon-circle-arrow-right"></span>&nbsp;&nbsp;&nbsp;We do not refund any payments and neither do we guarantee that your request will be approved.<br />
+              <span class="glyphicon glyphicon-circle-arrow-right"></span>&nbsp;&nbsp;&nbsp;The review and verification process takes between 1 to 7 days.<br />
+            </p>
           </div>
         </div>
       </div>
@@ -79,7 +82,7 @@
           <div class="col-lg-11 form-group">
             <div class="row">
             <div class="col-lg-5">
-              <?php echo tt('Provide detailed information that in your opinion proves your identity. It should include at least one web page or social profile that you own:') ?>
+              <?php echo tt('Provide detailed links to sites that in your opinion proves and verifies your identity. It should include at least one web page or social profile that you own:') ?>
             </div>
             <div class="col-lg-7">
               <div class="<?php if (isset($error['proof'])) { ?> has-error<?php } ?>">
@@ -96,7 +99,7 @@
           <div class="col-lg-11 form-group">
             <div class="row">
               <div class="col-lg-5">
-                <?php echo tt("Copy one of these codes provided in your social profile page or site's home page:") ?>
+                <?php echo tt("Copy the top code and post it on your social profile page or include the bottom code on your site's homepage. This is to verify that you are the owner/administrator of the relevant site and or page.") ?>
               </div>
               <div class="col-lg-7">
                 <pre><?php echo sprintf(tt('%s ID: %s'), PROJECT_NAME, $confirmation_code) ?></pre>
