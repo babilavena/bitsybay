@@ -65,9 +65,10 @@ define('USER_IMAGE_ORIGINAL_MIN_WIDTH', 200);
 define('USER_IMAGE_ORIGINAL_MIN_HEIGHT', 200);
 
 // PRICES
-define('FEE_PER_ORDER', 11); // Percent
-define('ALLOWED_PRODUCT_MIN_PRICE', 0.01);
-define('ALLOWED_PRODUCT_MAX_PRICE', 1000000);
+define('FEE_PER_ORDER', 11);                  // Percent
+define('FEE_USER_VERIFICATION', 0.1);         // BTC
+define('ALLOWED_PRODUCT_MIN_PRICE', 0.01);    // BTC
+define('ALLOWED_PRODUCT_MAX_PRICE', 1000000); // BTC
 
 // ORDERS
 define('ORDER_PENDING_STATUS_ID', 1);  // INT order_status_id in order_status table
@@ -109,4 +110,5 @@ define('BITCOIN_RPC_PASSWORD', '');
 
 define('BITCOIN_FUND_ADDRESS', '');
 define('BITCOIN_ORDER_PREFIX', 'order_');
+define('BITCOIN_USER_VERIFICATION_PREFIX', 'user_verification_');
 define('BITCOIN_MIN_TRANSACTION_CONFIRMATIONS', 6); // Minimum BTC transaction confirmations requires before the order will be marked as APPROVED

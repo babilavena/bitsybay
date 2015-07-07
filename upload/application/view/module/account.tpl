@@ -16,6 +16,9 @@
   <div class="list-group">
     <div class="list-group-item active"><?php echo tt('Account') ?></div>
     <a href="<?php echo $href_account_account ?>" class="list-group-item"><?php echo tt('Profile') ?></a>
+    <?php if ($verified) { ?>
+      <a href="<?php echo $href_account_account_verification ?>" class="list-group-item"><?php echo tt('Verification') ?></a>
+    <?php } ?>
     <a href="<?php echo $href_account_account_edit ?>" class="list-group-item"><?php echo tt('Account settings') ?></a>
     <a href="<?php echo $href_account_account_logout ?>" class="list-group-item"><?php echo tt('Logout') ?></a>
   </div>

@@ -21,6 +21,9 @@ class ControllerModuleAccount extends Controller {
         $data['href_account_account'] = $this->url->link('account/account', '', 'SSL');
         $data['href_account_account_edit'] = $this->url->link('account/account/update', '', 'SSL');
         $data['href_account_account_logout'] = $this->url->link('account/account/logout', '', 'SSL');
+        $data['href_account_account_verification'] = $this->url->link('account/account/verification', '', 'SSL');
+
+        $data['verified'] = !$this->auth->isVerified();
 
         return $this->load->view('module/account.tpl', $data);
     }

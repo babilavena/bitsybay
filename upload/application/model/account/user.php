@@ -357,6 +357,50 @@ class ModelAccountUser extends Model {
     }
 
     /**
+    * Add verification_request
+    *
+    * @param int $user_id
+    * @param int $currency_id
+    * @param string $status ENUM('pending','approved','declined')
+    * @param string $address Payment address
+    * @param string $code Unique verification code
+    * @param string $proof Proof info
+    * @return int|bool Returns login_attempt_id or false if throw exception
+    */
+    public function addVerificationRequest($user_id, $currency_id, $status, $address, $code, $proof) {
+        try {
+            $statement = $this->db->prepare('INSERT INTO `user_verification_request` SET
+            `user_id` = ?,
+            `currency_id` = ?,
+            `status` = ?,
+            `address` = ?,
+            `code` = ?,
+            `proof` = ?,
+            `comment` = NULL,
+            `date_conclusion` = NULL,
+            `date_added` = NOW()
+            ');
+            $statement->execute(
+                array(
+                    $user_id,
+                    $currency_id,
+                    $status,
+                    $address,
+                    $code,
+                    $proof
+                )
+            );
+
+            return $this->db->lastInsertId();
+
+        } catch (PDOException $e) {
+
+            trigger_error($e->getMessage());
+            return false;
+        }
+    }
+
+    /**
     * Add login attempt log
     *
     * @param string $login

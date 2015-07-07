@@ -750,6 +750,37 @@ CREATE TABLE `user_ip` (
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
+--
+-- Table structure for table `user_verification_request`
+--
+
+CREATE TABLE IF NOT EXISTS `user_verification_request` (
+  `user_verification_request_id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` INT UNSIGNED NOT NULL,
+  `currency_id` INT UNSIGNED NOT NULL,
+  `status` ENUM('pending', 'approved', 'declined') NOT NULL,
+  `address` VARCHAR(255) NOT NULL,
+  `code` VARCHAR(255) NOT NULL,
+  `proof` LONGTEXT NOT NULL,
+  `comment` LONGTEXT NULL,
+  `date_added` DATETIME NOT NULL,
+  `date_conclusion` DATETIME NULL,
+  PRIMARY KEY (`user_verification_request_id`),
+  INDEX `fk_user_verification_request_user_id` (`user_id` ASC),
+  INDEX `fk_user_verification_request_currency_id` (`currency_id` ASC),
+  CONSTRAINT `fk_user_verification_request_user_id`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `user` (`user_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_user_verification_request_currency_id`
+    FOREIGN KEY (`currency_id`)
+    REFERENCES `currency` (`currency_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
 --
 -- Table structure for table `video_server`
 --

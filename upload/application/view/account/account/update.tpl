@@ -36,7 +36,6 @@
     <?php echo $alert_danger ?>
     <?php echo $alert_warning ?>
     <?php echo $alert_success ?>
-    <?php echo $module_verification ?>
 
     <div class="form-group bs-component">
       <form class="form-horizontal" action="<?php echo $action ?>" method="POST">

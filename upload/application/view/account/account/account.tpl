@@ -48,7 +48,7 @@
       </form>
       </div>
       <div class="col-lg-7 col-md-7 col-sm-9 col-xs-12">
-        <p><?php echo $username ?> <sup><a href="<?php echo $href_account_account_update ?>"><i class="glyphicon glyphicon-pencil"></i> edit</a></sup></p>
+        <p><?php echo $username ?> <sup><a href="<?php echo $href_account_account_update ?>"><i class="glyphicon glyphicon-pencil"></i> <?php echo tt('edit') ?></a></sup></p>
         <p><?php echo tt('Joined on') ?>: <?php echo $date_added ?></p>
       </div>
     </div>
@@ -57,7 +57,11 @@
     <h3><?php echo tt('Account status') ?></h3>
     <p><?php echo tt('Active') ?>: <?php echo $active ? '<span class="text-success">' . tt('Yes') . '</span>' : '<span class="text-danger">' . tt('No') . '</span>' ?></p>
     <p><?php echo tt('Approved') ?>: <?php echo $approved ? '<span class="text-success">' . tt('Yes') . '</span>' : '<span class="text-warning">' . tt('No') . '</span>' ?></p>
-    <p><?php echo tt('Verified') ?>: <?php echo $verified ? '<span class="text-success">' . tt('Yes') . '</span>' : '<span class="text-warning">' . tt('No') . '</span>' ?></p>
+    <p>
+      <?php echo tt('Verified') ?>: <?php echo $verified ?
+      '<span class="text-success">' . tt('Yes') . '</span>' :
+      '<span class="text-warning">' . tt('No') . '</span> <sup><a href="' . $href_account_account_verification . '"><i class="glyphicon glyphicon-leaf"></i> ' . tt('verify') . '</a></sup>' ?>
+    </p>
   </div>
   <div class="col-lg-2 col-md-4 col-sm-6">
     <h3><?php echo tt('Get started') ?></h3>

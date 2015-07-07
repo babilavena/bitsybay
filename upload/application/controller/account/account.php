@@ -25,6 +25,7 @@ class ControllerAccountAccount extends Controller {
         $this->load->helper('validator/user');
         $this->load->helper('validator/upload');
         $this->load->library('mail');
+        $this->load->library('bitcoin');
         $this->load->library('identicon');
         $this->load->library('captcha/captcha');
     }
@@ -47,11 +48,12 @@ class ControllerAccountAccount extends Controller {
         $data['date_added']    = date(DATE_FORMAT_DEFAULT, strtotime($this->auth->getDateAdded()));
         $data['avatar_url']    = $this->cache->image('thumb', $this->auth->getId(), 100, 100);
 
-        $data['avatar_action']                 = $this->url->link('account/account/uploadAvatar', '', 'SSL');
-        $data['href_catalog_search_favorites'] = $this->url->link('catalog/search', 'favorites=1', 'SSL');
-        $data['href_catalog_search_purchased'] = $this->url->link('catalog/search', 'purchased=1', 'SSL');
-        $data['href_account_account_update']   = $this->url->link('account/account/update', '', 'SSL');
-        $data['href_account_product_create']   = $this->url->link('account/product/create', '', 'SSL');
+        $data['avatar_action']                     = $this->url->link('account/account/uploadAvatar', '', 'SSL');
+        $data['href_catalog_search_favorites']     = $this->url->link('catalog/search', 'favorites=1', 'SSL');
+        $data['href_catalog_search_purchased']     = $this->url->link('catalog/search', 'purchased=1', 'SSL');
+        $data['href_account_account_update']       = $this->url->link('account/account/update', '', 'SSL');
+        $data['href_account_product_create']       = $this->url->link('account/product/create', '', 'SSL');
+        $data['href_account_account_verification'] = $this->url->link('account/account/verification', '', 'SSL');
 
         $data['module_account']  = $this->load->controller('module/account');
         $data['module_billing']  = $this->load->controller('module/billing');
@@ -264,7 +266,6 @@ class ControllerAccountAccount extends Controller {
 
         // Load modules
         $data['module_account'] = $this->load->controller('module/account');
-        $data['module_verification'] = $this->load->controller('module/verification');
 
         $data['footer'] = $this->load->controller('common/footer');
         $data['header'] = $this->load->controller('common/header');
@@ -402,6 +403,103 @@ class ControllerAccountAccount extends Controller {
         $this->response->setOutput($this->load->view('account/account/forgot.tpl', $data));
     }
 
+    public function verification() {
+
+        // Redirect if user is not logged
+        if (!$this->auth->isLogged()) {
+            $this->response->redirect($this->url->link('account/account/login', '', 'SSL'));
+        }
+
+        // Redirect if user is already verified
+        if ($this->auth->isVerified()) {
+            $this->response->redirect($this->url->link('account/account', '', 'SSL'));
+        }
+
+        $this->document->setTitle(tt('Account verification'));
+
+        $data = array();
+        $code = md5(PROJECT_NAME . $this->auth->getId());
+
+        // Create a new BitCoin Address
+        try {
+            $bitcoin = new BitCoin(BITCOIN_RPC_USERNAME, BITCOIN_RPC_PASSWORD, BITCOIN_RPC_HOST, BITCOIN_RPC_PORT);
+            $address = $bitcoin->getaccountaddress(BITCOIN_USER_VERIFICATION_PREFIX . $this->auth->getId());
+        } catch (Exception $e) {
+            $this->security_log->write('BitCoin connection error ' . $e->error);
+            exit;
+        }
+
+        if ('POST' == $this->request->getRequestMethod() && $this->_validateVerification()) {
+
+            // Save verification request into the DB
+            if ($this->model_account_user->addVerificationRequest($this->auth->getId(),
+                                                                  $this->currency->getId(),
+                                                                  'pending',
+                                                                  $address,
+                                                                  $code,
+                                                                  $this->request->post['proof'])) {
+
+                // Admin alert
+                $mail = new Mail();
+                $mail->setTo(MAIL_INFO);
+                $mail->setFrom(MAIL_FROM);
+                $mail->setReplyTo(MAIL_INFO);
+                $mail->setSender(MAIL_SENDER);
+                $mail->setSubject(sprintf(tt('Account Verification Request - %s'), PROJECT_NAME));
+                $mail->setText(
+                    sprintf(tt("A new verification was requested form %s (User ID %s)\n\n"), $this->auth->getUsername(), $this->auth->getId()) .
+                    sprintf(tt("Proof:\n\n%s\n\n"), $this->request->post['proof']) .
+                    sprintf(tt("Email: %s\n"), $this->auth->getEmail()) .
+                    sprintf(tt("Verification code: %s\n"), $code)
+                );
+                $mail->send();
+
+                // Success message
+                $this->session->setUserMessage(array('success' => tt('Your verification request was sent successfully!')));
+
+            } else {
+
+                // Something wrong
+                $this->session->setUserMessage(array('danger' => tt('Undefined error! Please contact us.')));
+            }
+        }
+
+        $data['error']     = $this->_error;
+        $data['action']    = $this->url->link('account/account/verification', '', 'SSL');
+
+        $data['proof']     = isset($this->request->post['proof']) ? $this->request->post['proof'] : false;
+        $data['accept_1']  = isset($this->request->post['accept_1']) ? $this->request->post['accept_1'] : false;
+        $data['accept_2']  = isset($this->request->post['accept_2']) ? $this->request->post['accept_2'] : false;
+
+        // Step 1
+        $data['payment_instruction'] = sprintf(tt('Send exactly %s to this address:'), $this->currency->format(FEE_USER_VERIFICATION));
+        $data['payment_address']     = $address;
+        $data['payment_qr_href']     = $this->url->link('common/image/qr', 'code=' . $address, 'SSL');
+        $data['payment_wallet_href'] = sprintf('bitcoin:%s?amount=%s&label=%s [BitsyBay Verification Request] Account #%s', $address, FEE_USER_VERIFICATION, PROJECT_NAME, $this->auth->getId());
+
+        // Step 3
+        $data['confirmation_code']   = $code;
+
+        $data['href_cancel'] = $this->url->link('account/account', '', 'SSL');
+
+        $data['footer'] = $this->load->controller('common/footer');
+        $data['header'] = $this->load->controller('common/header');
+
+        $data['alert_danger']  = $this->load->controller('common/alert/danger');
+        $data['alert_success'] = $this->load->controller('common/alert/success');
+        $data['alert_warning'] = $this->load->controller('common/alert/warning');
+
+        $data['module_account']  = $this->load->controller('module/account');
+        $data['module_breadcrumbs'] = $this->load->controller('module/breadcrumbs', array(
+                    array('name' => tt('Home'), 'href' => $this->url->link('common/home'), 'active' => false),
+                    array('name' => tt('Account'), 'href' => $this->url->link('account/account', '', 'SSL'), 'active' => false),
+                    array('name' => tt('Verification'), 'href' => $this->url->link('account/account/verification', '', 'SSL'), 'active' => true)
+        ));
+
+        // Renter the template
+        $this->response->setOutput($this->load->view('account/account/verification.tpl', $data));
+    }
+
     public function approve() {
 
         // Redirect if user is already logged
@@ -535,6 +633,30 @@ class ControllerAccountAccount extends Controller {
             $this->_error['email'] = tt('Invalid email address');
         } else if (!$this->model_account_user->checkEmail($this->request->post['email'])) {
             $this->_error['email'] = tt('E-Mail is not exists');
+        }
+
+        return !$this->_error;
+    }
+
+    private function _validateVerification() {
+
+        // Proof should be available
+        if (!isset($this->request->post['proof']) || empty($this->request->post['proof'])) {
+            $this->_error['proof'] = tt('Proof information is required!');
+        }
+
+        // Accept terms
+        if (!isset($this->request->post['accept_1']) || empty($this->request->post['accept_1']) || $this->request->post['accept_1'] != 1) {
+            $this->_error['accept_1'] = tt('You must accept terms and conditions!');
+        }
+
+        if (!isset($this->request->post['accept_2']) || empty($this->request->post['accept_2']) || $this->request->post['accept_2'] != 1) {
+            $this->_error['accept_2'] = tt('You must accept terms and conditions!');
+        }
+
+        // Common message
+        if ($this->_error) {
+            $this->session->setUserMessage(array('danger' => tt('Please check the form carefully for errors!')));
         }
 
         return !$this->_error;
