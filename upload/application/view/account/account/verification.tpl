@@ -67,7 +67,7 @@
                 </div>
                 <div class="row">
                   <div class="col-lg-6 text-left">
-                    <a class="btn btn-primary" href="<?php echo $payment_wallet_href ?>"><?php echo tt('Use wallet') ?></a>
+                    <a class="btn btn-default" href="<?php echo $payment_wallet_href ?>"><?php echo tt('Use wallet') ?></a>
                   </div>
                 </div>
               </div>
@@ -131,9 +131,13 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-11 text-right form-group">
-          <a href="<?php echo $href_cancel ?>" class="btn btn-default"><?php echo tt('Cancel') ?></a>
-          <button type="submit" class="btn btn-primary"><?php echo tt('Send Request') ?></button>
+        <div class="col-lg-11 form-group">
+          <div class="row">
+            <div class="col-lg-7 col-lg-offset-5">
+              <button type="submit" class="btn btn-primary"><?php echo tt('Send Request') ?></button>
+              <a href="<?php echo $href_cancel ?>" onclick="return confirm('<?php echo tt("Are you sure?") ?>')" class="btn btn-default"><?php echo tt('Cancel') ?></a>
+            </div>
+          </div>
         </div>
       </form>
     </div>
