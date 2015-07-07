@@ -34,7 +34,6 @@
     <?php echo $alert_warning ?>
     <?php echo $alert_success ?>
     <div class="bs-component">
-
       <div class="row">
         <div class="col-lg-12 form-group">
           <div class="well">
@@ -51,8 +50,6 @@
           </div>
         </div>
       </div>
-
-
       <form class="form-horizontal" action="<?php echo $action ?>" method="POST">
         <fieldset>
           <legend><?php echo tt('Step 1: Verification Fee') ?></legend>
@@ -82,7 +79,7 @@
           <div class="col-lg-11 form-group">
             <div class="row">
             <div class="col-lg-5">
-              <?php echo tt('Provide detailed links to sites that in your opinion proves and verifies your identity. It should include at least one web page or social profile that you own:') ?>
+              <?php echo tt('Provide detailed information that in your opinion proves and verifies your identity. It should include at least one web page or social profile that you own:') ?>
             </div>
             <div class="col-lg-7">
               <div class="<?php if (isset($error['proof'])) { ?> has-error<?php } ?>">
