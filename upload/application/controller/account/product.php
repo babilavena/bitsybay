@@ -732,7 +732,7 @@ class ControllerAccountProduct extends Controller {
 
             // Resize to default original format
             if (PRODUCT_IMAGE_ORIGINAL_WIDTH < $image->getWidth() || PRODUCT_IMAGE_ORIGINAL_HEIGHT < $image->getHeight()) {
-                $image->resize(PRODUCT_IMAGE_ORIGINAL_WIDTH, PRODUCT_IMAGE_ORIGINAL_HEIGHT);
+                $image->resize(PRODUCT_IMAGE_ORIGINAL_WIDTH, PRODUCT_IMAGE_ORIGINAL_HEIGHT, 1, false, true);
             }
 
             $image_path     = DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR;
