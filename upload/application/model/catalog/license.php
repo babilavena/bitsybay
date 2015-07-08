@@ -134,13 +134,14 @@ class ModelCatalogLicense extends Model {
                                              FROM `license` AS `l`
                                              LEFT JOIN `license_description` AS `ld` ON (`l`.`license_id` = `ld`.`license_id`)
                                              WHERE (`l`.`user_id` = :user_id OR `l`.`user_id` IS NULL)
-                                             AND SHA1(CONCAT(`ld`.`title`,`ld`.`description`)) = SHA1(:content)
+                                             AND SHA1(CONCAT(`ld`.`title`,`ld`.`description`)) = SHA1(CONCAT(:title, :description))
                                              AND `ld`.`language_id` = :language_id
                                              LIMIT 1');
 
             $statement->execute(array(
                 ':user_id'     => $user_id,
-                ':content'     => $title . $description,
+                ':title'       => $title,
+                ':description' => $description,
                 ':language_id' => $language_id));
 
             if ($statement->rowCount()) {
