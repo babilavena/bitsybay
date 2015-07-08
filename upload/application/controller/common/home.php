@@ -61,7 +61,7 @@ class ControllerCommonHome extends Controller {
         $data['href_account_create'] = $this->url->link('account/account/create', 'redirect=' . $redirect, 'SSL');
 
         $data['module_search']  = $this->load->controller('module/search', array('class' => 'col-lg-8 col-lg-offset-2'));
-        $data['module_latest']  = $this->load->controller('module/latest', array('limit' => 8));
+        $data['module_latest']  = $this->load->controller('module/latest', array('limit' => 4));
 
         $data['footer']         = $this->load->controller('common/footer');
         $data['header']         = $this->load->controller('common/header');
