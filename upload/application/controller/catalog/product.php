@@ -107,8 +107,8 @@ class ControllerCatalogProduct extends Controller {
         $data['verified']          = $product_info->verified;
 
         $image_info = $this->model_catalog_product->getProductImageInfo($product_info->main_product_image_id);
-        $data['product_image_url']     = $this->cache->image($product_info->main_product_image_id, $product_info->user_id, 350, 350, $image_info->watermark);
-        $data['product_image_orig_url'] = $this->cache->image($product_info->main_product_image_id, $product_info->user_id, 570, 570, $image_info->watermark);
+        $data['product_image_url']     = $this->cache->image($product_info->main_product_image_id, $product_info->user_id, 350, 350, $image_info->watermark, false, true);
+        $data['product_image_orig_url'] = $this->cache->image($product_info->main_product_image_id, $product_info->user_id, 570, 570, $image_info->watermark, false, true);
         $data['product_image_id']  = $product_info->main_product_image_id;
 
         switch ($product_info->order_status_id) {
