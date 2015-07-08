@@ -79,7 +79,7 @@
           <div class="col-lg-11 form-group">
             <div class="row">
             <div class="col-lg-5">
-              <?php echo tt('Provide detailed information that in your opinion proves and verifies your identity. It should include at least one web page or social profile that you own:') ?>
+              <?php echo tt('Provide detailed information that in your opinion proves and verifies your identity. It should include at least one web page or social profile that presents your works:') ?>
             </div>
             <div class="col-lg-7">
               <div class="<?php if (isset($error['proof'])) { ?> has-error<?php } ?>">
