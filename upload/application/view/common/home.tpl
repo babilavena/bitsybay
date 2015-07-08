@@ -28,7 +28,7 @@
 
             <div class="social-buttons">
               <div class="fb-follow" data-href="https://www.facebook.com/bitsybay" data-layout="button_count" data-show-faces="true"></div>
-              <a href="https://twitter.com/BitsyBayCom" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false">Follow @BitsyBayCom</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+              <a href="https://twitter.com/BitsyBayProject" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false">Follow @BitsyBayProject</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
               <a class="github-button" href="https://github.com/bitsybay/bitsybay" data-count-href="/bitsybay/bitsybay/stargazers" data-count-api="/repos/bitsybay/bitsybay#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star bitsybay/bitsybay on GitHub">Star</a>
             </div>
 
