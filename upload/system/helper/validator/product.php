@@ -43,7 +43,7 @@ class ValidatorProduct {
             return false;
         } else if (mb_strlen($description) < VALIDATOR_PRODUCT_DESCRIPTION_MIN_LENGTH || mb_strlen($description) > VALIDATOR_PRODUCT_DESCRIPTION_MAX_LENGTH) {
             return false;
-        } else if (!preg_match('/^[\w\s\d\(\)\.\,\`\"\'\@\®\©\#\№\&\%\:\;\*\/\-\_\~\+\=\?\!\<\>\{\}\[\]\’\‘\“\”]+$/i', $description)) {
+        } else if (!preg_match('/^[\w\s\d\(\)\.\,\`\"\'\@\®\©\#\№\&\%\:\;\*\/\-\_\~\+\=\?\!\<\>\{\}\[\]\’\‘\“\”]+$/ui', $description)) {
             return false;
         } else {
             return true;
