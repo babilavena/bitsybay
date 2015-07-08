@@ -210,6 +210,7 @@ CREATE TABLE `order` (
   `order_status_id` int(10) unsigned NOT NULL,
   `fee` int(10) NOT NULL,
   `currency_id` int(10) unsigned NOT NULL,
+  `license_id` int(10) unsigned NOT NULL,
   `amount` decimal(16,8) NOT NULL,
   `license` enum('regular','exclusive') NOT NULL,
   `date_added` datetime NOT NULL,
