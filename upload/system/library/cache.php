@@ -32,14 +32,15 @@ final class Cache {
     * @param int $height Resizing height
     * @param bool $watermarked
     * @param bool $overwrite
+    * @param bool $best_fit
     * @return string Cached Image URL
     */
-    public function image($name, $user_id, $width, $height, $watermarked = false, $overwrite = false) {
+    public function image($name, $user_id, $width, $height, $watermarked = false, $overwrite = false, $best_fit = false) {
 
         $storage     = DIR_STORAGE . $user_id . DIR_SEPARATOR . $name . '.' . STORAGE_IMAGE_EXTENSION;
-        $cache       = DIR_IMAGE . 'cache' . DIR_SEPARATOR . $user_id . DIR_SEPARATOR . $name . '-' . $width . '-' . $height . '.' . STORAGE_IMAGE_EXTENSION;
+        $cache       = DIR_IMAGE . 'cache' . DIR_SEPARATOR . $user_id . DIR_SEPARATOR . $name . '-' . (int) $best_fit . '-' . $width . '-' . $height . '.' . STORAGE_IMAGE_EXTENSION;
         $watermark   = DIR_IMAGE . 'common' . DIR_SEPARATOR . 'watermark.png';
-        $cached_url  = ($this->_request->getHttps() ? HTTPS_IMAGE_SERVER : HTTP_IMAGE_SERVER ) . 'cache' . DIR_SEPARATOR . $user_id . DIR_SEPARATOR . $name . '-' . $width . '-' . $height . '.' . STORAGE_IMAGE_EXTENSION;
+        $cached_url  = ($this->_request->getHttps() ? HTTPS_IMAGE_SERVER : HTTP_IMAGE_SERVER ) . 'cache' . DIR_SEPARATOR . $user_id . DIR_SEPARATOR . $name . '-' . (int) $best_fit . '-' . $width . '-' . $height . '.' . STORAGE_IMAGE_EXTENSION;
 
         // Force reset
         if ($overwrite) {
@@ -66,7 +67,7 @@ final class Cache {
 
             // Prepare new image
             $image = new Image($storage);
-            $image->resize($width, $height);
+            $image->resize($width, $height, 1, false, $best_fit);
 
             if ($watermarked) {
                 $image->watermark($watermark);
