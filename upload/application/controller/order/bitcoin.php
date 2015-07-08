@@ -101,6 +101,7 @@ class ControllerOrderBitcoin extends Controller {
         // Create a new order in DB
         if (!$order_id = $this->model_common_order->createOrder($this->auth->getId(),
                                                                 $product_info->product_id,
+                                                                $product_info->license_id,
                                                                 $this->request->post['license'],
                                                                 $amount,
                                                                 FEE_PER_ORDER,
