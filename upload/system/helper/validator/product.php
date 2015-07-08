@@ -24,7 +24,7 @@ class ValidatorProduct {
 
         if (mb_strlen($title) < VALIDATOR_PRODUCT_TITLE_MIN_LENGTH || mb_strlen($title) > VALIDATOR_PRODUCT_TITLE_MAX_LENGTH) {
             return false;
-        } else if (!preg_match('/^[\w\s\d\(\)\-\+\.\%]+$/i', $title)) {
+        } else if (!preg_match('/^[\w\s\d\(\)\-\+\.\%]+$/ui', $title)) {
             return false;
         } else {
             return true;
@@ -64,7 +64,7 @@ class ValidatorProduct {
             return false;
         } else if (mb_strlen($url) > VALIDATOR_PRODUCT_URL_MAX_LENGTH) {
             return false;
-        } else if (!preg_match('/^(http|https)\:\/\/[a-z\d\.\/\&\?\=\-\_\+]+$/i', $url)) {
+        } else if (!preg_match('/^(http|https)\:\/\/[a-z\d\.\/\&\?\=\-\_\+]+$/ui', $url)) {
             return false;
         } else {
             return true;
@@ -85,7 +85,7 @@ class ValidatorProduct {
 
             if ($tags_length < VALIDATOR_PRODUCT_TAGS_MIN_LENGTH || $tags_length > VALIDATOR_PRODUCT_TAGS_MAX_LENGTH) {
                 return false;
-            } else if (!preg_match('/^[\,\.\-\s\d\w]+$/i', $tags)) {
+            } else if (!preg_match('/^[\,\.\-\s\d\w]+$/ui', $tags)) {
                 return false;
             }
         }
@@ -107,7 +107,7 @@ class ValidatorProduct {
 
             if ($tag_length < VALIDATOR_PRODUCT_TAG_MIN_LENGTH || $tag_length > VALIDATOR_PRODUCT_TAG_MAX_LENGTH) {
                 return false;
-            } else if (!preg_match('/^[\,\.\-\s\d\w]+$/i', $tag)) {
+            } else if (!preg_match('/^[\,\.\-\s\d\w]+$/ui', $tag)) {
                 return false;
             }
         }
@@ -123,7 +123,7 @@ class ValidatorProduct {
     */
     static public function dateValid($date) {
 
-        if (preg_match('/^[\d]{4}\-[\d]{2}\-[\d]{2}+$/i', $date)) {
+        if (preg_match('/^[\d]{4}\-[\d]{2}\-[\d]{2}+$/ui', $date)) {
             return true;
         } else {
             return false;
