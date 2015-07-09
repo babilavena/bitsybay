@@ -26,21 +26,34 @@
           <div class="col-lg-7">
             <h3>Looking for a Marketplace to buy or sell digital creative in Bitcoin?</h3>
 
+            <!-- Social:begin //-->
             <div class="social-buttons">
               <div style="vertical-align:top" class="fb-like" data-href="https://facebook.com/bitsybay" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false"></div>
               <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://bitsybay.com" data-via="BitsyBayProject" data-related="bitsybay" data-hashtags="BitsyBay">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
               <a class="github-button" href="https://github.com/bitsybay/bitsybay" data-count-href="/bitsybay/bitsybay/stargazers" data-count-api="/repos/bitsybay/bitsybay#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star bitsybay/bitsybay on GitHub">Star</a>
             </div>
+            <!-- Github //-->
+            <script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
 
-              Then here you are:
-              <ul>
-                <li><?php echo $total_products ?> by <?php echo $total_sellers ?> for <?php echo $total_buyers ?></li>
-                <li>Trade from any country without bank commissions and other restrictions</li>
-                <li>Royalty Free and Exclusive licenses</li>
-                <li><?php echo QUOTA_FILE_SIZE_BY_DEFAULT ?> Mb free disk space for all new sellers and +<?php echo QUOTA_BONUS_SIZE_PER_ORDER ?> Mb for every next sale</li>
-                <li>0% seller commission up to 2016, 11% later</li>
-              </ul>
-            </p>
+            <!-- Facebook //-->
+            <div id="fb-root"></div>
+            <script>(function(d, s, id) {
+              var js, fjs = d.getElementsByTagName(s)[0];
+              if (d.getElementById(id)) return;
+              js = d.createElement(s); js.id = id;
+              js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.3";
+              fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));</script>
+            <!-- Social:end //-->
+
+            Then here you are:
+            <ul>
+              <li><?php echo $total_products ?> by <?php echo $total_sellers ?> for <?php echo $total_buyers ?></li>
+              <li>Trade from any country without bank commissions and other restrictions</li>
+              <li>Royalty Free and Exclusive licenses</li>
+              <li><?php echo QUOTA_FILE_SIZE_BY_DEFAULT ?> Mb free disk space for all new sellers and +<?php echo QUOTA_BONUS_SIZE_PER_ORDER ?> Mb for every next sale</li>
+              <li>0% seller commission up to 2016, 11% later</li>
+            </ul>
           </div>
           <div class="col-lg-4 col-lg-offset-1">
             <div class="bs-component">
