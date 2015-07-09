@@ -179,7 +179,7 @@
             <p><?php echo $product_description ?></p>
           </div>
           <div class="tab-pane fade" id="productLicense">
-            <h4><?php echo $product_license_title ?></h4>
+            <h4 class="license-header"><?php echo $product_license_title ?></h4>
             <p><?php echo $product_license_description ?></p>
           </div>
           <div class="tab-pane fade" id="productReviews">

@@ -530,6 +530,12 @@ table img {
     cursor: pointer;
 }
 
+.catalog-product .license-header {
+    border-bottom: 1px #CCC dashed;
+    padding-bottom: 20px;
+    margin-bottom: 20px
+}
+
 /* Social plugins */
 
 .social-buttons {
