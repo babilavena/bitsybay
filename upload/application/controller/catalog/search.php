@@ -35,6 +35,7 @@ class ControllerCatalogSearch extends Controller {
         $breadcrumbs = array();
         $filter_data = array('order' => 'DESC');
         $title = tt('Products');
+        $meta_title = '';
 
 
         $breadcrumbs[] = array('name' => tt('Home'), 'href' => $this->url->link('common/home'), 'active' => false);
@@ -44,13 +45,15 @@ class ControllerCatalogSearch extends Controller {
         if (isset($this->request->get['user_id']) && $user_info = $this->model_account_user->getUser((int) $this->request->get['user_id'])) {
 
             $title .= sprintf(' ' . tt('by %s'), $user_info->username);
+            $meta_title .= sprintf(' ' . tt('by %s'), $user_info->username);
             $filter_data['user_id'] = (int) $this->request->get['user_id'];
         }
 
         // Filter by search term & tags
         if (isset($this->request->get['q']) && !empty($this->request->get['q']) && ValidatorProduct::titleValid($this->request->get['q'])) {
 
-            $title .= sprintf(' ' . tt('contains %s'), $this->request->get['q']);
+            $title .= sprintf(' ' . tt('containing %s'), ucfirst($this->request->get['q']));
+            $meta_title .= sprintf(' ' . tt('Buy %s Thematic with Bitcoin | %s Thematic Store'), ucfirst($this->request->get['q']), ucfirst($this->request->get['q']));
             $filter_data['filter_query'] = $this->request->get['q'];
         }
 
@@ -58,6 +61,7 @@ class ControllerCatalogSearch extends Controller {
         if (isset($this->request->get['favorites'])) {
 
             $title .= ' ' . tt('favorites');
+            $meta_title .= $title;
             $filter_data['favorites'] = true;
         }
 
@@ -65,6 +69,7 @@ class ControllerCatalogSearch extends Controller {
         if (isset($this->request->get['purchased'])) {
 
             $title .= ' ' . tt('purchased');
+            $meta_title .= $title;
             $filter_data['purchased'] = true;
         }
 
@@ -148,7 +153,7 @@ class ControllerCatalogSearch extends Controller {
         }
 
         // Load layout
-        $this->document->setTitle($title);
+        $this->document->setTitle($meta_title);
         $data['title']  = $title;
 
         $data['footer'] = $this->load->controller('common/footer');

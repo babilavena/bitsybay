@@ -242,7 +242,6 @@ class ControllerCatalogProduct extends Controller {
         }
 
         // Create SEO titles
-        array_multisort($categories, SORT_ASC, SORT_NUMERIC);
         $this->document->setTitle(sprintf(tt('Buy %s with BitCoin'), $product_info->title) . ' | ' . implode(' ', $categories));
 
         // Load layout
