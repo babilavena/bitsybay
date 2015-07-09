@@ -468,7 +468,7 @@ table img {
 .container .jumbotron {
 
     text-shadow: 0 1px 1px #FFF;
-    overflow: hidden;
+    overflow: auto;
     padding: 50px;
     background-image: url(../image/template/t-bg.png);
     background-color: #FFF;

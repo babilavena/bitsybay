@@ -27,8 +27,8 @@
             <h3>Looking for a Marketplace to buy or sell digital creative in Bitcoin?</h3>
 
             <div class="social-buttons">
-              <div class="fb-follow" data-href="https://www.facebook.com/bitsybay" data-layout="button_count" data-show-faces="true"></div>
-              <a href="https://twitter.com/BitsyBayProject" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false">Follow @BitsyBayProject</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+              <div style="vertical-align:top" class="fb-like" data-href="https://facebook.com/bitsybay" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false"></div>
+              <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://bitsybay.com" data-via="BitsyBayProject" data-related="bitsybay" data-hashtags="BitsyBay">Tweet</a> <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
               <a class="github-button" href="https://github.com/bitsybay/bitsybay" data-count-href="/bitsybay/bitsybay/stargazers" data-count-api="/repos/bitsybay/bitsybay#stargazers_count" data-count-aria-label="# stargazers on GitHub" aria-label="Star bitsybay/bitsybay on GitHub">Star</a>
             </div>
 
