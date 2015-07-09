@@ -49,7 +49,7 @@
                 <li>You represent and warrant that you are the owner of, or that you have all rights to all your submissions;</li>
                 <li>We charge a 11% fee (0% fee up to 2016) on the selling price;</li>
                 <li>If your submitted content was purchased under the <a href="licenses">Exclusive License</a>, it can not be put up for sale again;</li>
-                <li>If you provide any content that is fraudulent, untrue, inaccurate, incomplete, not current, or illegal to <?php echo HOST_COUNTRY ?> laws, we reserve the right to suspend or terminate your account without notice and to refuse any and all current and future use of the Website.</li>
+                <li>If you provide any content that is fraudulent, untrue, inaccurate, incomplete, not current, or illegal to <?php echo HOST_COUNTRY ?> laws, we reserve the right to suspend or terminate your account without notice and to refuse any and all current and future use of the website.</li>
               </ul>
             </div>
           </div>
@@ -72,9 +72,9 @@
             <div style="margin-left:6em">
               <ul>
                 <li>We reserve the right to update or modify these Terms and Conditions at any time without prior notice;</li>
-                <li>Should you believe that any material or content published on this Website, infringe on copyright, or is illegal, or that of another, please <a href="contact">contact us</a>;</li>
+                <li>Should you believe that any material or content published on this website, infringe on copyright, or is illegal, or that of another, please <a href="contact">contact us</a>;</li>
                 <li>We make no representations that this website will meet your requirements;</li>
-                <li>This service / software is provided "as is", without warranty of any kind, express or implied;</li>
+                <li>This Service / Software is provided "as is", without warranty of any kind, express or implied;</li>
                 <li>If you do not agree to this Terms &amp; Conditions, do not use this website.</li>
               </ul>
             </div>
