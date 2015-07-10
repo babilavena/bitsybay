@@ -90,6 +90,33 @@ final class Auth {
     }
 
     /**
+    * Register last visit
+    *
+    * @param int $user_id
+    * @return int|bool Return affected int row, or bool true if row already exists or false if throw exception
+    */
+    private function _setVisitDate($user_id) {
+
+        try {
+
+            $statement = $this->db->prepare('UPDATE `user` SET `date_visit` = NOW() WHERE `user_id` = ? LIMIT 1');
+            $statement->execute(array($user_id));
+
+            return $statement->rowCount();
+
+        } catch (PDOException $e) {
+
+            if ($this->db->inTransaction()) {
+                $this->db->rollBack();
+            }
+
+            trigger_error($e->getMessage());
+
+            return false;
+        }
+    }
+
+    /**
     * Save user IP to database
     *
     * @param int $user_id
@@ -125,28 +152,23 @@ final class Auth {
     }
 
     /**
-    * Register last visit
+    * Get last IP
     *
-    * @param int $user_id
-    * @return int|bool Return affected int row, or bool true if row already exists or false if throw exception
+    * @return string|bool
     */
-    private function _setVisitDate($user_id) {
+    public function getLastIP() {
 
         try {
+            $statement = $this->db->prepare('SELECT `ip` FROM `user_ip` WHERE `user_id` = ? ORDER BY `user_ip_id` DESC LIMIT 1');
+            $statement->execute(array($this->_user_id));
 
-            $statement = $this->db->prepare('UPDATE `user` SET `date_visit` = NOW() WHERE `user_id` = ? LIMIT 1');
-            $statement->execute(array($user_id));
+            $result = $statement->fetch();
 
-            return $statement->rowCount();
+            return $result->ip;
 
         } catch (PDOException $e) {
 
-            if ($this->db->inTransaction()) {
-                $this->db->rollBack();
-            }
-
             trigger_error($e->getMessage());
-
             return false;
         }
     }

@@ -62,6 +62,7 @@
       '<span class="text-success">' . tt('Yes') . '</span>' :
       '<span class="text-warning">' . tt('No') . '</span> <sup><a href="' . $href_account_account_verification . '"><i class="glyphicon glyphicon-leaf"></i> ' . tt('verify') . '</a></sup>' ?>
     </p>
+    <p><?php echo tt('Last login') ?>: <?php echo $last_ip == $current_ip ? '<span class="text-success">' . $last_ip . '</span>' : '<span class="text-danger">' . $last_ip . '</span>' ?></p>
   </div>
   <div class="col-lg-2 col-md-4 col-sm-6">
     <h3><?php echo tt('Get started') ?></h3>
