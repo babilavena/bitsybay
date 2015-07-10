@@ -37,27 +37,27 @@ class ControllerCommonHeader extends Controller {
         $data['lang']        = $this->language->getCode();
         $data['icon']        = '';
         $data['logo']        = '';
-        $data['base']        = HTTP_SERVER;
+        $data['base']        = URL_BASE;
 
         $data['bool_is_logged'] = $this->auth->isLogged();
 
         // Account section
-        $data['href_account_account_update'] = $this->url->link('account/account/update', '', 'SSL');
-        $data['href_account_account'] = $this->url->link('account/account', '', 'SSL');
+        $data['href_account_account_update'] = $this->url->link('account/account/update');
+        $data['href_account_account'] = $this->url->link('account/account');
 
         // Buyer section
-        $data['href_product_purchased'] = $this->url->link('catalog/search', 'purchased=1', 'SSL');
-        $data['href_product_favorites'] = $this->url->link('catalog/search', 'favorites=1', 'SSL');
+        $data['href_product_purchased'] = $this->url->link('catalog/search', 'purchased=1');
+        $data['href_product_favorites'] = $this->url->link('catalog/search', 'favorites=1');
 
         // Seller section
-        $data['href_account_product_list']  = $this->url->link('account/product', '', 'SSL');
-        $data['href_account_product_sales']  = $this->url->link('account/sales', '', 'SSL');
+        $data['href_account_product_list']  = $this->url->link('account/product');
+        $data['href_account_product_sales']  = $this->url->link('account/sales');
 
-        $redirect = base64_encode($this->url->getCurrentLink($this->request->getHttps()));
+        $redirect = base64_encode($this->url->getCurrentLink());
 
-        $data['href_account_create']  = $this->url->link('account/account/create', 'redirect=' . $redirect, 'SSL');
-        $data['href_account_login']   = $this->url->link('account/account/login', 'redirect=' . $redirect, 'SSL');
-        $data['href_account_logout']  = $this->url->link('account/account/logout', 'redirect=' . $redirect, 'SSL');
+        $data['href_account_create']  = $this->url->link('account/account/create', 'redirect=' . $redirect);
+        $data['href_account_login']   = $this->url->link('account/account/login', 'redirect=' . $redirect);
+        $data['href_account_logout']  = $this->url->link('account/account/logout', 'redirect=' . $redirect);
 
         // Generate categories menu
         $this->load->model('catalog/category');

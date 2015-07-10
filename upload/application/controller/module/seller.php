@@ -18,7 +18,7 @@ class ControllerModuleSeller extends Controller {
 
         $data = array();
 
-        $data['href_account_product'] = $this->url->link('account/product', '', 'SSL');
+        $data['href_account_product'] = $this->url->link('account/product');
 
         return $this->load->view('module/seller.tpl', $data);
     }

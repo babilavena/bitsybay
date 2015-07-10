@@ -36,7 +36,7 @@ class ControllerAccountAccount extends Controller {
 
         // Redirect to login page if user is not logged
         if (!$this->auth->isLogged()) {
-            $this->response->redirect($this->url->link('account/account/login', '', 'SSL'));
+            $this->response->redirect($this->url->link('account/account/login'));
         }
 
         $data = array();
@@ -48,12 +48,12 @@ class ControllerAccountAccount extends Controller {
         $data['date_added']    = date(DATE_FORMAT_DEFAULT, strtotime($this->auth->getDateAdded()));
         $data['avatar_url']    = $this->cache->image('thumb', $this->auth->getId(), 100, 100);
 
-        $data['avatar_action']                     = $this->url->link('account/account/uploadAvatar', '', 'SSL');
-        $data['href_catalog_search_favorites']     = $this->url->link('catalog/search', 'favorites=1', 'SSL');
-        $data['href_catalog_search_purchased']     = $this->url->link('catalog/search', 'purchased=1', 'SSL');
-        $data['href_account_account_update']       = $this->url->link('account/account/update', '', 'SSL');
-        $data['href_account_product_create']       = $this->url->link('account/product/create', '', 'SSL');
-        $data['href_account_account_verification'] = $this->url->link('account/account/verification', '', 'SSL');
+        $data['avatar_action']                     = $this->url->link('account/account/uploadAvatar');
+        $data['href_catalog_search_favorites']     = $this->url->link('catalog/search', 'favorites=1');
+        $data['href_catalog_search_purchased']     = $this->url->link('catalog/search', 'purchased=1');
+        $data['href_account_account_update']       = $this->url->link('account/account/update');
+        $data['href_account_product_create']       = $this->url->link('account/product/create');
+        $data['href_account_account_verification'] = $this->url->link('account/account/verification');
 
         $data['module_account']  = $this->load->controller('module/account');
         $data['module_billing']  = $this->load->controller('module/billing');
@@ -69,7 +69,7 @@ class ControllerAccountAccount extends Controller {
 
         $data['module_breadcrumbs'] = $this->load->controller('module/breadcrumbs', array(
                     array('name' => tt('Home'), 'href' => $this->url->link('common/home'), 'active' => false),
-                    array('name' => tt('Profile'), 'href' => $this->url->link('account/account', '', 'SSL'), 'active' => false),
+                    array('name' => tt('Profile'), 'href' => $this->url->link('account/account'), 'active' => false),
         ));
 
         $data['module_quota_bar']    = $this->load->controller('module/quota_bar');
@@ -83,7 +83,7 @@ class ControllerAccountAccount extends Controller {
 
         // Redirect if user is already logged
         if ($this->auth->isLogged()) {
-            $this->response->redirect($this->url->link('account/account', '', 'SSL'));
+            $this->response->redirect($this->url->link('account/account'));
         }
 
         // Validate & save incoming data
@@ -130,7 +130,7 @@ class ControllerAccountAccount extends Controller {
                     $mail->setText(
                         tt("Welcome and thank you for registering!\n\n").
                         sprintf(tt("Here is your BitsyBay account information:\n\nUsername: %s\nE-mail: %s\nPassword: %s\n\n"), $this->request->post['username'], $this->request->post['email'], $this->request->post['password']).
-                        sprintf(tt("Please, approve your email at the following URL: \n%s"), $this->url->link('account/account/approve', 'approval_code=' . $approval_code, 'SSL'))
+                        sprintf(tt("Please, approve your email at the following URL: \n%s"), $this->url->link('account/account/approve', 'approval_code=' . $approval_code))
                     );
                     $mail->send();
 
@@ -148,7 +148,7 @@ class ControllerAccountAccount extends Controller {
                     //if (isset($this->request->get['redirect'])) {
                     //    $this->response->redirect(base64_decode($this->request->get['redirect']));
                     //} else {
-                        $this->response->redirect($this->url->link('account/account', '', 'SSL'));
+                        $this->response->redirect($this->url->link('account/account'));
                     //}
                 }
             }
@@ -163,11 +163,11 @@ class ControllerAccountAccount extends Controller {
 
         $captcha = new Captcha();
         $this->session->setCaptcha($captcha->getCode());
-        $data['captcha'] = $this->url->link('account/account/captcha', '', 'SSL');
+        $data['captcha'] = $this->url->link('account/account/captcha');
 
-        $data['action'] = $this->url->link('account/account/create', isset($this->request->get['redirect']) ? 'redirect=' . $this->request->get['redirect'] : false, 'SSL');
-        $data['href_account_account_login'] = $this->url->link('account/account/login', '', 'SSL');
-        $data['href_account_account_forgot'] = $this->url->link('account/account/forgot', '', 'SSL');
+        $data['action'] = $this->url->link('account/account/create', isset($this->request->get['redirect']) ? 'redirect=' . $this->request->get['redirect'] : false);
+        $data['href_account_account_login'] = $this->url->link('account/account/login');
+        $data['href_account_account_forgot'] = $this->url->link('account/account/forgot');
         $data['href_common_information_terms'] = $this->url->link('common/information/terms');
         $data['href_common_information_licenses'] = $this->url->link('common/information/licenses');
         $data['href_common_information_faq'] = $this->url->link('common/information/faq');
@@ -185,8 +185,8 @@ class ControllerAccountAccount extends Controller {
 
         $data['module_breadcrumbs'] = $this->load->controller('module/breadcrumbs', array(
             array('name' => tt('Home'), 'href'  => $this->url->link('common/home'), 'active' => false),
-            array('name' => tt('Account'), 'href' => $this->url->link('account/account', '', 'SSL'), 'active' => false),
-            array('name' => tt('Create'), 'href' => $this->url->link('account/account/create', '', 'SSL'), 'active' => true)
+            array('name' => tt('Account'), 'href' => $this->url->link('account/account'), 'active' => false),
+            array('name' => tt('Create'), 'href' => $this->url->link('account/account/create'), 'active' => true)
         ));
 
         // Renter the template
@@ -206,7 +206,7 @@ class ControllerAccountAccount extends Controller {
 
         // Redirect if user is already logged
         if (!$this->auth->isLogged()) {
-            $this->response->redirect($this->url->link('account/account/login', '', 'SSL'));
+            $this->response->redirect($this->url->link('account/account/login'));
         }
 
         // Validate & save incoming data
@@ -231,7 +231,7 @@ class ControllerAccountAccount extends Controller {
                     $mail->setSubject(tt('BitsyBay e-mail verification'));
                     $mail->setText(
                         sprintf(tt("Your email address has been changed from %s to %s.\n"), $this->auth->getEmail(), $this->request->post['email']) .
-                        sprintf(tt("Please, approve your new email at the following URL:\n"), $this->url->link('account/account', 'approve=' . $approval_code, 'SSL')));
+                        sprintf(tt("Please, approve your new email at the following URL:\n"), $this->url->link('account/account', 'approve=' . $approval_code)));
                     $mail->send();
 
                     // Success alert
@@ -245,7 +245,7 @@ class ControllerAccountAccount extends Controller {
                 }
 
 
-                $this->response->redirect($this->url->link('account/account/update', '', 'SSL'));
+                $this->response->redirect($this->url->link('account/account/update'));
             }
         }
 
@@ -262,7 +262,7 @@ class ControllerAccountAccount extends Controller {
         $data['error'] = $this->_error;
 
         // Links
-        $data['action'] = $this->url->link('account/account/update', '', 'SSL');
+        $data['action'] = $this->url->link('account/account/update');
 
         // Load modules
         $data['module_account'] = $this->load->controller('module/account');
@@ -276,8 +276,8 @@ class ControllerAccountAccount extends Controller {
 
         $data['module_breadcrumbs'] = $this->load->controller('module/breadcrumbs', array(
             array('name' => tt('Home'), 'href' => $this->url->link('common/home'), 'active' => false),
-            array('name' => tt('Account'), 'href' => $this->url->link('account/account', '', 'SSL'), 'active' => false),
-            array('name' => tt('Settings'), 'href' => $this->url->link('account/account/update', '', 'SSL'), 'active' => true),
+            array('name' => tt('Account'), 'href' => $this->url->link('account/account'), 'active' => false),
+            array('name' => tt('Settings'), 'href' => $this->url->link('account/account/update'), 'active' => true),
         ));
 
         // Renter the template
@@ -289,7 +289,7 @@ class ControllerAccountAccount extends Controller {
 
         // Redirect if user is already logged
         if ($this->auth->isLogged()) {
-            $this->response->redirect($this->url->link('account/account', '', 'SSL'));
+            $this->response->redirect($this->url->link('account/account'));
         }
 
         $this->document->setTitle(tt('Sign In'));
@@ -299,19 +299,19 @@ class ControllerAccountAccount extends Controller {
             if (isset($this->request->get['redirect'])) {
                 $this->response->redirect(base64_decode($this->request->get['redirect']));
             } else {
-                $this->response->redirect($this->url->link('account/account', '', 'SSL'));
+                $this->response->redirect($this->url->link('account/account'));
             }
         }
 
         $data = array();
 
-        $data['href_account_forgot'] = $this->url->link('account/account/forgot', '', 'SSL');
+        $data['href_account_forgot'] = $this->url->link('account/account/forgot');
 
         $data['error']  = $this->_error;
-        $data['action'] = $this->url->link('account/account/login', isset($this->request->get['redirect']) ? 'redirect=' . $this->request->get['redirect'] : false, 'SSL');
+        $data['action'] = $this->url->link('account/account/login', isset($this->request->get['redirect']) ? 'redirect=' . $this->request->get['redirect'] : false);
 
-        $data['href_account_account_create'] = $this->url->link('account/account/create', '', 'SSL');
-        $data['href_account_account_forgot'] = $this->url->link('account/account/forgot', '', 'SSL');
+        $data['href_account_account_create'] = $this->url->link('account/account/create');
+        $data['href_account_account_forgot'] = $this->url->link('account/account/forgot');
         $data['href_common_information_faq'] = $this->url->link('common/information/faq');
         $data['href_common_contact'] = $this->url->link('common/contact');
 
@@ -325,8 +325,8 @@ class ControllerAccountAccount extends Controller {
 
         $data['module_breadcrumbs'] = $this->load->controller('module/breadcrumbs', array(
             array('name' => tt('Home'), 'href'  => $this->url->link('common/home'), 'active' => false),
-            array('name' => tt('Account'), 'href' => $this->url->link('account/account', '', 'SSL'), 'active' => false),
-            array('name' => tt('Sign In'), 'href' => $this->url->link('account/account/login', '', 'SSL'), 'active' => true)
+            array('name' => tt('Account'), 'href' => $this->url->link('account/account'), 'active' => false),
+            array('name' => tt('Sign In'), 'href' => $this->url->link('account/account/login'), 'active' => true)
         ));
 
         // Renter the template
@@ -349,7 +349,7 @@ class ControllerAccountAccount extends Controller {
 
         // Redirect if user is already logged
         if ($this->auth->isLogged()) {
-            $this->response->redirect($this->url->link('account/account', '', 'SSL'));
+            $this->response->redirect($this->url->link('account/account'));
         }
 
         $this->document->setTitle(tt('Request a password reset'));
@@ -378,13 +378,13 @@ class ControllerAccountAccount extends Controller {
             $this->session->setUserMessage(array('success' => tt('Recovery instructions sent to your email address!')));
 
             // Redirect to login page
-            $this->response->redirect($this->url->link('account/account/login', isset($this->request->get['redirect']) ? 'redirect=' . $this->request->get['redirect'] : false, 'SSL'));
+            $this->response->redirect($this->url->link('account/account/login', isset($this->request->get['redirect']) ? 'redirect=' . $this->request->get['redirect'] : false));
         }
 
         $data['error']  = $this->_error;
-        $data['action'] = $this->url->link('account/account/forgot', isset($this->request->get['redirect']) ? 'redirect=' . $this->request->get['redirect'] : false, 'SSL');
-        $data['href_account_account_create'] = $this->url->link('account/account/create', '', 'SSL');
-        $data['href_account_account_login'] = $this->url->link('account/account/login', '', 'SSL');
+        $data['action'] = $this->url->link('account/account/forgot', isset($this->request->get['redirect']) ? 'redirect=' . $this->request->get['redirect'] : false);
+        $data['href_account_account_create'] = $this->url->link('account/account/create');
+        $data['href_account_account_login'] = $this->url->link('account/account/login');
         $data['href_common_information_faq'] = $this->url->link('common/information/faq');
         $data['href_common_contact'] = $this->url->link('common/contact');
 
@@ -395,8 +395,8 @@ class ControllerAccountAccount extends Controller {
 
         $data['module_breadcrumbs'] = $this->load->controller('module/breadcrumbs', array(
                     array('name' => tt('Home'), 'href' => $this->url->link('common/home'), 'active' => false),
-                    array('name' => tt('Account'), 'href' => $this->url->link('account/account', '', 'SSL'), 'active' => false),
-                    array('name' => tt('Forgot'), 'href' => $this->url->link('account/account/forgot', '', 'SSL'), 'active' => true)
+                    array('name' => tt('Account'), 'href' => $this->url->link('account/account'), 'active' => false),
+                    array('name' => tt('Forgot'), 'href' => $this->url->link('account/account/forgot'), 'active' => true)
         ));
 
         // Renter the template
@@ -407,12 +407,12 @@ class ControllerAccountAccount extends Controller {
 
         // Redirect if user is not logged
         if (!$this->auth->isLogged()) {
-            $this->response->redirect($this->url->link('account/account/login', 'redirect=' . base64_encode($this->url->getCurrentLink($this->request->getHttps())), 'SSL'));
+            $this->response->redirect($this->url->link('account/account/login', 'redirect=' . base64_encode($this->url->getCurrentLink())));
         }
 
         // Redirect if user is already verified
         if ($this->auth->isVerified()) {
-            $this->response->redirect($this->url->link('account/account', '', 'SSL'));
+            $this->response->redirect($this->url->link('account/account'));
         }
 
         $this->document->setTitle(tt('Account verification'));
@@ -465,7 +465,7 @@ class ControllerAccountAccount extends Controller {
         }
 
         $data['error']     = $this->_error;
-        $data['action']    = $this->url->link('account/account/verification', '', 'SSL');
+        $data['action']    = $this->url->link('account/account/verification');
 
         $data['proof']     = isset($this->request->post['proof']) ? $this->request->post['proof'] : false;
         $data['accept_1']  = isset($this->request->post['accept_1']) ? $this->request->post['accept_1'] : false;
@@ -474,13 +474,13 @@ class ControllerAccountAccount extends Controller {
         // Step 1
         $data['payment_instruction'] = sprintf(tt('Send exactly %s to this address:'), $this->currency->format(FEE_USER_VERIFICATION));
         $data['payment_address']     = $address;
-        $data['payment_qr_href']     = $this->url->link('common/image/qr', 'code=' . $address, 'SSL');
+        $data['payment_qr_href']     = $this->url->link('common/image/qr', 'code=' . $address);
         $data['payment_wallet_href'] = sprintf('bitcoin:%s?amount=%s&label=%s Verification Request for Account ID %s', $address, FEE_USER_VERIFICATION, PROJECT_NAME, $this->auth->getId());
 
         // Step 3
         $data['confirmation_code']   = $code;
 
-        $data['href_cancel'] = $this->url->link('account/account', '', 'SSL');
+        $data['href_cancel'] = $this->url->link('account/account');
 
         $data['footer'] = $this->load->controller('common/footer');
         $data['header'] = $this->load->controller('common/header');
@@ -492,8 +492,8 @@ class ControllerAccountAccount extends Controller {
         $data['module_account']  = $this->load->controller('module/account');
         $data['module_breadcrumbs'] = $this->load->controller('module/breadcrumbs', array(
                     array('name' => tt('Home'), 'href' => $this->url->link('common/home'), 'active' => false),
-                    array('name' => tt('Account'), 'href' => $this->url->link('account/account', '', 'SSL'), 'active' => false),
-                    array('name' => tt('Verification'), 'href' => $this->url->link('account/account/verification', '', 'SSL'), 'active' => true)
+                    array('name' => tt('Account'), 'href' => $this->url->link('account/account'), 'active' => false),
+                    array('name' => tt('Verification'), 'href' => $this->url->link('account/account/verification'), 'active' => true)
         ));
 
         // Renter the template
@@ -504,13 +504,13 @@ class ControllerAccountAccount extends Controller {
 
         // Redirect if user is already logged
         if (!$this->auth->isLogged()) {
-            $this->response->redirect($this->url->link('account/account/login', 'redirect=' . base64_encode($this->url->getCurrentLink($this->request->getHttps())), 'SSL'));
+            $this->response->redirect($this->url->link('account/account/login', 'redirect=' . base64_encode($this->url->getCurrentLink())));
         }
 
         // Redirect if required parameters is missing
         if (!isset($this->request->get['approval_code']) || empty($this->request->get['approval_code'])) {
             $this->security_log->write('Try to approve email without approve param');
-            $this->response->redirect($this->url->link('account/account', '', 'SSL'));
+            $this->response->redirect($this->url->link('account/account'));
         }
 
         // Try to approve
@@ -521,7 +521,7 @@ class ControllerAccountAccount extends Controller {
             $this->session->setUserMessage(array('success' => tt('Your email successfully approved!')));
         }
 
-        $this->response->redirect($this->url->link('account/account', '', 'SSL'));
+        $this->response->redirect($this->url->link('account/account'));
 
     }
 

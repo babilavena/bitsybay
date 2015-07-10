@@ -62,11 +62,6 @@ final class Request {
     /**
      * @var bool
      */
-    private $_https =  false;
-
-    /**
-     * @var bool
-     */
     private $_is_ajax =  false;
 
 
@@ -110,10 +105,6 @@ final class Request {
 
         if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
             $this->_is_ajax = true;
-        }
-
-        if (isset($_SERVER['HTTPS'])) {
-            $this->_setHttps((bool) $_SERVER['HTTPS']);
         }
 
         unset($_GET);
@@ -205,16 +196,6 @@ final class Request {
     }
 
     /**
-    * Set server HTTPS mode
-    *
-    * @param bool $https
-    * @return null
-    */
-    private function _setHttps($https = false) {
-        $this->_https = (bool) $https;
-    }
-
-    /**
     * Get server remote address
     *
     * @return string Remote IP
@@ -266,15 +247,6 @@ final class Request {
     */
     public function getServerProtocol() {
         return $this->_server_protocol;
-    }
-
-    /**
-    * Get server HTTPS mode
-    *
-    * @return bool HTTPS mode
-    */
-    public function getHttps() {
-        return $this->_https;
     }
 
     /**

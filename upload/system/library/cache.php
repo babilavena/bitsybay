@@ -40,7 +40,7 @@ final class Cache {
         $storage     = DIR_STORAGE . $user_id . DIR_SEPARATOR . $name . '.' . STORAGE_IMAGE_EXTENSION;
         $cache       = DIR_IMAGE . 'cache' . DIR_SEPARATOR . $user_id . DIR_SEPARATOR . $name . '-' . (int) $best_fit . '-' . $width . '-' . $height . '.' . STORAGE_IMAGE_EXTENSION;
         $watermark   = DIR_IMAGE . 'common' . DIR_SEPARATOR . 'watermark.png';
-        $cached_url  = ($this->_request->getHttps() ? HTTPS_IMAGE_SERVER : HTTP_IMAGE_SERVER ) . 'cache' . DIR_SEPARATOR . $user_id . DIR_SEPARATOR . $name . '-' . (int) $best_fit . '-' . $width . '-' . $height . '.' . STORAGE_IMAGE_EXTENSION;
+        $cached_url  = URL_BASE . 'image' . DIR_SEPARATOR . 'cache' . DIR_SEPARATOR . $user_id . DIR_SEPARATOR . $name . '-' . (int) $best_fit . '-' . $width . '-' . $height . '.' . STORAGE_IMAGE_EXTENSION;
 
         // Force reset
         if ($overwrite) {

@@ -38,7 +38,7 @@ class ControllerModuleSearch extends Controller {
             $data['tags'][] = array(
                 'tag_id' => $tag->tag_id,
                 'name'   => $tag->name,
-                'url'    => $this->url->link('catalog/search', 'q=' . urlencode($tag->name), 'SSL'),
+                'url'    => $this->url->link('catalog/search', 'q=' . urlencode($tag->name)),
             );
         }
 
@@ -49,7 +49,7 @@ class ControllerModuleSearch extends Controller {
             $data['query'] = false;
         }
 
-        $data['action'] = $this->url->link('catalog/search', 'q=', 'SSL');
+        $data['action'] = $this->url->link('catalog/search', 'q=');
 
         return $this->load->view('module/search.tpl', $data);
     }

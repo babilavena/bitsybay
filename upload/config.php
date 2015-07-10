@@ -16,13 +16,8 @@
 define('PROJECT_NAME', 'BitsyBay');
 define('HOST_COUNTRY', 'Sweden'); // Law
 
-// HTTP
-define('HTTP_SERVER', 'http://localhost/');
-define('HTTP_IMAGE_SERVER', 'http://localhost/image/');
-
-// HTTPS
-define('HTTPS_SERVER', 'https://localhost/');
-define('HTTPS_IMAGE_SERVER', 'https://localhost/image/');
+// URL
+define('URL_BASE', 'http://localhost/');
 
 // DIR
 define('DIR_BASE', '/var/www/html/');

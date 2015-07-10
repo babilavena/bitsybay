@@ -18,10 +18,10 @@ class ControllerModuleAccount extends Controller {
 
         $data = array();
 
-        $data['href_account_account'] = $this->url->link('account/account', '', 'SSL');
-        $data['href_account_account_edit'] = $this->url->link('account/account/update', '', 'SSL');
-        $data['href_account_account_logout'] = $this->url->link('account/account/logout', '', 'SSL');
-        $data['href_account_account_verification'] = $this->url->link('account/account/verification', '', 'SSL');
+        $data['href_account_account'] = $this->url->link('account/account');
+        $data['href_account_account_edit'] = $this->url->link('account/account/update');
+        $data['href_account_account_logout'] = $this->url->link('account/account/logout');
+        $data['href_account_account_verification'] = $this->url->link('account/account/verification');
 
         $data['verified'] = !$this->auth->isVerified();
 

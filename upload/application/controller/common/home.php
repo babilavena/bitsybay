@@ -31,7 +31,7 @@ class ControllerCommonHome extends Controller {
         $this->document->setTitle(tt('BitsyBay - Sell and Buy Digital Content with BitCoin'), false);
 
         if (isset($this->request->get['route'])) {
-            $this->document->addLink(HTTP_SERVER, 'canonical');
+            $this->document->addLink(URL_BASE, 'canonical');
         }
 
         if ($this->auth->isLogged()) {
@@ -55,10 +55,10 @@ class ControllerCommonHome extends Controller {
         $total_buyers  = $this->model_account_user->getTotalUsers();
         $data['total_buyers'] = sprintf(tt('%s %s'), $total_buyers, plural($total_buyers, array(tt('buyer'), tt('buyers'), tt('buyers'))));
 
-        $redirect = base64_encode($this->url->getCurrentLink($this->request->getHttps()));
+        $redirect = base64_encode($this->url->getCurrentLink());
 
-        $data['login_action'] = $this->url->link('account/account/login', 'redirect=' . $redirect, 'SSL');
-        $data['href_account_create'] = $this->url->link('account/account/create', 'redirect=' . $redirect, 'SSL');
+        $data['login_action'] = $this->url->link('account/account/login', 'redirect=' . $redirect);
+        $data['href_account_create'] = $this->url->link('account/account/create', 'redirect=' . $redirect);
 
         $data['module_search']  = $this->load->controller('module/search', array('class' => 'col-lg-8 col-lg-offset-2'));
         $data['module_latest']  = $this->load->controller('module/latest', array('limit' => 4));

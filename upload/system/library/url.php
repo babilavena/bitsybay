@@ -32,12 +32,7 @@ final class Url {
     /**
      * @var string
      */
-    private $_http;
-
-    /**
-     * @var string
-     */
-    private $_https;
+    private $_base;
 
     /**
      * @var array
@@ -50,13 +45,11 @@ final class Url {
     * @param $db
     * @param $request
     * @param $response
-    * @param string $http
-    * @param string $https
+    * @param string $base
     */
-    public function __construct($db, $request, $response, $http, $https) {
+    public function __construct($db, $request, $response, $base) {
 
-        $this->_http     = $http;
-        $this->_https    = $https;
+        $this->_base     = $base;
 
         $this->_db       = $db;
         $this->_request  = $request;
@@ -176,7 +169,7 @@ final class Url {
                             $statement->execute(array($redirect->redirect_id));
 
                             // Redirect
-                            $this->_response->redirect(($this->_request->getHttps() ? $this->_https : $this->_http) . $redirect->uri_to, 301);
+                            $this->_response->redirect($this->_base . $redirect->uri_to, 301);
                         }
                     }
                 }
@@ -191,8 +184,8 @@ final class Url {
             if (!$this->_request->isAjax()) {
 
                 // Check if rewrite rule is exists
-                $raw = ($this->_request->getHttps() ? $this->_https : $this->_http) . 'index.php?' . urldecode(http_build_query($this->_request->get));
-                $sef = $this->link($this->_request->get['route'], urldecode(http_build_query(array_diff_key($this->_request->get, array_flip(array('route'))))), ($this->_request->getHttps() ? 'SSL' : false));
+                $raw = $this->_base . 'index.php?' . urldecode(http_build_query($this->_request->get));
+                $sef = $this->link($this->_request->get['route'], urldecode(http_build_query(array_diff_key($this->_request->get, array_flip(array('route'))))));
 
                 if (rawurldecode($raw) != rawurldecode($sef)) {
                     $this->_response->redirect($sef, 303);
@@ -209,14 +202,10 @@ final class Url {
     * @param bool $secure TRUE for SSL or FALSE by default
     * @return string Returns canonical link
     */
-    public function link($route, $arguments = '', $secure = false) {
+    public function link($route, $arguments = '') {
 
         // Secure layer
-        if ($secure) {
-            $url = $this->_https;
-        } else {
-            $url = $this->_http;
-        }
+        $url = $this->_base;
 
         // Route
         $url .= isset($this->_rewrite[$route]) ? $this->_rewrite[$route] : 'index.php?route=' . $route;
@@ -248,10 +237,9 @@ final class Url {
     /**
     * Get Current Link
     *
-    * @param bool $secure TRUE for SSL or FALSE by default
     * @return string Returns current page canonical link
     */
-    public function getCurrentLink($secure = false) {
+    public function getCurrentLink() {
 
         $route     = 'common/home';
         $arguments = array();
@@ -268,7 +256,7 @@ final class Url {
             }
         }
 
-        return $this->link($route, implode('&', $arguments), $secure);
+        return $this->link($route, implode('&', $arguments));
     }
 
     /**

@@ -49,7 +49,7 @@ class ControllerCatalogCategory extends Controller {
 
                 $breadcrumbs[] = array(
                     'name' => $parent_category_info->title,
-                    'href' => $this->url->link('catalog/category', 'category_id=' . $parent_category_info->category_id, 'SSL'),
+                    'href' => $this->url->link('catalog/category', 'category_id=' . $parent_category_info->category_id),
                     'active' => false);
 
                 $categories[] = $parent_category_info->title;

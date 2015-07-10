@@ -18,14 +18,14 @@ class ControllerCommonFooter extends Controller {
 
         $data['user_is_logged'] = $this->auth->isLogged();
 
-        $redirect = base64_encode($this->url->getCurrentLink($this->request->getHttps()));
+        $redirect = base64_encode($this->url->getCurrentLink());
 
-        $data['href_catalog_search'] = $this->url->link('catalog/search', '&q=', 'SSL');
-        $data['href_common_contact'] = $this->url->link('common/contact', '', 'SSL');
+        $data['href_catalog_search'] = $this->url->link('catalog/search', '&q=');
+        $data['href_common_contact'] = $this->url->link('common/contact');
 
-        $data['href_account_account_forgot'] = $this->url->link('account/account/forgot', 'redirect=' . $redirect, 'SSL');
-        $data['href_account_account_create'] = $this->url->link('account/account/create', 'redirect=' . $redirect, 'SSL');
-        $data['action_account_account_login'] = $this->url->link('account/account/login', 'redirect=' . $redirect, 'SSL');
+        $data['href_account_account_forgot'] = $this->url->link('account/account/forgot', 'redirect=' . $redirect);
+        $data['href_account_account_create'] = $this->url->link('account/account/create', 'redirect=' . $redirect);
+        $data['action_account_account_login'] = $this->url->link('account/account/login', 'redirect=' . $redirect);
 
         $data['href_common_information_about']  = $this->url->link('common/information/about');
         $data['href_common_information_licenses']  = $this->url->link('common/information/licenses');

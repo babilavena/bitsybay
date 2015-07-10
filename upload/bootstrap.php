@@ -51,7 +51,7 @@ $response->setCompression(GZIP_COMPRESSION_LEVEL);
 $registry->set('response', $response);
 
 // Url
-$url = new Url($db, $request, $response, HTTP_SERVER, HTTP_SERVER);
+$url = new Url($db, $request, $response, URL_BASE);
 $registry->set('url', $url);
 
 // Session

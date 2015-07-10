@@ -82,7 +82,7 @@ class ControllerCatalogProduct extends Controller {
 
                 $breadcrumbs[] = array(
                     'name' => $parent_category_info->title,
-                    'href' => $this->url->link('catalog/category', 'category_id=' . $parent_category_info->category_id, 'SSL'),
+                    'href' => $this->url->link('catalog/category', 'category_id=' . $parent_category_info->category_id),
                     'active' => false);
 
                 $categories[] = $parent_category_info->title;
@@ -303,8 +303,8 @@ class ControllerCatalogProduct extends Controller {
         $data['download']      = $product_info->order_status_id == ORDER_APPROVED_STATUS_ID || $product_info->user_id == $this->auth->getId() ? true : false;
         $data['favorite']      = $product_info->favorite;
         $data['favorites']     = $product_info->favorites ? $product_info->favorites : false;
-        $data['href_view']     = $this->url->link('catalog/product', 'product_id=' . $product_info->product_id, 'SSL');
-        $data['href_download'] = $this->url->link('catalog/product/download', 'product_id=' . $product_info->product_id, 'SSL');
+        $data['href_view']     = $this->url->link('catalog/product', 'product_id=' . $product_info->product_id);
+        $data['href_download'] = $this->url->link('catalog/product/download', 'product_id=' . $product_info->product_id);
         $data['href_original'] = $product_demo_info->url;
 
         // Renter the template

@@ -126,7 +126,7 @@ class ControllerOrderBitcoin extends Controller {
             'address' => $address,
             'text'    => sprintf(tt('Send exactly %s to this address:'), $this->currency->format($amount)),
             'href'    => 'bitcoin:' . $address . '?amount=' . $amount . '&label=' . PROJECT_NAME . ' Order #' . $order_id,
-            'src'     => $this->url->link('common/image/qr', 'code=' . $address, 'SSL'));
+            'src'     => $this->url->link('common/image/qr', 'code=' . $address));
 
         $this->response->addHeader('Content-Type: application/json');
         $this->response->setOutput(json_encode($json));

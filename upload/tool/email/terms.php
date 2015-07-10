@@ -72,7 +72,7 @@ if ($statement->rowCount()) {
         $mail->setSender(sprintf('%s Notification Center', MAIL_SENDER));
         $mail->setTo($user->email);
         $mail->setSubject(sprintf($subject, PROJECT_NAME));
-        $mail->setText(sprintf($body, $user->username, HTTP_SERVER . 'terms', PROJECT_NAME));
+        $mail->setText(sprintf($body, $user->username, URL_BASE . 'terms', PROJECT_NAME));
         $mail->send();
     }
 }

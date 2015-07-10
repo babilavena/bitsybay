@@ -39,7 +39,7 @@ class ControllerCatalogSearch extends Controller {
 
 
         $breadcrumbs[] = array('name' => tt('Home'), 'href' => $this->url->link('common/home'), 'active' => false);
-        $breadcrumbs[] = array('name' => tt('Search'), 'href' => $this->url->link('catalog/search', ''), 'active' => true);
+        $breadcrumbs[] = array('name' => tt('Search'), 'href' => $this->url->link('catalog/search'), 'active' => true);
 
         // Filter by user
         if (isset($this->request->get['user_id']) && $user_info = $this->model_account_user->getUser((int) $this->request->get['user_id'])) {

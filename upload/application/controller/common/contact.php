@@ -51,7 +51,7 @@ class ControllerCommonContact extends Controller {
 
         $data['module_breadcrumbs'] = $this->load->controller('module/breadcrumbs', array(
             array('name' => tt('Home'), 'href' => $this->url->link('common/home'), 'active' => false),
-            array('name' => tt('Contact Us'), 'href' => $this->url->link('common/contact', '', 'SSL'), 'active' => true),
+            array('name' => tt('Contact Us'), 'href' => $this->url->link('common/contact'), 'active' => true),
         ));
 
         $data['error']  = $this->_error;
@@ -60,7 +60,7 @@ class ControllerCommonContact extends Controller {
         $data['href_common_information_terms']   = $this->url->link('common/information/terms');
         $data['href_common_information_faq']  = $this->url->link('common/information/faq');
 
-        $data['action']  = $this->url->link('common/contact', '', 'SSL');
+        $data['action']  = $this->url->link('common/contact');
 
 
 

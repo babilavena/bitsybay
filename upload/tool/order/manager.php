@@ -215,7 +215,7 @@ if ($statement->rowCount()) {
                         // Alert to buyer
                         $output  = sprintf("Hi,\n\n");
                         $output .= sprintf("Your order ID %s has been successfully confirmed!\n\n", $order->order_id);
-                        $output .= sprintf("Get it now:\n%s\n\n", HTTPS_SERVER . "search?purchased=1");
+                        $output .= sprintf("Get it now:\n%s\n\n", URL_BASE . "search?purchased=1");
                         $output .= sprintf("Best Regards\n%s\n", PROJECT_NAME);
 
                         $mail = new Mail();

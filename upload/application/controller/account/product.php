@@ -49,14 +49,14 @@ class ControllerAccountProduct extends Controller {
 
         // Redirect to login page if user is not logged
         if (!$this->auth->isLogged()) {
-            $this->response->redirect($this->url->link('account/account/login', 'redirect=' . base64_encode($this->url->link('account/product', '', 'SSL')), 'SSL'));
+            $this->response->redirect($this->url->link('account/account/login', 'redirect=' . base64_encode($this->url->link('account/product'))));
         }
 
         $data = array();
 
         $this->document->setTitle(tt('All products'));
 
-        $data['href_account_product_create'] = $this->url->link('account/product/create', '', 'SSL');
+        $data['href_account_product_create'] = $this->url->link('account/product/create');
 
         $data['alert_success']  = $this->load->controller('common/alert/success');
         $data['alert_danger']   = $this->load->controller('common/alert/danger');
@@ -89,16 +89,16 @@ class ControllerAccountProduct extends Controller {
                     'favorites'               => $product->favorites,
                     'viewed'                  => $product->viewed,
                     'status'                  => $product->status,
-                    'href_edit'               => $this->url->link('account/product/update', 'product_id=' . $product->product_id, 'SSL'),
-                    'href_delete'             => $this->url->link('account/product/delete', 'product_id=' . $product->product_id, 'SSL'),
-                    'href_download'           => $this->url->link('catalog/product/download', 'product_id=' . $product->product_id, 'SSL'),
+                    'href_edit'               => $this->url->link('account/product/update', 'product_id=' . $product->product_id),
+                    'href_delete'             => $this->url->link('account/product/delete', 'product_id=' . $product->product_id),
+                    'href_download'           => $this->url->link('catalog/product/download', 'product_id=' . $product->product_id),
                     'href_view'               => $this->url->link('catalog/product', 'product_id=' . $product->product_id)
                 );
             }
         }
         $data['module_breadcrumbs'] = $this->load->controller('module/breadcrumbs', array(
                     array('name' => tt('Home'), 'href' => $this->url->link('common/home'), 'active' => false),
-                    array('name' => tt('Product list'), 'href' => $this->url->link('account/product', '', 'SSL'), 'active' => true)
+                    array('name' => tt('Product list'), 'href' => $this->url->link('account/product'), 'active' => true)
             ));
 
         // Renter the template
@@ -110,7 +110,7 @@ class ControllerAccountProduct extends Controller {
         // Redirect to login page if user is not logged
         if (!$this->auth->isLogged()) {
             $this->response->redirect($this->url->link('account/account/login',
-                                                       'redirect=' . base64_encode($this->url->link('account/product/create', '', 'SSL')), 'SSL'));
+                                                       'redirect=' . base64_encode($this->url->link('account/product/create'))));
         }
 
         if ('POST' == $this->request->getRequestMethod() && $this->_validateProductForm()) {
@@ -273,18 +273,18 @@ class ControllerAccountProduct extends Controller {
             $this->cache->clean($this->auth->getId());
 
             $this->session->setUserMessage(array('success' => tt('Product successfully published!')));
-            $this->response->redirect($this->url->link('account/product', '', 'SSL'));
+            $this->response->redirect($this->url->link('account/product'));
         }
 
-        $data = $this->_populateForm($this->url->link('account/product/create', '', 'SSL'));
+        $data = $this->_populateForm($this->url->link('account/product/create'));
 
         $data['footer'] = $this->load->controller('common/footer');
         $data['header'] = $this->load->controller('common/header');
 
         $data['module_breadcrumbs'] = $this->load->controller('module/breadcrumbs', array(
                     array('name' => tt('Home'), 'href' => $this->url->link('common/home'), 'active' => false),
-                    array('name' => tt('Product list'), 'href' => $this->url->link('account/product', '', 'SSL'), 'active' => false),
-                    array('name' => tt('Add product'), 'href' => $this->url->link('account/product/create', '', 'SSL'), 'active' => true),
+                    array('name' => tt('Product list'), 'href' => $this->url->link('account/product'), 'active' => false),
+                    array('name' => tt('Add product'), 'href' => $this->url->link('account/product/create'), 'active' => true),
             ));
 
         // Renter the template
@@ -301,12 +301,12 @@ class ControllerAccountProduct extends Controller {
         } else {
             // Log hack attempt
             $this->security_log->write('Try to get product without product_id param');
-            $this->response->redirect($this->url->link('account/product/create', '', 'SSL'));
+            $this->response->redirect($this->url->link('account/product/create'));
         }
 
         // Redirect to login page if user is not logged
         if (!$this->auth->isLogged()) {
-            $this->response->redirect($this->url->link('account/account/login', 'redirect=' . base64_encode($this->url->link('account/product/update', 'product_id=' . $product_id, 'SSL')), 'SSL'));
+            $this->response->redirect($this->url->link('account/account/login', 'redirect=' . base64_encode($this->url->link('account/product/update', 'product_id=' . $product_id))));
         }
 
         // Check if user has product
@@ -316,7 +316,7 @@ class ControllerAccountProduct extends Controller {
             $this->security_log->write('Try to get not own\'s product_id #' . $product_id);
 
             // Redirect to safe page
-            $this->response->redirect($this->url->link('account/product', '', 'SSL'));
+            $this->response->redirect($this->url->link('account/product'));
         }
 
         if ('POST' == $this->request->getRequestMethod() && $this->_validateProductForm()) {
@@ -346,13 +346,13 @@ class ControllerAccountProduct extends Controller {
 
             // Add 301 rule if product has new URI
 
-            $url = new Url($this->db, $this->request, $this->response, HTTP_SERVER, HTTP_SERVER);
+            $url = new Url($this->db, $this->request, $this->response, URL_BASE);
 
             $old_url = $this->url->link('catalog/product', 'product_id=' . $product_id);
             $new_url = $url->link('catalog/product', 'product_id=' . $product_id);
 
             if ($old_url != $new_url) {
-                $this->model_common_redirect->createRedirect(301, str_replace(HTTP_SERVER, '', $old_url), str_replace(HTTP_SERVER, '', $new_url));
+                $this->model_common_redirect->createRedirect(301, str_replace(URL_BASE, $old_url), str_replace(URL_BASE, $new_url));
             }
 
             // Add product description
@@ -491,18 +491,18 @@ class ControllerAccountProduct extends Controller {
             $this->storage->clean($this->auth->getId());
 
             $this->session->setUserMessage(array('success' => tt('Product successfully updated!')));
-            $this->response->redirect($this->url->link('account/product', '', 'SSL'));
+            $this->response->redirect($this->url->link('account/product'));
         }
 
-        $data = $this->_populateForm($this->url->link('account/product/update', 'product_id=' . $product_id, 'SSL'));
+        $data = $this->_populateForm($this->url->link('account/product/update', 'product_id=' . $product_id));
 
         $data['footer'] = $this->load->controller('common/footer');
         $data['header'] = $this->load->controller('common/header');
 
         $data['module_breadcrumbs'] = $this->load->controller('module/breadcrumbs', array(
                     array('name' => tt('Home'), 'href' => $this->url->link('common/home'), 'active' => false),
-                    array('name' => tt('Product list'), 'href' => $this->url->link('account/product', '', 'SSL'), 'active' => false),
-                    array('name' => tt('Update product'), 'href' => $this->url->link('account/product/update', 'product_id=' . $product_id, 'SSL'), 'active' => true),
+                    array('name' => tt('Product list'), 'href' => $this->url->link('account/product'), 'active' => false),
+                    array('name' => tt('Update product'), 'href' => $this->url->link('account/product/update', 'product_id=' . $product_id), 'active' => true),
             ));
 
         // Renter the template
@@ -516,7 +516,7 @@ class ControllerAccountProduct extends Controller {
 
             // Log hack attempt
             $this->security_log->write('Try to delete product without product_id param');
-            $this->response->redirect($this->url->link('account/product', '', 'SSL'));
+            $this->response->redirect($this->url->link('account/product'));
         }
 
         $product_id = (int) $this->request->get['product_id'];
@@ -524,7 +524,7 @@ class ControllerAccountProduct extends Controller {
         // Redirect to login page if user is not logged
         if (!$this->auth->isLogged()) {
             $this->response->redirect($this->url->link('account/account/login',
-                                                       'redirect=' . base64_encode($this->url->link('account/product/delete', 'product_id=' . $product_id, 'SSL')),
+                                                       'redirect=' . base64_encode($this->url->link('account/product/delete', 'product_id=' . $product_id)),
                                                        'SSL'));
         }
 
@@ -533,14 +533,14 @@ class ControllerAccountProduct extends Controller {
 
             // Log hack attempt
             $this->security_log->write('Try to delete not own\'s product #' . $product_id);
-            $this->response->redirect($this->url->link('account/product', '', 'SSL'));
+            $this->response->redirect($this->url->link('account/product'));
         }
 
         // Check if all customers already download package files
         if ($this->model_catalog_product->productHasRelations($product_id, ORDER_PENDING_STATUS_ID, ORDER_PROCESSED_STATUS_ID, ORDER_APPROVED_STATUS_ID)) {
 
             $this->session->setUserMessage(array('danger' => tt('Looks like someone has ordered this product, try again later!')));
-            $this->response->redirect($this->url->link('account/product', '', 'SSL'));
+            $this->response->redirect($this->url->link('account/product'));
         }
 
         // Begin action
@@ -596,7 +596,7 @@ class ControllerAccountProduct extends Controller {
         $this->cache->clean($this->auth->getId());
 
         $this->session->setUserMessage(array('success' => tt('Product successfully deleted!')));
-        $this->response->redirect($this->url->link('account/product', '', 'SSL'));
+        $this->response->redirect($this->url->link('account/product'));
 
     }
 
@@ -765,7 +765,7 @@ class ControllerAccountProduct extends Controller {
         $data['product_id']           = isset($this->request->get['product_id']) ? $this->request->get['product_id'] : false;
         $data['error']                = $this->_error;
         $data['action']               = $action;
-        $data['href_account_product'] = $this->url->link('account/product', '', 'SSL');
+        $data['href_account_product'] = $this->url->link('account/product');
 
         // Get saved info
         if (isset($this->request->get['product_id'])) {
