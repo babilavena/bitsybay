@@ -102,6 +102,7 @@ define('BITCOIN_RPC_PORT', '8332');
 define('BITCOIN_RPC_HOST', 'localhost');
 define('BITCOIN_RPC_USERNAME', '');
 define('BITCOIN_RPC_PASSWORD', '');
+define('BITCOIN_DAEMON_PATH', '/usr/local/bin/bitcoind');
 
 define('BITCOIN_FUND_ADDRESS', '');
 define('BITCOIN_ORDER_PREFIX', 'order_');

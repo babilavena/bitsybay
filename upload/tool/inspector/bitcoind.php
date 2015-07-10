@@ -25,5 +25,5 @@ $bitcoin = new BitCoin(
 );
 
 // Check daemon status, sometimes it going down
-if (false === $bitcoin->getinfo()) echo system('bitcoind');
+if (false === $bitcoin->getinfo()) echo system(BITCOIN_DAEMON_PATH);
 echo sprintf("status: %s\n", $bitcoin->status);

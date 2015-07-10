@@ -98,6 +98,9 @@ class ControllerOrderBitcoin extends Controller {
             exit;
         }
 
+        // Init variables
+        $json = array('status' => false);
+
         // Create a new order in DB
         if (!$order_id = $this->model_common_order->createOrder($this->auth->getId(),
                                                                 $product_info->product_id,
@@ -114,19 +117,26 @@ class ControllerOrderBitcoin extends Controller {
 
         // Create a new BitCoin Address
         try {
-            $bitcoin = new BitCoin(BITCOIN_RPC_USERNAME, BITCOIN_RPC_PASSWORD, BITCOIN_RPC_HOST, BITCOIN_RPC_PORT);
-            $address = $bitcoin->getaccountaddress(BITCOIN_ORDER_PREFIX . $order_id);
-        } catch (Exception $e) {
-            $this->security_log->write('BitCoin connection error ' . var_dump($e));
-            exit;
-        }
+            $bitcoin = new BitCoin(BITCOIN_RPC_USERNAME,
+                                   BITCOIN_RPC_PASSWORD,
+                                   BITCOIN_RPC_HOST,
+                                   BITCOIN_RPC_PORT);
 
-        // Set response
-        $json = array(
-            'address' => $address,
-            'text'    => sprintf(tt('Send exactly %s to this address:'), $this->currency->format($amount)),
-            'href'    => 'bitcoin:' . $address . '?amount=' . $amount . '&label=' . PROJECT_NAME . ' Order #' . $order_id,
-            'src'     => $this->url->link('common/image/qr', 'code=' . $address));
+            // Set response
+            if (false !== $bitcoin->status && $address = $bitcoin->getaccountaddress(BITCOIN_ORDER_PREFIX . $order_id)) {
+
+                $json = array(
+                    'status'  => true,
+                    'address' => $address,
+                    'text'    => sprintf(tt('Send exactly %s to this address:'), $this->currency->format($amount)),
+                    'href'    => 'bitcoin:' . $address . '?amount=' . $amount . '&label=' . PROJECT_NAME . ' Order #' . $order_id,
+                    'src'     => $this->url->link('common/image/qr', 'code=' . $address));
+            }
+
+
+        } catch (Exception $e) {
+            $this->security_log->write($bitcoin->error . '/' . $e->getMessage());
+        }
 
         $this->response->addHeader('Content-Type: application/json');
         $this->response->setOutput(json_encode($json));

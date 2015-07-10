@@ -262,7 +262,7 @@
               $('#productPurchase').modal('toggle');
             },
             success: function (e) {
-              if (e['src']) {
+              if (e['status']) {
                 $('#paymentResult').removeClass('hide');
                 $('#productPurchase .modal-loading').hide();
                 $('#productPurchase pre').html(e['address']);
@@ -271,6 +271,8 @@
                 $('#initBitcoinWallet').attr('href', e['href']);
 
                 timer(900, document.getElementById('paymentTimer'));
+              } else {
+                $('#productPurchase .modal-loading').html('Maintenance mode. Please wait a few minutes and try again.');
               }
             },
             error: function (e) {
