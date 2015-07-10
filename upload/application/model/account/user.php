@@ -170,29 +170,6 @@ class ModelAccountUser extends Model {
     }
 
     /**
-    * Add quota bonus
-    *
-    * @param int $user_id
-    * @param int $bonus
-    * @return int|bool Count affected rows or false if throw exception
-    */
-    public function addQuotaBonus($user_id, $bonus) {
-
-        try {
-
-            $statement = $this->db->prepare('UPDATE `user` SET `file_quota` = `file_quota` + ? WHERE `user_id` = ? LIMIT 1');
-            $statement->execute(array($bonus, $user_id));
-
-            return $statement->rowCount();
-
-        } catch (PDOException $e) {
-
-            trigger_error($e->getMessage());
-            return false;
-        }
-    }
-
-    /**
     * Add new email to specific user
     *
     * @param int $user_id

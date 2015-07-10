@@ -67,9 +67,10 @@ try {
 // Get pending orders
 $statement = $db->prepare('SELECT `o`.`order_id`,
                                   `o`.`amount`,
+                                  `o`.`user_id` AS `buyer_user_id`,
+                                  `p`.`user_id` AS `seller_user_id`,
                                   `p`.`product_id`,
                                   `p`.`currency_id`,
-                                  `p`.`user_id`,
                                   `p`.`withdraw_address`,
                                   (SELECT `email` FROM `user` AS `us` WHERE `us`.`user_id` = `p`.`user_id` LIMIT 1) AS `seller_email`,
                                   (SELECT `email` FROM `user` AS `ub` WHERE `ub`.`user_id` = `o`.`user_id` LIMIT 1) AS `buyer_email`,
@@ -120,6 +121,10 @@ if ($statement->rowCount()) {
                     $statement = $db->prepare('UPDATE `order` SET `order_status_id` = ? WHERE `order_id` = ? LIMIT 1');
                     $statement->execute(array(ORDER_APPROVED_STATUS_ID, $order->order_id));
 
+                    // Add file quota bonus
+                    $statement = $this->db->prepare('UPDATE `user` SET `file_quota` = `file_quota` + ? WHERE `user_id` = ? LIMIT 1');
+                    $statement->execute(array(QUOTA_BONUS_SIZE_PER_ORDER, $order->seller_user_id));
+
                     // Generating a billing report
                     if ($statement->rowCount()) {
 
@@ -145,7 +150,7 @@ if ($statement->rowCount()) {
                                 array(
                                     'seller',
                                     $order->order_id,
-                                    $order->user_id,
+                                    $order->seller_user_id,
                                     $order->currency_id,
                                     $transaction_id,
                                     sprintf("[%s] Payout - Order ID %s", PROJECT_NAME, $order->order_id)
@@ -180,7 +185,7 @@ if ($statement->rowCount()) {
                                     array(
                                         'fund',
                                         $order->order_id,
-                                        $order->user_id,
+                                        $order->seller_user_id,
                                         $order->currency_id,
                                         $transaction_id,
                                         sprintf("[%s] Profit - Order ID %s", PROJECT_NAME, $order->order_id)
