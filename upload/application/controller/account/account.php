@@ -131,7 +131,7 @@ class ControllerAccountAccount extends Controller {
                     $mail->setSubject(tt('Welcome to the BitsyBay Store!'));
                     $mail->setText(
                         tt("Welcome and thank you for registering!\n\n").
-                        sprintf(tt("Here is your BitsyBay account information:\n\nUsername: %s\nE-mail: %s\nPassword: %s\n\n"), $this->request->post['username'], $this->request->post['email'], $this->request->post['password']).
+                        sprintf(tt("Here is your BitsyBay account information:\n\nUsername: %s\nE-mail: %s\n\n"), $this->request->post['username'], $this->request->post['email']).
                         sprintf(tt("Please, approve your email at the following URL: \n%s"), $this->url->link('account/account/approve', 'approval_code=' . $approval_code))
                     );
                     $mail->send();
@@ -373,7 +373,7 @@ class ControllerAccountAccount extends Controller {
             $mail->setSubject(tt('BitsyBay - Password recovery'));
             $mail->setText(
                 sprintf(tt("A new password was requested from %s\n"), $this->request->post['email']) .
-                sprintf(tt("Your new password is: %s"), $password)
+                sprintf(tt("Your temporary password is: %s"), $password)
             );
             $mail->send();
 
