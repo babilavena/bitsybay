@@ -6,5 +6,5 @@
 <div style="margin-left:20px"><span class="glyphicon glyphicon-circle-arrow-right"></span> The Buyer <strong class="text-success">may</strong> use the Item in several projects without having to purchase any additional licenses;</div>
 <div style="margin-left:20px"><span class="glyphicon glyphicon-circle-arrow-right"></span> The Buyer <strong class="text-success">may</strong> use the Item in all personal and derivative commercial works;</div>
 <div style="margin-left:20px"><span class="glyphicon glyphicon-circle-arrow-right"></span> The Buyer <strong class="text-success">may</strong> modify the Item;</div>
-<div style="margin-left:20px"><span class="glyphicon glyphicon-circle-arrow-right"></span> The Buyer <strong class="text-danger">shall not</strong> resell or redistribute the Item;</div>
+<div style="margin-left:20px"><span class="glyphicon glyphicon-circle-arrow-right"></span> The Buyer <strong class="text-danger">shall not</strong> redistribute the Item;</div>
 <div style="margin-left:20px;margin-bottom:30px"><span class="glyphicon glyphicon-circle-arrow-right"></span> The Buyer <strong class="text-danger">shall not</strong> claim Copyright to the Item.</div>

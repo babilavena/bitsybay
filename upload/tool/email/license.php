@@ -13,13 +13,13 @@
  */
 
 // Build the template
-$subject = "The Licensing Policy was updated - %s";
+$subject = "The Licensing Policy has been updated - %s";
 $body    =
 "Hi, %s
 
-Our Licensing Policy was updated!
+Our Licensing Policy has been updated!
 
-Please read these Licensing Policy carefully, and contact us if you have any questions:
+Please read this Licensing Policy carefully, and contact us if you have any questions:
 %s
 
 Best Regards
