@@ -171,17 +171,19 @@
       <div class="bs-component catalog-product-details">
         <ul class="nav nav-tabs">
           <li class="active"><a href="#productDescription" data-toggle="tab"><?php echo tt('Description') ?></a></li>
-          <li><a href="#productLicense" data-toggle="tab"><?php echo tt('License') ?></a></li>
+          <!--<li><a href="#productLicense" data-toggle="tab"><?php echo tt('License') ?></a></li>-->
           <li><a href="#productReviews" data-toggle="tab"><?php echo tt('Reviews') ?></a></li>
         </ul>
         <div class="tab-content">
           <div class="tab-pane fade active in" id="productDescription">
             <p><?php echo $product_description ?></p>
           </div>
+          <!--
           <div class="tab-pane fade" id="productLicense">
-            <h4 class="license-header"><?php echo $product_license_title ?></h4>
-            <p><?php echo $product_license_description ?></p>
+            <h4 class="license-header"></h4>
+            <p></p>
           </div>
+          -->
           <div class="tab-pane fade" id="productReviews">
             <div id="productReviewList" class="product-reviews"></div>
             <div id="productReviewForm" class="product-review-form">

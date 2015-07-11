@@ -31,7 +31,6 @@ class ModelCatalogProduct extends Model {
             `p`.`product_id`,
             `p`.`category_id`,
             `p`.`user_id`,
-            `p`.`license_id`,
             `p`.`currency_id`,
             `p`.`viewed`,
             `p`.`status`,
@@ -46,8 +45,6 @@ class ModelCatalogProduct extends Model {
             `ps`.`regular_price` AS `special_regular_price`,
             `ps`.`exclusive_price` AS `special_exclusive_price`,
             `ps`.`date_end` AS `special_date_end`,
-            `ld`.`title` AS `license_title`,
-            `ld`.`description` AS `license_description`,
 
             (SELECT `o`.`order_status_id` FROM `order` AS `o` WHERE `o`.`product_id` = `p`.`product_id` AND `o`.`user_id` = :session_user_id ORDER BY `o`.`order_status_id` DESC  LIMIT 1) AS `order_status_id`,
             (SELECT COUNT(*) FROM `product_favorite` AS `pf` WHERE `pf`.`product_id` = `p`.`product_id`) AS `favorites`,
@@ -60,8 +57,6 @@ class ModelCatalogProduct extends Model {
             FROM `product` AS `p`
             JOIN `product_description` AS `pd` ON (`pd`.`product_id` = `p`.`product_id`)
             JOIN `user` AS `u` ON (`u`.`user_id` = `p`.`user_id`)
-            LEFT JOIN `license` AS `l` ON (`l`.`license_id` = `p`.`license_id`)
-            LEFT JOIN `license_description` AS `ld` ON (`ld`.`license_id` = `l`.`license_id`)
             LEFT JOIN `product_special` AS `ps` ON (`ps`.`product_id` = `p`.`product_id` AND `ps`.`date_start` < NOW() AND `ps`.`date_end` > NOW())
 
             WHERE `p`.`product_id` = :product_id AND (`p`.`status` = 1 OR (`p`.`user_id` = :session_user_id AND `p`.`status` = 0))
@@ -104,7 +99,6 @@ class ModelCatalogProduct extends Model {
                 `p`.`product_id`,
                 `p`.`category_id`,
                 `p`.`user_id`,
-                `p`.`license_id`,
                 `p`.`currency_id`,
                 `p`.`viewed`,
                 `p`.`status`,
@@ -771,7 +765,6 @@ class ModelCatalogProduct extends Model {
     *
     * @param int $user_id
     * @param int $category_id
-    * @param int $license_id
     * @param int $currency_id
     * @param float $regular_price
     * @param float $exclusive_price
@@ -779,7 +772,7 @@ class ModelCatalogProduct extends Model {
     * @param string $alias
     * @return int|bool product_id or FALSE/rollBack if throw exception
     */
-    public function createProduct($user_id, $category_id, $license_id, $currency_id, $regular_price, $exclusive_price, $withdraw_address, $alias) {
+    public function createProduct($user_id, $category_id, $currency_id, $regular_price, $exclusive_price, $withdraw_address, $alias) {
 
         try {
             // Product
@@ -787,7 +780,6 @@ class ModelCatalogProduct extends Model {
                 'INSERT INTO `product` SET
                 `user_id`          = :user_id,
                 `category_id`      = :category_id,
-                `license_id`       = :license_id,
                 `currency_id`      = :currency_id,
                 `regular_price`    = :regular_price,
                 `exclusive_price`  = :exclusive_price,
@@ -801,7 +793,6 @@ class ModelCatalogProduct extends Model {
             $statement->execute(array(
                 ':user_id'          => $user_id,
                 ':category_id'      => $category_id,
-                ':license_id'       => $license_id,
                 ':currency_id'      => $currency_id,
                 ':regular_price'    => $regular_price,
                 ':exclusive_price'  => $exclusive_price,
@@ -1479,7 +1470,6 @@ class ModelCatalogProduct extends Model {
     *
     * @param int $product_id
     * @param int $category_id
-    * @param int $license_id
     * @param int $currency_id
     * @param float $regular_price
     * @param float $exclusive_price
@@ -1487,7 +1477,7 @@ class ModelCatalogProduct extends Model {
     * @param string $alias
     * @return int|bool affected rows or FALSE/rollBack if throw exception
     */
-    public function updateProduct($product_id, $category_id, $license_id, $currency_id, $regular_price, $exclusive_price, $withdraw_address, $alias) {
+    public function updateProduct($product_id, $category_id, $currency_id, $regular_price, $exclusive_price, $withdraw_address, $alias) {
 
         try {
             // Product
@@ -1495,7 +1485,6 @@ class ModelCatalogProduct extends Model {
                 'UPDATE `product` SET
 
                 `category_id`      = :category_id,
-                `license_id`       = :license_id,
                 `currency_id`      = :currency_id,
                 `regular_price`    = :regular_price,
                 `exclusive_price`  = :exclusive_price,
@@ -1512,7 +1501,6 @@ class ModelCatalogProduct extends Model {
             $statement->execute(array(
                 ':product_id'       => $product_id,
                 ':category_id'      => $category_id,
-                ':license_id'       => $license_id,
                 ':currency_id'      => $currency_id,
                 ':regular_price'    => $regular_price,
                 ':exclusive_price'  => $exclusive_price,

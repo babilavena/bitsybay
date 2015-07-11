@@ -63,10 +63,6 @@
             <li><?php echo sprintf(tt('Minimum price: %s'), ALLOWED_PRODUCT_MIN_PRICE) ?></li>
             <li><?php echo sprintf(tt('Allowed specials per product: %s'), QUOTA_SPECIALS_PER_PRODUCT) ?></li>
           </ul>
-          <ul id="productLicenseHints">
-            <li><?php echo tt('Select your favorite license from the free templates list or add your custom terms') ?></li>
-            <li><?php echo tt('Custom terms will be saved to be used again') ?></li>
-          </ul>
         </div>
       </div>
     </div>
@@ -85,7 +81,6 @@
           <li><a href="#images" data-toggle="tab" id="aImages"><?php echo tt('Images') ?><?php echo isset($error['image']) ? ' <span class="text-danger">*</span>' : false ?></a></li>
           <li><a href="#videos" data-toggle="tab"><?php echo tt('Videos') ?><?php echo isset($error['video']) ? ' <span class="text-danger">*</span>' : false ?></a></li>
           <li><a href="#prices" data-toggle="tab"><?php echo tt('Price') ?><?php echo isset($error['price']) ? ' <span class="text-danger">*</span>' : false ?></a></li>
-          <li><a href="#license" data-toggle="tab"><?php echo tt('License') ?><?php echo isset($error['license']) ? ' <span class="text-danger">*</span>' : false ?></a></li>
         </ul>
         <div id="ProductFormTabContent" class="tab-content">
           <div class="tab-pane fade in active" id="general">
@@ -511,49 +506,6 @@
               </table>
             </fieldset>
           </div>
-          <div class="tab-pane fade" id="license">
-            <?php if (isset($error['license']['common'])) { ?>
-              <div class="alert alert-dismissible alert-danger">
-                <?php echo $error['license']['common'] ?>
-              </div>
-            <?php } ?>
-            <fieldset>
-              <legend><?php echo tt('Choose a license') ?></legend>
-              <?php foreach ($license_description as $language_id => $license_description) { ?>
-                <div class="form-group">
-                  <select name="license_description[<?php echo $language_id ?>][license_id]" class="form-control" id="inputLicense<?php echo $language_id ?>" onchange="loadLicense($(this).val(), <?php echo $language_id ?>)">
-                    <option value="0"><?php echo tt('Want to use a template?') ?></option>
-                    <?php if ($custom_licenses) { ?>
-                      <optgroup label="Custom terms">
-                        <?php foreach ($custom_licenses as $custom_license) { ?>
-                          <option value="<?php echo $custom_license['license_id'] ?>" <?php echo $license_description['license_id'] == $custom_license['license_id'] ? 'selected="selected"' : false ?>><?php echo $custom_license['title'] ?></option>
-                        <?php } ?>
-                      </optgroup>
-                    <?php } ?>
-                    <?php if ($general_licenses) { ?>
-                      <optgroup label="General licenses">
-                        <?php foreach ($general_licenses as $general_license) { ?>
-                          <option value="<?php echo $general_license['license_id'] ?>" <?php echo $license_description['license_id'] == $general_license['license_id'] ? 'selected="selected"' : false ?>><?php echo $general_license['title'] ?></option>
-                        <?php } ?>
-                      </optgroup>
-                    <?php } ?>
-                  </select>
-                </div>
-                <div class="form-group <?php echo isset($error['license']['license_description'][$language_id]['title']) ? 'has-error' : false ?>">
-                  <input onkeyup="lengthFilter(this, <?php echo VALIDATOR_PRODUCT_TITLE_MAX_LENGTH ?>)" type="text" name="license_description[<?php echo $language_id ?>][title]" class="form-control" id="inputLicenseTitle<?php echo $language_id ?>" placeholder="<?php echo tt('License title') ?>" value="<?php echo $license_description['title'] ?>" <?php echo $license_description['general'] ? 'readonly="readonly"' : false ?>>
-                  <?php if (isset($error['license']['license_description'][$language_id]['title'])) { ?>
-                    <div class="text-danger"><?php echo $error['license']['license_description'][$language_id]['title'] ?></div>
-                  <?php } ?>
-                </div>
-                <div class="form-group <?php echo isset($error['license']['license_description'][$language_id]['description']) ? 'has-error' : false ?>">
-                  <textarea onkeyup="lengthFilter(this, <?php echo VALIDATOR_PRODUCT_DESCRIPTION_MAX_LENGTH ?>)" name="license_description[<?php echo $language_id ?>][description]" placeholder="<?php echo tt('License description (plain text only)') ?>" id="inputLicenseDescription<?php echo $language_id ?>" class="form-control" rows="10" <?php echo $license_description['general'] ? 'readonly="readonly"' : false ?>><?php echo $license_description['description'] ?></textarea>
-                  <?php if (isset($error['license']['license_description'][$language_id]['description'])) { ?>
-                    <div class="text-danger"><?php echo $error['license']['license_description'][$language_id]['description'] ?></div>
-                  <?php } ?>
-                </div>
-              </fieldset>
-            <?php } ?>
-          </div>
         </div>
       </form>
     </div>
@@ -567,7 +519,7 @@
   <!-- Hints -->
 
   function hideHints() {
-    $('#productDescriptionHints, #productPackageHints, #productDemoHints, #productImageHints, #productVideoHints, #productPriceHints, #productLicenseHints').addClass('hide');
+    $('#productDescriptionHints, #productPackageHints, #productDemoHints, #productImageHints, #productVideoHints, #productPriceHints').addClass('hide');
   }
 
   // Init
@@ -602,11 +554,6 @@
   $('a[href=#prices]').click(function () {
     hideHints();
     $('#productPriceHints').removeClass('hide');
-  });
-
-  $('a[href=#license]').click(function () {
-    hideHints();
-    $('#productLicenseHints').removeClass('hide');
   });
 
   <!-- Submit form -->
@@ -775,32 +722,6 @@
         processData: false
     });
   }
-
-
-  <!-- Licenses -->
-  function loadLicense(license_id, language_id) {
-    if (0 == license_id) {
-      $('#inputLicenseTitle' + language_id + ', #inputLicenseDescription' + language_id).attr('readonly', false).val('');
-    } else {
-      $.ajax({
-        url: 'index.php?route=account/product/license&license_id=' + license_id,
-        dataType: 'json',
-        success: function (json) {
-          if (json) {
-            $('#inputLicenseTitle' + language_id).val(json['title']);
-            $('#inputLicenseDescription' + language_id).html(json['description']);
-
-            if (null == json['user_id']) {
-              $('#inputLicenseTitle' + language_id + ', #inputLicenseDescription' + language_id).attr('readonly', true);
-            } else {
-              $('#inputLicenseTitle' + language_id + ', #inputLicenseDescription' + language_id).attr('readonly', false);
-            }
-          }
-        }
-      });
-    }
-  }
-
 
   <!-- Demo -->
   var demo_r = <?php echo $demo_max_row ?>;

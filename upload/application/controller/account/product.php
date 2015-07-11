@@ -28,7 +28,6 @@ class ControllerAccountProduct extends Controller {
 
         $this->load->model('account/user');
 
-        $this->load->model('catalog/license');
         $this->load->model('catalog/category');
         $this->load->model('catalog/product');
         $this->load->model('catalog/tag');
@@ -118,21 +117,9 @@ class ControllerAccountProduct extends Controller {
             // Start transaction
             $this->db->beginTransaction();
 
-            // Add license
-            $license_id = 0;
-
-            foreach ($this->request->post['license_description'] as $language_id => $license_description) {
-
-                $license_id = $this->model_catalog_license->addLicense($this->auth->getId(),
-                                                                       $license_description['title'],
-                                                                       $license_description['description'],
-                                                                       $language_id);
-            }
-
             // Add product
             $product_id = $this->model_catalog_product->createProduct(  $this->auth->getId(),
                                                                         $this->request->post['category_id'],
-                                                                        $license_id,
                                                                         $this->request->post['currency_id'],
                                                                         $this->request->post['regular_price'],
                                                                         $this->request->post['exclusive_price'],
@@ -324,20 +311,9 @@ class ControllerAccountProduct extends Controller {
             // Start transaction
             $this->db->beginTransaction();
 
-            // Add license
-            $license_id = 0;
-
-            foreach ($this->request->post['license_description'] as $language_id => $license_description) {
-                $license_id = $this->model_catalog_license->addLicense($this->auth->getId(),
-                                                                       $license_description['title'],
-                                                                       $license_description['description'],
-                                                                       $language_id);
-            }
-
             // Add product
             $this->model_catalog_product->updateProduct($product_id,
                                                         $this->request->post['category_id'],
-                                                        $license_id,
                                                         $this->request->post['currency_id'],
                                                         $this->request->post['regular_price'],
                                                         $this->request->post['exclusive_price'],
@@ -601,44 +577,15 @@ class ControllerAccountProduct extends Controller {
     }
 
     // AJAX actions begin
-    public function license() {
-
-        $json = array();
-
-        // Account actions only for logged users
-        if (!$this->auth->isLogged()) {
-            $this->security_log->write('Try to access to license method from guest request');
-            exit;
-
-        } else if (!isset($this->request->get['license_id'])) {
-            $this->security_log->write('Try to access to license method without license_id key');
-            exit;
-
-        } else if (!$this->request->isAjax()) {
-            $this->security_log->write('Try to access to license method without ajax request');
-            exit;
-
-        } else if ($license = $this->model_catalog_license->getLicense($this->request->get['license_id'], $this->language->getId())) {
-            $json = array(
-                'license_id'  => $license->license_id,
-                'user_id'     => $license->user_id,
-                'title'       => $license->title,
-                'description' => $license->description);
-        }
-
-        $this->response->addHeader('Content-Type: application/json');
-        $this->response->setOutput(json_encode($json));
-    }
-
     public function quota() {
 
         if (!$this->auth->isLogged()) {
-            $this->security_log->write('Try to access to license method from guest request');
+            $this->security_log->write('Try to access to quota method from guest request');
             exit;
         }
 
         if (!$this->request->isAjax()) {
-            $this->security_log->write('Try to access to license method without ajax request');
+            $this->security_log->write('Try to access to quota method without ajax request');
             exit;
         }
 
@@ -667,12 +614,12 @@ class ControllerAccountProduct extends Controller {
     public function uploadPackage() {
 
         if (!$this->auth->isLogged()) {
-            $this->security_log->write('Trying to access to license method from guest request');
+            $this->security_log->write('Trying to access to uploadPackage method from guest request');
             exit;
         }
 
         if (!$this->request->isAjax()) {
-            $this->security_log->write('Trying to access to license method without ajax request');
+            $this->security_log->write('Trying to access to uploadPackage method without ajax request');
             exit;
         }
 
@@ -1097,52 +1044,6 @@ class ControllerAccountProduct extends Controller {
             $data['category_id'] = $product_info->category_id;
         } else {
             $data['category_id'] = 0;
-        }
-
-        // Custom licenses list
-        $data['custom_licenses'] = array();
-        foreach ($this->model_catalog_license->getLicenses($this->language->getId(), $this->auth->getId()) as $license) {
-            $data['custom_licenses'][] = array(
-                'license_id' => $license->license_id,
-                'title'      => $license->title);
-        }
-
-        // General licenses list
-        $data['general_licenses'] = array();
-        foreach ($this->model_catalog_license->getLicenses($this->language->getId(), null) as $license) {
-            $data['general_licenses'][] = array(
-                'license_id' => $license->license_id,
-                'title'      => $license->title);
-        }
-
-        // License descriptions
-        $data['license_description'] = array();
-        if (isset($this->request->post['license_description'])) {
-            foreach ($this->request->post['license_description'] as $language_id => $license_description) {
-                    $license_info = $this->model_catalog_license->getLicense($license_description['license_id'], $this->language->getId());
-
-                    $data['license_description'][$language_id] = array('general'     => $license_info && !$license_info->user_id ? true : false,
-                                                                       'license_id'  => isset($license_description['license_id']) ? $license_description['license_id'] : false,
-                                                                       'title'       => isset($license_description['title']) ? $license_description['title'] : false,
-                                                                       'description' => isset($license_description['description']) ? $license_description['description'] : false);
-            }
-        } elseif ($product_info) {
-            foreach ($this->model_catalog_license->getLicenseDescriptions($product_info->license_id) as $license_description) {
-
-                $license_info = $this->model_catalog_license->getLicense($license_description->license_id, $this->language->getId());
-
-                $data['license_description'][$license_description->language_id] = array('general'  => $license_info && !$license_info->user_id ? true : false,
-                                                                                        'license_id'  => $license_description->license_id,
-                                                                                        'title'       => $license_description->title,
-                                                                                        'description' => $license_description->description);
-            }
-        } else {
-            foreach ($languages as $language) {
-                $data['license_description'][$language->language_id] = array('general'     => false,
-                                                                             'license_id'  => false,
-                                                                             'title'       => false,
-                                                                             'description' => false);
-            }
         }
 
         return $data;
@@ -1794,53 +1695,6 @@ class ControllerAccountProduct extends Controller {
                 // Filter critical request
                 $this->security_log->write('Exceeded limit of product specials');
                 unset($this->request->post['special']);
-            }
-        }
-
-        // License
-        if(isset($this->request->post['license_description'])) {
-
-            foreach ($this->request->post['license_description'] as $language_id => $license_description) {
-
-                // Language id
-                if (!$this->model_common_language->getLanguage($language_id)) {
-                    $this->_error['license']['common'] = tt('Wrong language field');
-
-                    // Filter critical request
-                    $this->security_log->write('Wrong product license_description language_id field');
-                    unset($this->request->post['license_description'][$language_id]);
-                    break;
-                }
-
-                // Title
-                if (!isset($license_description['title'])) {
-                    $this->_error['license']['license_description'][$language_id]['title'] = tt('Wrong title input');
-
-                    // Filter critical request
-                    $this->security_log->write('Wrong product license_description title field');
-                    unset($this->request->post['license_description'][$language_id]);
-                    break;
-
-                } else if (empty($license_description['title'])) {
-                    $this->_error['license']['license_description'][$language_id]['title'] = tt('Title is required');
-                } else if (!ValidatorProduct::titleValid(html_entity_decode($license_description['title']))) {
-                    $this->_error['license']['license_description'][$language_id]['title'] = tt('Invalid title format');
-                }
-
-                // Description
-                if (!isset($license_description['description'])) {
-                    $this->_error['license']['license_description'][$language_id]['description'] = tt('Wrong description input');
-
-                    // Filter critical request
-                    $this->security_log->write('Wrong product license_description description field');
-                    unset($this->request->post['license_description'][$language_id]);
-                    break;
-
-                } else if (empty($license_description['description'])) {
-                    $this->_error['license']['license_description'][$language_id]['description'] = tt('Description is required');
-                } else if (!ValidatorProduct::descriptionValid(html_entity_decode($license_description['description']))) {
-                    $this->_error['license']['license_description'][$language_id]['description'] = tt('Invalid description format');
-                }
             }
         }
 

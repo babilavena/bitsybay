@@ -126,32 +126,6 @@ class ControllerCatalogProduct extends Controller {
         $data['product_favorites'] = $product_info->favorites ? $product_info->favorites : false;
         $data['product_favorite']  = $product_info->favorite;
         $data['product_description'] = nl2br($product_info->description);
-        $data['product_license_title'] = $product_info->license_title;
-        $data['product_license_description'] =
-
-            // Prepare license placeholders
-            str_replace(
-                array(
-                    '{year}',
-                    '{yyyy}',
-                    '{project}',
-                    '{description}',
-                    '{fullname}',
-                    '{name of copyright owner}',
-                    '{name of author}',
-                    '{one line to give the program\'s name and a brief idea of what it does.}',
-                    ),
-                array(
-                    date('Y'),
-                    date('Y'),
-                    $product_info->title,
-                    $product_info->title,
-                    $product_info->username,
-                    $product_info->username,
-                    $product_info->username,
-                    $product_info->username,
-                ),
-                nl2br($product_info->license_description));
 
         $data['product_href_view']     = $this->url->link('catalog/product', 'product_id=' . $product_info->product_id);
         $data['product_href_download'] = $this->url->link('catalog/product/download', 'product_id=' . $product_info->product_id);

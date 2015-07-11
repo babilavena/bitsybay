@@ -92,47 +92,6 @@ CREATE TABLE `language` (
 
 
 --
--- Table structure for table `license`
---
-
-DROP TABLE IF EXISTS `license`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `license` (
-  `license_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(10) unsigned DEFAULT NULL,
-  `date_added` datetime NOT NULL,
-  PRIMARY KEY (`license_id`),
-  KEY `fk_license_user_id` (`user_id`),
-  CONSTRAINT `fk_license_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
-
---
--- Table structure for table `license_description`
---
-
-DROP TABLE IF EXISTS `license_description`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `license_description` (
-  `license_description_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `license_id` int(10) unsigned NOT NULL,
-  `language_id` int(10) unsigned NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `description` text NOT NULL,
-  PRIMARY KEY (`license_description_id`),
-  UNIQUE KEY `UNIQUE` (`license_id`,`language_id`),
-  KEY `fk_license_description_license_id` (`license_id`),
-  KEY `fk_license_description_language_id` (`language_id`),
-  CONSTRAINT `fk_license_description_license_id` FOREIGN KEY (`license_id`) REFERENCES `license` (`license_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_license_description_language_id` FOREIGN KEY (`language_id`) REFERENCES `language` (`language_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
-
---
 -- Table structure for table `log_404`
 --
 
@@ -210,7 +169,6 @@ CREATE TABLE `order` (
   `order_status_id` int(10) unsigned NOT NULL,
   `fee` int(10) NOT NULL,
   `currency_id` int(10) unsigned NOT NULL,
-  `license_id` int(10) unsigned NOT NULL,
   `amount` decimal(16,8) NOT NULL,
   `license` enum('regular','exclusive') NOT NULL,
   `date_added` datetime NOT NULL,
@@ -219,12 +177,10 @@ CREATE TABLE `order` (
   KEY `fk_order_user_id` (`user_id`),
   KEY `fk_order_order_status_id` (`order_status_id`),
   KEY `fk_order_currency_id` (`currency_id`),
-  KEY `fk_order_license_id` (`license_id`),
   KEY `fk_order_product_id` (`product_id`),
   CONSTRAINT `fk_order_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_order_order_status_id` FOREIGN KEY (`order_status_id`) REFERENCES `order_status` (`order_status_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_order_currency_id` FOREIGN KEY (`currency_id`) REFERENCES `currency` (`currency_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_order_license_id` FOREIGN KEY (`license_id`) REFERENCES `license` (`license_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_order_product_id` FOREIGN KEY (`product_id`) REFERENCES `product` (`product_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -277,7 +233,6 @@ CREATE TABLE `product` (
   `product_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `category_id` int(10) unsigned NOT NULL,
   `currency_id` int(10) unsigned NOT NULL,
-  `license_id` int(10) unsigned NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
   `viewed` int(10) unsigned NOT NULL,
   `regular_price` decimal(16,8) NOT NULL,
@@ -290,11 +245,9 @@ CREATE TABLE `product` (
   PRIMARY KEY (`product_id`),
   UNIQUE KEY `alias_UNIQUE` (`alias`),
   KEY `fk_product_user_id` (`user_id`),
-  KEY `fk_product_license_id` (`license_id`),
   KEY `fk_product_category_id` (`category_id`),
   KEY `fk_product_currency_id` (`currency_id`),
   CONSTRAINT `fk_product_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_product_license_id` FOREIGN KEY (`license_id`) REFERENCES `license` (`license_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_product_category_id` FOREIGN KEY (`category_id`) REFERENCES `category` (`category_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_product_currency_id` FOREIGN KEY (`currency_id`) REFERENCES `currency` (`currency_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
