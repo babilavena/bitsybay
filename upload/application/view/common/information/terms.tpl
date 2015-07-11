@@ -34,7 +34,7 @@
             <div class="glyphicon glyphicon-shopping-cart" style="color:#CCC;float:left;font-size:5em"></div>
             <div style="margin-left:6em">
               <ul>
-                <li>All commercial (non-public) submissions to this site are subject to their individual licenses and can not be used for their intended purposes until purchased;</li>
+                <li>All commercial (non-public) submissions to this site are subject to <a href="licenses">Licensing Policy</a>;</li>
                 <li>Full responsibility for all commercial content of this site remains with the author's of such content;</li>
                 <li>The author reserves the right to change, add to or delete all or part of the commercial content without prior notice or to discontinue publication of all or part of the commercial content temporarily or permanently;</li>
                 <li>We do not provide any support or warranties for purchased content and do not refund any payments.</li>
@@ -47,9 +47,9 @@
             <div style="margin-left:6em">
               <ul>
                 <li>You represent and warrant that you are the owner of, or that you have all rights to all your submissions;</li>
-                <li>We charge a 11% fee (0% fee up to 2016) on the selling price;</li>
-                <li>If your submitted content was purchased under the <a href="licenses">Exclusive License</a>, it can not be put up for sale again;</li>
+                <li>You responsible for any copyright violations;</li>
                 <li>If you provide any content that is fraudulent, untrue, inaccurate, incomplete, not current, or illegal to <?php echo HOST_COUNTRY ?> laws, we reserve the right to suspend or terminate your account without notice and to refuse any and all current and future use of the website.</li>
+                <li>We charge a 11% fee (0% fee up to 2016) on the selling price;</li>
               </ul>
             </div>
           </div>

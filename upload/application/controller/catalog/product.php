@@ -200,6 +200,7 @@ class ControllerCatalogProduct extends Controller {
 
         $data['license_form_action'] = $this->url->link('catalog/product', 'product_id=' . $product_info->product_id);
 
+        $data['license']   = str_replace('h2', 'h4 class="license-header"', $this->load->controller('common/information/licensesRegular'));
         $data['regular']   = true;
         $data['exclusive'] = 0 == $product_info->regular_price && 0 == $product_info->special_regular_price ? true : false;
 
@@ -208,6 +209,7 @@ class ControllerCatalogProduct extends Controller {
                 case 'exclusive':
                     $data['regular']   = false;
                     $data['exclusive'] = true;
+                    $data['license']   = $this->load->controller('common/information/licensesExclusive');
                     break;
                 default:
                     $data['regular']   = true;

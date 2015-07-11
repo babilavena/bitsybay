@@ -41,7 +41,23 @@ class ControllerCommonInformation extends Controller {
             array('name' => tt('Licensing Policy'), 'href' => $this->url->link('common/information/licenses'), 'active' => true),
         ));
 
-        $this->response->setOutput($this->load->view('common/information/licenses.tpl', $data));
+        $data['definitions'] = $this->load->controller('common/information/licensesCommon');
+        $data['regular']     = $this->load->controller('common/information/licensesRegular');
+        $data['exclusive']   = $this->load->controller('common/information/licensesExclusive');
+
+        $this->response->setOutput($this->load->view('common/information/license/layout.tpl', $data));
+    }
+
+    public function licensesCommon() {
+        return $this->load->view('common/information/license/common.tpl');
+    }
+
+    public function licensesRegular() {
+        return $this->load->view('common/information/license/regular.tpl');
+    }
+
+    public function licensesExclusive() {
+        return $this->load->view('common/information/license/exclusive.tpl');
     }
 
     public function terms() {

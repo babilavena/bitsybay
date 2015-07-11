@@ -20,7 +20,7 @@
                 <ul class="list-unstyled menu">
                   <li><a href="<?php echo $href_common_information_about ?>"><?php echo tt('About Us') ?></a></li>
                   <li><a href="<?php echo $href_common_information_terms ?>"><?php echo tt('Terms of Service') ?></a></li>
-                  <li><a href="<?php echo $href_common_information_licenses ?>"><?php echo tt('Licenses') ?></a></li>
+                  <li><a href="<?php echo $href_common_information_licenses ?>"><?php echo tt('Licensing Policy') ?></a></li>
                 </ul>
               </li>
             </ul>

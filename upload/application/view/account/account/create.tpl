@@ -88,7 +88,7 @@
                   <?php } else { ?>
                     <input type="checkbox" name="accept" value="1">
                   <?php } ?>
-                  <?php echo sprintf(tt('I agree with the %s and %s'), '<a href="' . $href_common_information_terms . '" target="_blank">' . tt('Terms of Service') . '</a>', '<a href="' . $href_common_information_licenses . '" target="_blank">' . tt('License Policy') . '</a>') ?>
+                  <?php echo sprintf(tt('I agree with the %s and %s'), '<a href="' . $href_common_information_terms . '" target="_blank">' . tt('Terms of Service') . '</a>', '<a href="' . $href_common_information_licenses . '" target="_blank">' . tt('Licensing Policy') . '</a>') ?>
                 </label>
               </div>
             </div>
