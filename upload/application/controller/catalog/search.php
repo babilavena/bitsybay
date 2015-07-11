@@ -53,7 +53,7 @@ class ControllerCatalogSearch extends Controller {
         if (isset($this->request->get['q']) && !empty($this->request->get['q']) && ValidatorProduct::titleValid($this->request->get['q'])) {
 
             $title .= sprintf(' ' . tt('containing %s'), ucfirst($this->request->get['q']));
-            $meta_title .= sprintf(' ' . tt('Buy %s Thematic with Bitcoin | %s Thematic Store'), ucfirst($this->request->get['q']), ucfirst($this->request->get['q']));
+            $meta_title .= sprintf(' ' . tt('Buy %s Thematic with Bitcoin | Royalty Free %s Thematic Store'), ucfirst($this->request->get['q']), ucfirst($this->request->get['q']));
             $filter_data['filter_query'] = $this->request->get['q'];
         }
 

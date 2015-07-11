@@ -218,7 +218,7 @@ class ControllerCatalogProduct extends Controller {
         }
 
         // Create SEO titles
-        $this->document->setTitle(sprintf(tt('Buy %s with BitCoin'), $product_info->title) . ' | ' . implode(' ', $categories));
+        $this->document->setTitle(sprintf(tt('Buy %s with BitCoin'), $product_info->title) . ' | Royalty Free ' . implode(' ', $categories));
 
         // Load layout
         $data['title']  = $product_info->title;
