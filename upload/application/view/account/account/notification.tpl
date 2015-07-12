@@ -111,7 +111,7 @@
                   <?php } else { ?>
                     <input type="checkbox" name="notify_au" value="1">
                   <?php } ?>
-                  <?php echo tt('Terms of Service and Licensing Policy updates') ?>
+                  <?php echo tt('News about Terms of Service and Licensing Policy updates') ?>
                 </label>
               </div>
             </div>
