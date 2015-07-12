@@ -22,6 +22,9 @@ Our Terms of Service has been updated!
 Please read these Terms carefully, and contact us if you have any questions:
 %s
 
+If you do not want to receive further messages, you can change your notification preferences here:
+%s
+
 Best Regards
 %s";
 
@@ -72,7 +75,7 @@ if ($statement->rowCount()) {
         $mail->setSender(sprintf('%s Notification Center', MAIL_SENDER));
         $mail->setTo($user->email);
         $mail->setSubject(sprintf($subject, PROJECT_NAME));
-        $mail->setText(sprintf($body, $user->username, URL_BASE . 'terms', PROJECT_NAME));
+        $mail->setText(sprintf($body, $user->username, URL_BASE . 'terms', URL_BASE . 'notification', PROJECT_NAME));
         $mail->send();
     }
 }
