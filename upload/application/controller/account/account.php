@@ -290,7 +290,7 @@ class ControllerAccountAccount extends Controller {
 
         // Redirect if user is already logged
         if (!$this->auth->isLogged()) {
-            $this->response->redirect($this->url->link('account/account/login'));
+            $this->response->redirect($this->url->link('account/account/login'), 'redirect=' . base64_encode($this->url->getCurrentLink()));
         }
 
         // Init
