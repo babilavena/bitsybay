@@ -675,6 +675,37 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
+-- -----------------------------------------------------
+-- Table `user_notification`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `user_notification` ;
+
+CREATE TABLE IF NOT EXISTS `user_notification` (
+  `user_notification_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` INT UNSIGNED NOT NULL,
+  `language_id` INT UNSIGNED NOT NULL,
+  `read` TINYINT(1) NOT NULL,
+  `sent` TINYINT(1) NOT NULL,
+  `type` ENUM('notify_pf', 'notify_pp', 'notify_pc', 'notify_pn', 'notify_on', 'notify_au', 'notify_ni', 'notify_ns') NOT NULL,
+  `title` VARCHAR(255) NOT NULL,
+  `description` MEDIUMTEXT NOT NULL,
+  `date_added` DATETIME NOT NULL,
+  PRIMARY KEY (`user_notification_id`),
+  INDEX `fk_user_notification_user_id` (`user_id` ASC),
+  INDEX `fk_user_notification_language_id` (`language_id` ASC),
+  CONSTRAINT `fk_user_notification_user_id`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `user` (`user_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_user_notification_language_id`
+    FOREIGN KEY (`language_id`)
+    REFERENCES `language` (`language_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
 --
 -- Table structure for table `user_email`
 --
