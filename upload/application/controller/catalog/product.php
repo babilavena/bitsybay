@@ -28,7 +28,6 @@ class ControllerCatalogProduct extends Controller {
         $this->load->helper('plural');
         $this->load->helper('search_engines');
 
-        $this->load->library('mail');
         $this->load->library('bitcoin');
     }
 
@@ -378,14 +377,9 @@ class ControllerCatalogProduct extends Controller {
         if ($this->model_catalog_product->createReport($product_id, $message, $this->auth->getId())) {
             $json = array('status' => 200, 'title' => tt('Report successfully sent!'), 'message' => tt('Your message will be reviewed in the near time.'));
 
-            $mail = new Mail();
-            $mail->setTo(MAIL_INFO);
-            $mail->setFrom(MAIL_FROM);
-            $mail->setReplyTo(MAIL_FROM);
-            $mail->setSender(MAIL_SENDER);
-            $mail->setSubject(tt('Report for product_id #' . $product_id));
-            $mail->setText($this->request->post['message']);
-            $mail->send();
+            $this->mail->setSubject(tt('Report for product_id #' . $product_id));
+            $this->mail->setText($this->request->post['message']);
+            $this->mail->send();
 
         } else {
             $json = array('status' => 500, 'title' => tt('Connection error'), 'message' => tt('Please, try again later'));

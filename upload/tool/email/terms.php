@@ -70,9 +70,9 @@ if ($statement->rowCount()) {
 
         // Send email
         $mail = new Mail();
-        $mail->setFrom(MAIL_INFO);
-        $mail->setReplyTo(MAIL_INFO);
-        $mail->setSender(sprintf('%s Notification Center', MAIL_SENDER));
+        $mail->setFrom(MAIL_EMAIL_SUPPORT_ADDRESS);
+        $mail->setReplyTo(MAIL_EMAIL_SUPPORT_ADDRESS);
+        $mail->setSender(sprintf('%s Notification Center', MAIL_EMAIL_SENDER_NAME));
         $mail->setTo($user->email);
         $mail->setSubject(sprintf($subject, PROJECT_NAME));
         $mail->setText(sprintf($body, $user->username, URL_BASE . 'terms', URL_BASE . 'notification', PROJECT_NAME));

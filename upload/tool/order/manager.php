@@ -210,9 +210,9 @@ if ($statement->rowCount()) {
 
                         $mail = new Mail();
                         $mail->setTo($order->seller_email);
-                        $mail->setFrom(MAIL_INFO);
-                        $mail->setReplyTo(MAIL_INFO);
-                        $mail->setSender(MAIL_SENDER);
+                        $mail->setFrom(MAIL_EMAIL_SUPPORT_ADDRESS);
+                        $mail->setReplyTo(MAIL_EMAIL_SUPPORT_ADDRESS);
+                        $mail->setSender(MAIL_EMAIL_SENDER_NAME);
                         $mail->setSubject(sprintf('Your product has been purchased - %s', PROJECT_NAME));
                         $mail->setText($output);
                         $mail->send();
@@ -225,9 +225,9 @@ if ($statement->rowCount()) {
 
                         $mail = new Mail();
                         $mail->setTo($order->buyer_email);
-                        $mail->setFrom(MAIL_INFO);
-                        $mail->setReplyTo(MAIL_INFO);
-                        $mail->setSender(MAIL_SENDER);
+                        $mail->setFrom(MAIL_EMAIL_SUPPORT_ADDRESS);
+                        $mail->setReplyTo(MAIL_EMAIL_SUPPORT_ADDRESS);
+                        $mail->setSender(MAIL_EMAIL_SENDER_NAME);
                         $mail->setSubject(sprintf('%s is ready to download - %s', $order->product_title, PROJECT_NAME));
                         $mail->setText($output);
                         $mail->send();
@@ -256,10 +256,10 @@ if ($error) {
 if ($pending_count || $approved_count || $transaction_count || $error) {
 
     $mail = new Mail();
-    $mail->setTo(MAIL_BILLING);
-    $mail->setFrom(MAIL_FROM);
-    $mail->setReplyTo(MAIL_INFO);
-    $mail->setSender(MAIL_SENDER);
+    $mail->setTo(MAIL_EMAIL_BILLING_ADDRESS);
+    $mail->setFrom(MAIL_EMAIL_SENDER_ADDRESS);
+    $mail->setReplyTo(MAIL_EMAIL_SUPPORT_ADDRESS);
+    $mail->setSender(MAIL_EMAIL_SENDER_NAME);
     $mail->setSubject(sprintf('%s REPORT', PROJECT_NAME));
     $mail->setText($output);
     $mail->send();

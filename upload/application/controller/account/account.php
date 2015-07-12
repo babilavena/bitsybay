@@ -24,7 +24,6 @@ class ControllerAccountAccount extends Controller {
         $this->load->model('account/user');
         $this->load->helper('validator/user');
         $this->load->helper('validator/upload');
-        $this->load->library('mail');
         $this->load->library('bitcoin');
         $this->load->library('identicon');
         $this->load->library('captcha/captcha');
@@ -123,28 +122,19 @@ class ControllerAccountAccount extends Controller {
                     $image->save(DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR . 'thumb.' . STORAGE_IMAGE_EXTENSION);
 
                     // Send user email
-                    $mail = new Mail();
-                    $mail->setTo($this->request->post['email']);
-                    $mail->setFrom(MAIL_FROM);
-                    $mail->setReplyTo(MAIL_INFO);
-                    $mail->setSender(MAIL_SENDER);
-                    $mail->setSubject(tt('Welcome to the BitsyBay Store!'));
-                    $mail->setText(
+                    $this->mail->setTo($this->request->post['email']);
+                    $this->mail->setSubject(sprintf(tt('Welcome to the %s Store!'), PROJECT_NAME));
+                    $this->mail->setText(
                         tt("Welcome and thank you for registering!\n\n").
-                        sprintf(tt("Here is your BitsyBay account information:\n\nUsername: %s\nE-mail: %s\n\n"), $this->request->post['username'], $this->request->post['email']).
+                        sprintf(tt("Here is your account information:\n\nUsername: %s\nE-mail: %s\n\n"), $this->request->post['username'], $this->request->post['email']).
                         sprintf(tt("Please, approve your email at the following URL: \n%s"), $this->url->link('account/account/approve', 'approval_code=' . $approval_code))
                     );
-                    $mail->send();
+                    $this->mail->send();
 
                     // Send admin notice
-                    $mail = new Mail();
-                    $mail->setTo(MAIL_INFO);
-                    $mail->setFrom(MAIL_FROM);
-                    $mail->setReplyTo(MAIL_INFO);
-                    $mail->setSender(MAIL_SENDER);
-                    $mail->setSubject(tt('A new customer join us'));
-                    $mail->setText(tt('Yes yes yes'));
-                    $mail->send();
+                    $this->mail->setSubject(tt('A new customer join us'));
+                    $this->mail->setText(tt('Yes yes yes'));
+                    $this->mail->send();
 
                     // Redirect to account page
                     //if (isset($this->request->get['redirect'])) {
@@ -225,16 +215,12 @@ class ControllerAccountAccount extends Controller {
                                                       $approval_code)) {
 
                 if ($this->request->post['email'] != $this->auth->getEmail()) {
-                    $mail = new Mail();
-                    $mail->setTo($this->request->post['email']);
-                    $mail->setFrom(MAIL_FROM);
-                    $mail->setReplyTo(MAIL_INFO);
-                    $mail->setSender(MAIL_SENDER);
-                    $mail->setSubject(tt('BitsyBay e-mail verification'));
-                    $mail->setText(
+                    $this->mail->setTo($this->request->post['email']);
+                    $this->mail->setSubject(sprintf(tt('E-mail verification - %s'), PROJECT_NAME));
+                    $this->mail->setText(
                         sprintf(tt("Your email address has been changed from %s to %s.\n"), $this->auth->getEmail(), $this->request->post['email']) .
                         sprintf(tt("Please, approve your new email at the following URL:\n"), $this->url->link('account/account', 'approve=' . $approval_code)));
-                    $mail->send();
+                    $this->mail->send();
 
                     // Success alert
                     $this->session->setUserMessage(array(
@@ -438,17 +424,15 @@ class ControllerAccountAccount extends Controller {
 
             $this->model_account_user->resetPassword($this->request->post['email'], $password);
 
-            $mail = new Mail();
-            $mail->setTo($this->request->post['email']);
-            $mail->setFrom(MAIL_FROM);
-            $mail->setReplyTo(MAIL_INFO);
-            $mail->setSender(MAIL_SENDER);
-            $mail->setSubject(tt('BitsyBay - Password recovery'));
-            $mail->setText(
+            $this->mail->setTo($this->request->post['email']);
+            $this->mail->setSubject(sprintf(tt('Password recovery - %s'), PROJECT_NAME));
+            $this->mail->setText(
+                sprintf(tt("Hi,\n\n")) .
                 sprintf(tt("A new password was requested from %s\n"), $this->request->post['email']) .
-                sprintf(tt("Your temporary password is: %s"), $password)
+                sprintf(tt("Your temporary password is: %s\n\n"), $password) .
+                sprintf(tt("Best Regards,\n%s\n%s"), PROJECT_NAME, $this->url->link('common/home'))
             );
-            $mail->send();
+            $this->mail->send();
 
             $this->session->setUserMessage(array('success' => tt('Recovery instructions sent to your email address!')));
 
@@ -515,19 +499,14 @@ class ControllerAccountAccount extends Controller {
                                                                   $this->request->post['proof'])) {
 
                 // Admin alert
-                $mail = new Mail();
-                $mail->setTo(MAIL_INFO);
-                $mail->setFrom(MAIL_FROM);
-                $mail->setReplyTo(MAIL_INFO);
-                $mail->setSender(MAIL_SENDER);
-                $mail->setSubject(sprintf(tt('Account Verification Request - %s'), PROJECT_NAME));
-                $mail->setText(
+                $this->mail->setSubject(sprintf(tt('Account Verification Request - %s'), PROJECT_NAME));
+                $this->mail->setText(
                     sprintf(tt("A new verification was requested form %s (User ID %s)\n\n"), $this->auth->getUsername(), $this->auth->getId()) .
                     sprintf(tt("Proof:\n\n%s\n\n"), $this->request->post['proof']) .
                     sprintf(tt("Email: %s\n"), $this->auth->getEmail()) .
                     sprintf(tt("Verification code: %s\n"), $code)
                 );
-                $mail->send();
+                $this->mail->send();
 
                 // Success message
                 $this->session->setUserMessage(array('success' => tt('Your verification request was sent successfully!')));

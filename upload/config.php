@@ -66,8 +66,8 @@ define('ALLOWED_PRODUCT_MIN_PRICE', 0.01);    // BTC
 define('ALLOWED_PRODUCT_MAX_PRICE', 1000000); // BTC
 
 // ORDERS
-define('ORDER_PENDING_STATUS_ID', 1);  // INT order_status_id in order_status table
-define('ORDER_APPROVED_STATUS_ID', 2); // INT order_status_id in order_status table
+define('ORDER_PENDING_STATUS_ID', 1);   // INT order_status_id in order_status table
+define('ORDER_APPROVED_STATUS_ID', 2);  // INT order_status_id in order_status table
 define('ORDER_PROCESSED_STATUS_ID', 3); // INT order_status_id in order_status table
 
 // QUOTA
@@ -91,11 +91,11 @@ define('VALIDATOR_PRODUCT_TAGS_MAX_LENGTH', 100);
 define('VALIDATOR_PRODUCT_TAG_MIN_LENGTH', 2);
 define('VALIDATOR_PRODUCT_TAG_MAX_LENGTH', 20);
 
-// MAIL
-define('MAIL_BILLING', '');
-define('MAIL_INFO', '');
-define('MAIL_FROM', '');
-define('MAIL_SENDER', PROJECT_NAME);
+// MAILING AND NOTICES
+define('MAIL_EMAIL_BILLING_ADDRESS', '');
+define('MAIL_EMAIL_SUPPORT_ADDRESS', '');
+define('MAIL_EMAIL_SENDER_ADDRESS', '');
+define('MAIL_EMAIL_SENDER_NAME', PROJECT_NAME);
 
 // BITCOIN
 define('BITCOIN_RPC_PORT', '8332');

@@ -20,8 +20,6 @@ class ControllerCommonContact extends Controller {
 
         parent::__construct($registry);
 
-        // Load dependencies
-        $this->load->library('mail');
     }
 
     public function index() {
@@ -32,14 +30,10 @@ class ControllerCommonContact extends Controller {
 
         if ('POST' == $this->request->getRequestMethod() && $this->_validatePost()) {
 
-            $mail = new Mail();
-            $mail->setTo(MAIL_INFO);
-            $mail->setFrom(MAIL_FROM);
-            $mail->setReplyTo($this->request->post['email']);
-            $mail->setSender(MAIL_SENDER);
-            $mail->setSubject($this->request->post['subject']);
-            $mail->setText($this->request->post['message']);
-            $mail->send();
+            $this->mail->setReplyTo($this->request->post['email']);
+            $this->mail->setSubject($this->request->post['subject']);
+            $this->mail->setText($this->request->post['message']);
+            $this->mail->send();
 
             $this->session->setUserMessage(array('success' => tt('Your message was sent successfully!')));
 
@@ -57,12 +51,10 @@ class ControllerCommonContact extends Controller {
         $data['error']  = $this->_error;
 
         $data['href_common_information_licenses']  = $this->url->link('common/information/licenses');
-        $data['href_common_information_terms']   = $this->url->link('common/information/terms');
-        $data['href_common_information_faq']  = $this->url->link('common/information/faq');
+        $data['href_common_information_terms']     = $this->url->link('common/information/terms');
+        $data['href_common_information_faq']       = $this->url->link('common/information/faq');
 
-        $data['action']  = $this->url->link('common/contact');
-
-
+        $data['action'] = $this->url->link('common/contact');
 
         $data['alert_success']  = $this->load->controller('common/alert/success');
 
