@@ -691,6 +691,8 @@ CREATE TABLE IF NOT EXISTS `user_notification` (
   `title` VARCHAR(255) NOT NULL,
   `description` MEDIUMTEXT NOT NULL,
   `date_added` DATETIME NOT NULL,
+  `date_sent` DATETIME NOT NULL,
+  `date_read` DATETIME NOT NULL,
   PRIMARY KEY (`user_notification_id`),
   INDEX `fk_user_notification_user_id` (`user_id` ASC),
   INDEX `fk_user_notification_language_id` (`language_id` ASC),
