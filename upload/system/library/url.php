@@ -59,11 +59,12 @@ final class Url {
         $this->_addRewrite('account/account', 'profile');
         $this->_addRewrite('account/account/approve', 'approve');
         $this->_addRewrite('account/account/create', 'signup');
-        $this->_addRewrite('account/account/update', 'account-settings');
+        $this->_addRewrite('account/account/update', 'settings');
         $this->_addRewrite('account/account/login', 'signin');
         $this->_addRewrite('account/account/logout', 'logout');
-        $this->_addRewrite('account/account/forgot', 'forgot-password');
+        $this->_addRewrite('account/account/forgot', 'forgot');
         $this->_addRewrite('account/account/verification', 'verify');
+        $this->_addRewrite('account/account/notification', 'notification');
 
         $this->_addRewrite('account/product', 'product-list');
         $this->_addRewrite('account/product/create', 'add-product');

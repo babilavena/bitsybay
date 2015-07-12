@@ -19,6 +19,7 @@
     <?php if ($verified) { ?>
       <a href="<?php echo $href_account_account_verification ?>" class="list-group-item"><?php echo tt('Verification') ?></a>
     <?php } ?>
+    <a href="<?php echo $href_account_account_notification ?>" class="list-group-item"><?php echo tt('Notification center') ?></a>
     <a href="<?php echo $href_account_account_edit ?>" class="list-group-item"><?php echo tt('Account settings') ?></a>
     <a href="<?php echo $href_account_account_logout ?>" class="list-group-item"><?php echo tt('Logout') ?></a>
   </div>

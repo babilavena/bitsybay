@@ -22,7 +22,7 @@ class ModelAccountUser extends Model {
     */
     public function getUser($user_id) {
         try {
-            $statement = $this->db->prepare('SELECT `username`, `email`, `file_quota` FROM `user` WHERE `user_id` = ? AND `status` = 1 LIMIT 1');
+            $statement = $this->db->prepare('SELECT * FROM `user` WHERE `user_id` = ? AND `status` = 1 LIMIT 1');
             $statement->execute(array($user_id));
 
             if ($statement->rowCount()) {
@@ -273,6 +273,59 @@ class ModelAccountUser extends Model {
     }
 
     /**
+    * Update user notification settings
+    *
+    * @param int $user_id    User ID
+    * @param int $notify_pf  Product favorite
+    * @param int $notify_pp  Product purchase
+    * @param int $notify_pc  Product comment
+    * @param int $notify_pn  Project news
+    * @param int $notify_on  Other news
+    * @param int $notify_au  Agreement update
+    * @param int $notify_ni  New IP
+    * @param int $notify_ns  New settings
+    * @return int|bool Affected rows or false if throw exception
+    */
+    public function updateNotificationSettings($user_id, $notify_pf, $notify_pp, $notify_pc, $notify_pn, $notify_on, $notify_au, $notify_ni, $notify_ns) {
+
+        try {
+
+            $statement = $this->db->prepare('UPDATE `user` SET  `notify_pf` = :notify_pf,
+                                                                `notify_pp` = :notify_pp,
+                                                                `notify_pc` = :notify_pc,
+                                                                `notify_pn` = :notify_pn,
+                                                                `notify_on` = :notify_on,
+                                                                `notify_au` = :notify_au,
+                                                                `notify_ni` = :notify_ni,
+                                                                `notify_ns` = :notify_ns
+
+                                                                WHERE `user_id` = :user_id
+                                                                LIMIT 1');
+            $statement->execute(
+                array(
+                ':user_id'   => $user_id,
+
+                ':notify_pf' => $notify_pf,
+                ':notify_pp' => $notify_pp,
+                ':notify_pc' => $notify_pc,
+                ':notify_pn' => $notify_pn,
+                ':notify_on' => $notify_on,
+                ':notify_au' => $notify_au,
+                ':notify_ni' => $notify_ni,
+                ':notify_ns' => $notify_ns,
+                )
+            );
+
+            return $statement->rowCount();
+
+        } catch (PDOException $e) {
+
+            trigger_error($e->getMessage());
+            return false;
+        }
+    }
+
+    /**
     * Create new user
     *
     * @param string $username
@@ -304,6 +357,15 @@ class ModelAccountUser extends Model {
                                             `password`      = :password,
                                             `salt`          = :salt,
                                             `email`         = :email,
+
+                                            `notify_pf`     = 1,
+                                            `notify_pp`     = 1,
+                                            `notify_pc`     = 1,
+                                            `notify_pn`     = 1,
+                                            `notify_on`     = 1,
+                                            `notify_au`     = 1,
+                                            `notify_ni`     = 1,
+                                            `notify_ns`     = 1,
 
                                             `date_added`    = NOW(),
                                             `date_modified` = NOW(),
