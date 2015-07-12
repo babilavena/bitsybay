@@ -687,7 +687,7 @@ CREATE TABLE IF NOT EXISTS `user_notification` (
   `language_id` INT UNSIGNED NOT NULL,
   `read` TINYINT(1) NOT NULL,
   `sent` TINYINT(1) NOT NULL,
-  `type` ENUM('notify_pf', 'notify_pp', 'notify_pc', 'notify_pn', 'notify_on', 'notify_au', 'notify_ni', 'notify_ns') NOT NULL,
+  `type` ENUM('pf', 'pp', 'pc', 'pn', 'on', 'au', 'ni', 'ns', 'ca') NOT NULL,
   `title` VARCHAR(255) NOT NULL,
   `description` MEDIUMTEXT NOT NULL,
   `date_added` DATETIME NOT NULL,
