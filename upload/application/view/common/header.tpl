@@ -90,10 +90,16 @@
                 <span class="caret"></span>
               </a>
               <ul class="dropdown-menu" aria-labelledby="m-nav-account-account">
-                <li><a href="<?php echo $href_account_account ?>"><?php echo tt('Profile') ?></a></li>
-                <li><a href="<?php echo $href_account_account_update ?>"><?php echo tt('Account settings') ?></a></li>
+                <li class="disabled"><a style="cursor:default" href="#"><?php echo tt('Signed in as') ?> <strong><?php echo $username ?></strong></a></li>
                 <li class="divider"></li>
-                <li><a href="<?php echo $href_account_logout ?>"><?php echo tt('Logout') ?></a></li>
+                <li><a href="<?php echo $href_account_account ?>"><span class="glyphicon glyphicon-briefcase"></span>&nbsp; <?php echo tt('Profile') ?></a></li>
+                <?php if ($bool_is_verified) { ?>
+                  <li><a href="<?php echo $href_account_account_verification ?>"><span class="glyphicon glyphicon-leaf"></span>&nbsp; <?php echo tt('Verification') ?></a></li>
+                <?php } ?>
+                <li><a href="<?php echo $href_account_account_notification ?>"><span class="glyphicon glyphicon-envelope"></span>&nbsp; <?php echo tt('Notification center') ?></a></li>
+                <li><a href="<?php echo $href_account_account_update ?>"><span class="glyphicon glyphicon-cog"></span>&nbsp; <?php echo tt('Account settings') ?></a></li>
+                <li class="divider"></li>
+                <li><a href="<?php echo $href_account_logout ?>"><span class="glyphicon glyphicon-log-out"></span>&nbsp; <?php echo tt('Logout') ?></a></li>
               </ul>
             </li>
             <?php } else { ?>

@@ -39,11 +39,15 @@ class ControllerCommonHeader extends Controller {
         $data['logo']        = '';
         $data['base']        = URL_BASE;
 
-        $data['bool_is_logged'] = $this->auth->isLogged();
+        $data['bool_is_logged']   = $this->auth->isLogged();
+        $data['bool_is_verified'] = !$this->auth->isVerified();
+        $data['username']    = $this->auth->getUsername();
 
         // Account section
         $data['href_account_account_update'] = $this->url->link('account/account/update');
         $data['href_account_account'] = $this->url->link('account/account');
+        $data['href_account_account_verification'] = $this->url->link('account/account/verification');
+        $data['href_account_account_notification'] = $this->url->link('account/account/notification');
 
         // Buyer section
         $data['href_product_purchased'] = $this->url->link('catalog/search', 'purchased=1');

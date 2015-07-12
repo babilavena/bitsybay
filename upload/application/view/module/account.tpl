@@ -15,13 +15,13 @@
 <div class="bs-component">
   <div class="list-group">
     <div class="list-group-item active"><?php echo tt('Account') ?></div>
-    <a href="<?php echo $href_account_account ?>" class="list-group-item"><?php echo tt('Profile') ?></a>
+    <a href="<?php echo $href_account_account ?>" class="list-group-item"><span class="glyphicon glyphicon-briefcase"></span>&nbsp; <?php echo tt('Profile') ?></a>
     <?php if ($verified) { ?>
-      <a href="<?php echo $href_account_account_verification ?>" class="list-group-item"><?php echo tt('Verification') ?></a>
+      <a href="<?php echo $href_account_account_verification ?>" class="list-group-item"><span class="glyphicon glyphicon-leaf"></span>&nbsp; <?php echo tt('Verification') ?></a>
     <?php } ?>
-    <a href="<?php echo $href_account_account_notification ?>" class="list-group-item"><?php echo tt('Notification center') ?></a>
-    <a href="<?php echo $href_account_account_edit ?>" class="list-group-item"><?php echo tt('Account settings') ?></a>
-    <a href="<?php echo $href_account_account_logout ?>" class="list-group-item"><?php echo tt('Logout') ?></a>
+    <a href="<?php echo $href_account_account_notification ?>" class="list-group-item"><span class="glyphicon glyphicon-envelope"></span>&nbsp; <?php echo tt('Notification center') ?></a>
+    <a href="<?php echo $href_account_account_edit ?>" class="list-group-item"><span class="glyphicon glyphicon-cog"></span>&nbsp; <?php echo tt('Account settings') ?></a>
+    <a href="<?php echo $href_account_account_logout ?>" class="list-group-item"><span class="glyphicon glyphicon-log-out"></span>&nbsp; <?php echo tt('Logout') ?></a>
   </div>
 </div>
 
