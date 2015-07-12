@@ -59,24 +59,24 @@ final class Url {
         $this->_addRewrite('account/account', 'profile');
         $this->_addRewrite('account/account/approve', 'approve');
         $this->_addRewrite('account/account/create', 'signup');
-        $this->_addRewrite('account/account/update', 'settings');
+        $this->_addRewrite('account/account/update', 'settings/account');
         $this->_addRewrite('account/account/login', 'signin');
         $this->_addRewrite('account/account/logout', 'logout');
         $this->_addRewrite('account/account/forgot', 'forgot');
-        $this->_addRewrite('account/account/verification', 'verify');
-        $this->_addRewrite('account/account/notification', 'notification');
+        $this->_addRewrite('account/account/verification', 'account/verification');
+        $this->_addRewrite('account/account/notification', 'settings/notifications');
 
-        $this->_addRewrite('account/product', 'product-list');
-        $this->_addRewrite('account/product/create', 'add-product');
-        $this->_addRewrite('account/product/update', 'update-product');
-        $this->_addRewrite('account/product/delete', 'delete-product');
+        $this->_addRewrite('account/product', 'product/list');
+        $this->_addRewrite('account/product/create', 'product/create');
+        $this->_addRewrite('account/product/update', 'product/update');
+        $this->_addRewrite('account/product/delete', 'product/delete');
 
         // Create catalog rewrite rules
         $this->_addRewrite('catalog/category', '');
         $this->_addRewrite('catalog/product', '');
         $this->_addRewrite('catalog/search', 'search');
-        $this->_addRewrite('catalog/product/download', 'download');
-        $this->_addRewrite('catalog/product/demo', 'demo');
+        $this->_addRewrite('catalog/product/download', 'product/download');
+        $this->_addRewrite('catalog/product/demo', 'product/demo');
 
         // Create common rewrite rules
         $this->_addRewrite('common/home', '');
