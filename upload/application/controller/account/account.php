@@ -179,12 +179,6 @@ class ControllerAccountAccount extends Controller {
         $this->response->setOutput($this->load->view('account/account/create.tpl', $data));
     }
 
-    public function captcha() {
-
-        $captcha = new Captcha();
-        $captcha->getImage($this->session->getCaptcha());
-    }
-
     public function update() {
 
         // Init
@@ -197,6 +191,7 @@ class ControllerAccountAccount extends Controller {
 
         // Set variables
         $user = $this->model_account_user->getUser($this->auth->getId());
+
 
         // Validate & save incoming data
         if ('POST' == $this->request->getRequestMethod() && $this->_validateUpdate()) {
@@ -260,6 +255,9 @@ class ControllerAccountAccount extends Controller {
 
         // Errors
         $data['error'] = $this->_error;
+
+        // JS
+        $data['username_max_lenght'] = ValidatorUser::getUsernameMaxLength();
 
         // Links
         $data['action'] = $this->url->link('account/account/update');
@@ -604,6 +602,11 @@ class ControllerAccountAccount extends Controller {
 
         $this->response->redirect($this->url->link('account/account'));
 
+    }
+
+    public function captcha() {
+        $captcha = new Captcha();
+        $captcha->getImage($this->session->getCaptcha());
     }
 
     // AJAX actions begin

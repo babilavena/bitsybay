@@ -44,7 +44,7 @@
 
           <div class="form-group<?php if (isset($error['username'])) { ?> has-error<?php } ?>">
             <div class="col-lg-6">
-              <input onkeyup="lengthFilter(this, <?php echo VALIDATOR_USER_USERNAME_MAX_LENGTH ?>)" type="text" name="username" class="form-control" id="inputUsername" placeholder="<?php echo tt('Username') ?>" value="<?php echo $username ?>">
+              <input onkeyup="lengthFilter(this, <?php echo $username_max_lenght ?>)" type="text" name="username" class="form-control" id="inputUsername" placeholder="<?php echo tt('Username') ?>" value="<?php echo $username ?>">
               <?php if (isset($error['username'])) { ?>
                 <div class="text-danger"><?php echo $error['username'] ?></div>
               <?php } ?>
