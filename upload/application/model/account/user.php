@@ -343,8 +343,6 @@ class ModelAccountUser extends Model {
                                         ':email'      => $email,
                                         ':salt'       => $salt));
 
-            // todo: add subscriptions
-
             $user_id = $this->db->lastInsertId();
 
             $this->addEmail($user_id, $email, $approval_code, $approval_code);

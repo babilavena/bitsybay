@@ -106,7 +106,7 @@ class ControllerAccountAccount extends Controller {
                                                                    QUOTA_FILE_SIZE_BY_DEFAULT,
                                                                    $approval_code)) {
 
-                // Clear any previous login attempts for unregistered accounts.
+                // Clear previous login attempts for unregistered accounts.
                 $this->model_account_user->deleteLoginAttempts($this->request->post['email']);
 
                 // Try to login
@@ -120,6 +120,13 @@ class ControllerAccountAccount extends Controller {
                                                                              IMG_FILTER_GRAYSCALE), true);
 
                     $image->save(DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR . 'thumb.' . STORAGE_IMAGE_EXTENSION);
+
+                    // Subscription
+                    $subscriptions = $this->model_account_subscription->getSubscriptions($this->auth->getId());
+
+                    foreach ($subscriptions as $subscription) {
+                        $this->model_account_subscription->addUserSubscription($this->auth->getId(), $subscription->subscription_id);
+                    }
 
                     // Add welcome notification
                     $this->model_account_notification->addNotification($user_id,
