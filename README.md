@@ -108,7 +108,7 @@ INSTALL
     /public/image/cache 
     /system/log 
 
-* Setup crontab: **/tool/order/manager.php** - hourly
+* Setup crontab: **/tool/\***
 * Do not forget:
 
 
