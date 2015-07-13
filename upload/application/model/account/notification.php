@@ -183,7 +183,7 @@ class ModelAccountNotification extends Model {
     * Check new user notifications
     *
     * @param int $user_id
-    * @return int|bool notification total count or false if throw exception
+    * @return int|bool new notification status or false if throw exception
     */
     public function checkNewNotifications($user_id) {
 
