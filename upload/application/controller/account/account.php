@@ -124,10 +124,9 @@ class ControllerAccountAccount extends Controller {
                     $this->model_account_notification->addNotification($user_id,
                                                                        DEFAULT_LANGUAGE_ID,
                                                                        'ca', // Common activity
-                                                                       sprintf(tt('Welcome to the %s!'), PROJECT_NAME),
+                                                                       sprintf(tt('Welcome to %s!'), PROJECT_NAME),
                                                                        tt("We're so happy you've joined us.\n") .
-                                                                       tt("Check your mailbox and click the link on the email notification to activate your account.\n\n") .
-                                                                       tt("If you need additional help, contact us!"));
+                                                                       tt("Make every day awesome with inspired finds!"));
 
                     // Send email approval link
                     $this->mail->setTo($this->request->post['email']);
@@ -219,7 +218,7 @@ class ControllerAccountAccount extends Controller {
                 $this->model_account_notification->addNotification($this->auth->getId(),
                                                                    DEFAULT_LANGUAGE_ID,
                                                                    'ns', // New Settings
-                                                                   tt('Your account settings has been updated!'),
+                                                                   tt('Your account settings has been updated'),
                                                                    tt('If you did not make this change and believe your account has been compromised, please contact us.'));
 
                 // If old and new email is not match
@@ -229,7 +228,7 @@ class ControllerAccountAccount extends Controller {
                     $this->model_account_notification->addNotification($this->auth->getId(),
                                                                        DEFAULT_LANGUAGE_ID,
                                                                        'ns', // New Settings
-                                                                       tt('Your email address has been changed!'),
+                                                                       tt('Your email address has been changed'),
                                                                        tt('If you did not make this change and believe your account has been compromised, please contact us.'));
 
 
@@ -443,7 +442,7 @@ class ControllerAccountAccount extends Controller {
             $this->model_account_notification->addNotification($user->user_id,
                                                                DEFAULT_LANGUAGE_ID,
                                                                'ns', // New Settings
-                                                               tt('Your password has been updated!'),
+                                                               tt('Your password has been updated'),
                                                                tt('If you did not make this change and believe your account has been compromised, please contact us.'));
 
             // Send email
@@ -527,7 +526,7 @@ class ControllerAccountAccount extends Controller {
                 $this->model_account_notification->addNotification($this->auth->getId(),
                                                                    DEFAULT_LANGUAGE_ID,
                                                                    'ca', // Common activity
-                                                                   tt('Your verification request was sent successfully!'),
+                                                                   tt('Your verification request was sent successfully'),
                                                                    tt('We will process the request as quickly as possible.'));
 
                 // Admin alert

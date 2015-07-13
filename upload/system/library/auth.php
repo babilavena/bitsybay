@@ -126,11 +126,40 @@ final class Auth {
     private function _saveIP($user_id, $ip) {
 
         try {
+
+            // If IP not registered
             $statement = $this->db->prepare('SELECT * FROM `user_ip` WHERE `user_id` = ? AND `ip` = ? LIMIT 1');
             $statement->execute(array($user_id, $ip));
 
             if (!$statement->rowCount()) {
 
+                // If IP changed
+                $statement = $this->db->prepare('SELECT NULL FROM `user_ip` WHERE `user_id` = ? LIMIT 1');
+                $statement->execute(array($user_id));
+
+                if ($statement->rowCount()) {
+
+                    // Add notification
+                    $statement = $this->db->prepare('INSERT INTO `user_notification` SET  `user_id`     = :user_id,
+                                                                                          `language_id` = :language_id,
+                                                                                          `type`        = :type,
+                                                                                          `title`       = :title,
+                                                                                          `description` = :description,
+                                                                                          `sent`        = 0,
+                                                                                          `read`        = 0,
+                                                                                          `date_added`  = NOW()');
+                    $statement->execute(
+                        array(
+                            ':user_id'     => $user_id,
+                            ':language_id' => DEFAULT_LANGUAGE_ID,
+                            ':type'        => 'ni', // New IP
+                            ':title'       => tt('Login with new IP'),
+                            ':description' => sprintf(tt("Login with new IP (%s) has been registered.\n"), $ip) . tt('If you believe your account has been compromised, please contact us.')
+                        )
+                    );
+                }
+
+                // Save new IP
                 $statement = $this->db->prepare('INSERT INTO `user_ip` SET `user_id` = ?, `ip` = ?, `date_added` = NOW()');
                 $statement->execute(array($user_id, $ip));
 

@@ -72,11 +72,14 @@ $statement = $db->prepare('SELECT `o`.`order_id`,
                                   `p`.`product_id`,
                                   `p`.`currency_id`,
                                   `p`.`withdraw_address`,
-                                  (SELECT `email` FROM `user` AS `us` WHERE `us`.`user_id` = `p`.`user_id` LIMIT 1) AS `seller_email`,
-                                  (SELECT `email` FROM `user` AS `ub` WHERE `ub`.`user_id` = `o`.`user_id` LIMIT 1) AS `buyer_email`,
+                                  `us`.`email` AS `seller_email`,
+                                  `ub`.`email` AS `buyer_email`,
+                                  `ub`.`username` AS `buyer_username`,
                                   (SELECT `title` FROM `product_description` AS `pd` WHERE `pd`.`product_id` = `p`.`product_id` AND `pd`.`language_id` = ? LIMIT 1) AS `product_title`
                                   FROM `product` AS `p`
                                   JOIN `order` AS `o` ON (`o`.`product_id` = `p`.`product_id`)
+                                  JOIN `user` AS `us` ON (`us`.`user_id` = `p`.`user_id`)
+                                  JOIN `user` AS `ub` ON (`ub`.`user_id` = `o`.`user_id`)
                                   WHERE `order_status_id` <> ?
                                   AND `o`.`product_id` IS NOT NULL
                                   GROUP BY `order_id`');
@@ -231,6 +234,25 @@ if ($statement->rowCount()) {
                         $mail->setSubject(sprintf('%s is ready to download - %s', $order->product_title, PROJECT_NAME));
                         $mail->setText($output);
                         $mail->send();
+
+                        // Add notification
+                        $notification = $db->prepare('INSERT INTO `user_notification` SET `user_id`     = :user_id,
+                                                                                          `language_id` = :language_id,
+                                                                                          `type`        = :type,
+                                                                                          `title`       = :title,
+                                                                                          `description` = :description,
+                                                                                          `sent`        = 0,
+                                                                                          `read`        = 0,
+                                                                                          `date_added`  = NOW()');
+                        $notification->execute(
+                            array(
+                                ':user_id'     => $order->seller_user_id,
+                                ':language_id' => DEFAULT_LANGUAGE_ID,
+                                ':type'        => 'pp', // Product purchase
+                                ':title'       => tt('Your product has been purchased'),
+                                ':description' => sprintf(tt("@%s has purchased your product %s.\n"), $order->buyer_username, $order->product_title)
+                            )
+                        );
                     }
                 }
             } else {

@@ -81,10 +81,12 @@ class ControllerAccountNotification extends Controller
             $this->response->redirect($this->url->link('account/account/login', 'redirect=' . base64_encode($this->url->link('account/notification/read', 'notification_id=' . $notification_id))));
         }
 
+        // Check the access
+        if (!$notification = $this->model_account_notification->getNotification($notification_id, $this->auth->getId(), $this->language->getId())) {
+            $this->response->redirect($this->url->link('account/notification'));
+        }
+
         $this->document->setTitle(tt('Notifications'));
-
-
-        $notification = $this->model_account_notification->getNotification($notification_id, $this->auth->getId(), $this->language->getId());
 
         $data['title']       = $notification->title;
         $data['description'] = $notification->description;

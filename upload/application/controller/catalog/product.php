@@ -23,6 +23,7 @@ class ControllerCatalogProduct extends Controller {
         $this->load->model('catalog/product');
         $this->load->model('catalog/category');
         $this->load->model('common/order');
+        $this->load->model('account/notification');
 
         $this->load->helper('validator/product');
         $this->load->helper('plural');
@@ -350,13 +351,31 @@ class ControllerCatalogProduct extends Controller {
         $json  = array();
         $product_id = (int) $this->request->post['product_id'];
         $total = $this->model_catalog_product->getProductFavoritesTotal($product_id);
+        $product = $this->model_catalog_product->getProduct($product_id, $this->auth->getId(), ORDER_APPROVED_STATUS_ID);
 
         // Favorite
-        if ($this->model_catalog_product->createProductFavorite($product_id, $this->auth->getId()))
+        if ($this->model_catalog_product->createProductFavorite($product_id, $this->auth->getId())) {
+
+            // Is not seller
+            if ($product->user_id != $this->auth->getId()) {
+
+                // Add notification
+                $this->model_account_notification->addNotification($product->user_id,
+                                                                   $this->language->getId(),
+                                                                   'pf', // Product favorite
+                                                                   tt('Your product has been marked as favorite'),
+                                                                   sprintf(tt("@%s has marked %s as favorite.\n"), $this->auth->getUsername(), $product->title) .
+                                                                   tt("Cheers!"));
+            }
+
+            // Set output
             $json = array('total' => $total + 1, 'status' => 200, 'code' => 1);
 
-        else if ($this->model_catalog_product->deleteProductFavorite($product_id, $this->auth->getId()))
+        } else if ($this->model_catalog_product->deleteProductFavorite($product_id, $this->auth->getId())) {
+
+            // Set output
             $json = array('total' => $total - 1, 'status' => 200, 'code' => 0);
+        }
 
         $this->response->addHeader('Content-Type: application/json');
         $this->response->setOutput(json_encode($json));
@@ -457,6 +476,21 @@ class ControllerCatalogProduct extends Controller {
         } else {
 
             if ($this->model_catalog_product->createProductReview((int)$this->request->post['product_id'], $this->request->post['review'], $this->auth->getId(), $this->language->getId(), 1)) {
+
+                // Get requires
+                $product = $this->model_catalog_product->getProduct((int) $this->request->post['product_id'], $this->auth->getId(), ORDER_APPROVED_STATUS_ID);
+
+                // Is not seller
+                if ($product->user_id != $this->auth->getId()) {
+
+                    // Add notification
+                    $this->model_account_notification->addNotification($product->user_id,
+                                                                       $this->language->getId(),
+                                                                       'pc', // Product comment
+                                                                       tt('Your product has been commented'),
+                                                                       sprintf(tt("@%s has posted a comment about your product %s.\n"), $this->auth->getUsername(), $product->title));
+                }
+
                 $json = array('success_message' => tt('Thank you for your review!'));
             } else {
                 $json = array('error_message' => tt('Internal server error! Please try again later.'));
