@@ -70,7 +70,7 @@
                   <?php } else { ?>
                     <input type="checkbox" name="notify_pc" value="1">
                   <?php } ?>
-                  <?php echo tt('My Offers get a new comment') ?>
+                  <?php echo tt('My Offers get a comment') ?>
                 </label>
               </div>
             </div>
