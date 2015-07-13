@@ -18,7 +18,7 @@ require('../../system/library/mail.php');
 
 // Set log files
 $filenames = array(
-    '',
+    ''
 );
 
 // Check logs
