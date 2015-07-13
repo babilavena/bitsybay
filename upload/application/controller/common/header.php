@@ -41,7 +41,13 @@ class ControllerCommonHeader extends Controller {
 
         $data['bool_is_logged']   = $this->auth->isLogged();
         $data['bool_is_verified'] = !$this->auth->isVerified();
-        $data['username']    = $this->auth->getUsername();
+        $data['username']         = $this->auth->getUsername();
+
+        // Notification section
+        $this->load->model('account/notification');
+        $data['total_account_notification'] = $this->model_account_notification->checkNewNotifications($this->auth->getId());
+
+        $data['href_account_notification'] = $this->url->link('account/notification');
 
         // Account section
         $data['href_account_account_update'] = $this->url->link('account/account/update');
@@ -60,7 +66,7 @@ class ControllerCommonHeader extends Controller {
         $redirect = base64_encode($this->url->getCurrentLink());
 
         $data['href_account_create']  = $this->url->link('account/account/create', 'redirect=' . $redirect);
-        $data['href_account_login']   = $this->url->link('account/account/login', 'redirect=' . $redirect);
+        $data['href_account_login']   = $this->url->link('account/account/login',  'redirect=' . $redirect);
         $data['href_account_logout']  = $this->url->link('account/account/logout', 'redirect=' . $redirect);
 
         // Generate categories menu

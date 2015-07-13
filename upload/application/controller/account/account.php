@@ -22,6 +22,7 @@ class ControllerAccountAccount extends Controller {
 
         // Load dependencies
         $this->load->model('account/user');
+        $this->load->model('account/notification');
         $this->load->helper('validator/user');
         $this->load->helper('validator/upload');
         $this->load->library('bitcoin');
@@ -53,7 +54,7 @@ class ControllerAccountAccount extends Controller {
         $data['href_catalog_search_favorites']     = $this->url->link('catalog/search', 'favorites=1');
         $data['href_catalog_search_purchased']     = $this->url->link('catalog/search', 'purchased=1');
         $data['href_account_account_update']       = $this->url->link('account/account/update');
-        $data['href_account_product_create']       = $this->url->link('account/product/create');
+        $data['href_account_product_create']       = $this->url->link('account/product');
         $data['href_account_account_verification'] = $this->url->link('account/account/verification');
 
         $data['module_account']  = $this->load->controller('module/account');
@@ -90,21 +91,19 @@ class ControllerAccountAccount extends Controller {
         // Validate & save incoming data
         if ('POST' == $this->request->getRequestMethod() && $this->_validateCreate()) {
 
-
-
             // Generate email approval link
             $approval_code = md5(rand() . microtime() . $this->request->post['email']);
 
             // Create new user
-            if ($this->model_account_user->createUser( $this->request->post['username'],
-                                                       $this->request->post['email'],
-                                                       $this->request->post['password'],
-                                                       1, // Is buyer
-                                                       1, // Is seller
-                                                       NEW_USER_STATUS,
-                                                       NEW_USER_VERIFIED,
-                                                       QUOTA_FILE_SIZE_BY_DEFAULT,
-                                                       $approval_code)) {
+            if ($user_id = $this->model_account_user->createUser(  $this->request->post['username'],
+                                                                   $this->request->post['email'],
+                                                                   $this->request->post['password'],
+                                                                   1, // Is buyer
+                                                                   1, // Is seller
+                                                                   NEW_USER_STATUS,
+                                                                   NEW_USER_VERIFIED,
+                                                                   QUOTA_FILE_SIZE_BY_DEFAULT,
+                                                                   $approval_code)) {
 
                 // Clear any previous login attempts for unregistered accounts.
                 $this->model_account_user->deleteLoginAttempts($this->request->post['email']);
@@ -121,27 +120,23 @@ class ControllerAccountAccount extends Controller {
 
                     $image->save(DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR . 'thumb.' . STORAGE_IMAGE_EXTENSION);
 
-                    // Send user email
+                    // Add welcome notification
+                    $this->model_account_notification->addNotification($user_id,
+                                                                       DEFAULT_LANGUAGE_ID,
+                                                                       'ca', // Common activity
+                                                                       sprintf(tt('Welcome to the %s!'), PROJECT_NAME),
+                                                                       tt("We're so happy you've joined us.\n") .
+                                                                       tt("Check your mailbox and click the link on the email notification to activate your account.\n\n") .
+                                                                       tt("If you need additional help, contact us!"));
+
+                    // Send email approval link
                     $this->mail->setTo($this->request->post['email']);
-                    $this->mail->setSubject(sprintf(tt('Welcome to the %s Store!'), PROJECT_NAME));
-                    $this->mail->setText(
-                        tt("Welcome and thank you for registering!\n\n").
-                        sprintf(tt("Here is your account information:\n\nUsername: %s\nE-mail: %s\n\n"), $this->request->post['username'], $this->request->post['email']).
-                        sprintf(tt("Please, approve your email at the following URL: \n%s"), $this->url->link('account/account/approve', 'approval_code=' . $approval_code))
-                    );
+                    $this->mail->setSubject(sprintf(tt('Account activation - %s'), PROJECT_NAME));
+                    $this->mail->setText(tt("Welcome and thank you for registering!\n\n").
+                                         sprintf(tt("Please, approve your email at the following link: \n%s"), $this->url->link('account/account/approve', 'approval_code=' . $approval_code)));
                     $this->mail->send();
 
-                    // Send admin notice
-                    $this->mail->setSubject(tt('A new customer join us'));
-                    $this->mail->setText(tt('Yes yes yes'));
-                    $this->mail->send();
-
-                    // Redirect to account page
-                    //if (isset($this->request->get['redirect'])) {
-                    //    $this->response->redirect(base64_decode($this->request->get['redirect']));
-                    //} else {
-                        $this->response->redirect($this->url->link('account/account'));
-                    //}
+                    $this->response->redirect($this->url->link('account/account'));
                 }
             }
         }
@@ -201,6 +196,9 @@ class ControllerAccountAccount extends Controller {
             $this->response->redirect($this->url->link('account/account/login'));
         }
 
+        // Set variables
+        $user = $this->model_account_user->getUser($this->auth->getId());
+
         // Validate & save incoming data
         if ('POST' == $this->request->getRequestMethod() && $this->_validateUpdate()) {
 
@@ -214,22 +212,41 @@ class ControllerAccountAccount extends Controller {
                                                       $this->request->post['password'],
                                                       $approval_code)) {
 
+                // Success alert
+                $this->session->setUserMessage(array('success' => tt('Well done! You have successfully modified account settings!')));
+
+                // Add notification about new account settings
+                $this->model_account_notification->addNotification($this->auth->getId(),
+                                                                   DEFAULT_LANGUAGE_ID,
+                                                                   'ns', // New Settings
+                                                                   tt('Your account settings has been updated!'),
+                                                                   tt('If you did not make this change and believe your account has been compromised, please contact us.'));
+
+                // If old and new email is not match
                 if ($this->request->post['email'] != $this->auth->getEmail()) {
+
+                    // Add notification with email approving instructions
+                    $this->model_account_notification->addNotification($this->auth->getId(),
+                                                                       DEFAULT_LANGUAGE_ID,
+                                                                       'ns', // New Settings
+                                                                       tt('Your email address has been changed!'),
+                                                                       tt('If you did not make this change and believe your account has been compromised, please contact us.'));
+
+
+                    // Send email verification code
                     $this->mail->setTo($this->request->post['email']);
                     $this->mail->setSubject(sprintf(tt('E-mail verification - %s'), PROJECT_NAME));
                     $this->mail->setText(
-                        sprintf(tt("Your email address has been changed from %s to %s.\n"), $this->auth->getEmail(), $this->request->post['email']) .
+                        sprintf(tt("Your email address has been changed.\n")) .
                         sprintf(tt("Please, approve your new email at the following URL:\n"), $this->url->link('account/account', 'approve=' . $approval_code)));
                     $this->mail->send();
+
 
                     // Success alert
                     $this->session->setUserMessage(array(
                         'success' => tt('Well done! You have successfully modified account settings!'),
                         'warning' => tt('You have successfully modified account settings! Please, check your mailbox to approve the new email address.')
                     ));
-                } else {
-                    // Success alert
-                    $this->session->setUserMessage(array('success' => tt('Well done! You have successfully modified account settings!')));
                 }
 
                 $this->response->redirect($this->url->link('account/account/update'));
@@ -238,9 +255,6 @@ class ControllerAccountAccount extends Controller {
 
         // Set headers
         $this->document->setTitle(tt('Account Edit'));
-
-        // Set variables
-        $user = $this->model_account_user->getUser($this->auth->getId());
 
         $data['email']    = isset($this->request->post['email']) ? $this->request->post['email'] : $user->email;
         $data['username'] = isset($this->request->post['username']) ? $this->request->post['username'] : $user->username;
@@ -276,7 +290,7 @@ class ControllerAccountAccount extends Controller {
 
         // Redirect if user is already logged
         if (!$this->auth->isLogged()) {
-            $this->response->redirect($this->url->link('account/account/login'), 'redirect=' . base64_encode($this->url->getCurrentLink()));
+            $this->response->redirect($this->url->link('account/account/login'));
         }
 
         // Init
@@ -423,7 +437,17 @@ class ControllerAccountAccount extends Controller {
             $password = substr(sha1(uniqid(mt_rand(), true)), 0, 10);
 
             $this->model_account_user->resetPassword($this->request->post['email'], $password);
+            $user = $this->model_account_user->getUserByEmail($this->request->post['email']);
 
+            // Add notification
+            $this->model_account_notification->addNotification($user->user_id,
+                                                               DEFAULT_LANGUAGE_ID,
+                                                               'ns', // New Settings
+                                                               tt('Your password has been updated!'),
+                                                               tt('If you did not make this change and believe your account has been compromised, please contact us.'));
+
+            // Send email
+            // todo: add password reset page
             $this->mail->setTo($this->request->post['email']);
             $this->mail->setSubject(sprintf(tt('Password recovery - %s'), PROJECT_NAME));
             $this->mail->setText(
@@ -433,6 +457,7 @@ class ControllerAccountAccount extends Controller {
                 sprintf(tt("Best Regards,\n%s\n%s"), PROJECT_NAME, $this->url->link('common/home'))
             );
             $this->mail->send();
+            // todo: end
 
             $this->session->setUserMessage(array('success' => tt('Recovery instructions sent to your email address!')));
 
@@ -498,14 +523,17 @@ class ControllerAccountAccount extends Controller {
                                                                   $code,
                                                                   $this->request->post['proof'])) {
 
+                // Add notification
+                $this->model_account_notification->addNotification($this->auth->getId(),
+                                                                   DEFAULT_LANGUAGE_ID,
+                                                                   'ca', // Common activity
+                                                                   tt('Your verification request was sent successfully!'),
+                                                                   tt('We will process the request as quickly as possible.'));
+
                 // Admin alert
+                $this->mail->setTo(MAIL_EMAIL_SUPPORT_ADDRESS);
                 $this->mail->setSubject(sprintf(tt('Account Verification Request - %s'), PROJECT_NAME));
-                $this->mail->setText(
-                    sprintf(tt("A new verification was requested form %s (User ID %s)\n\n"), $this->auth->getUsername(), $this->auth->getId()) .
-                    sprintf(tt("Proof:\n\n%s\n\n"), $this->request->post['proof']) .
-                    sprintf(tt("Email: %s\n"), $this->auth->getEmail()) .
-                    sprintf(tt("Verification code: %s\n"), $code)
-                );
+                $this->mail->setText(tt('A new verification was requested.'));
                 $this->mail->send();
 
                 // Success message

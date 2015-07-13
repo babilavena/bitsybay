@@ -38,6 +38,29 @@ class ModelAccountUser extends Model {
     }
 
     /**
+    * Get registered user info
+    *
+    * @param string $email
+    * @return object|bool User's PDOStatement::fetch object or false if throw exception
+    */
+    public function getUserByEmail($email) {
+        try {
+            $statement = $this->db->prepare('SELECT * FROM `user` WHERE `email` = ? AND `status` = 1 LIMIT 1');
+            $statement->execute(array($email));
+
+            if ($statement->rowCount()) {
+                return $statement->fetch();
+            } else {
+                return false;
+            }
+        } catch (PDOException $e) {
+
+            trigger_error($e->getMessage());
+            return false;
+        }
+    }
+
+    /**
     * Get user emails
     *
     * @param int $user_id

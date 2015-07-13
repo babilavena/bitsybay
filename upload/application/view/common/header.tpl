@@ -83,10 +83,18 @@
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <?php if ($bool_is_logged) { ?>
+            <li>
+              <a href="<?php echo $href_account_notification ?>">
+                <?php if ($total_account_notification) { ?>
+                  <span class="text-primary"><i class="glyphicon glyphicon-inbox"></i></span>
+                <?php } else { ?>
+                  <i class="glyphicon glyphicon-inbox"></i>
+                <?php } ?>
+              </a>
+            </li>
             <li class="dropdown">
               <a class="dropdown-toggle" data-toggle="dropdown" href="<?php echo $href_account_account ?>" id="m-nav-account-account">
                 <i class="glyphicon glyphicon-user"></i>
-                <?php echo tt('Account') ?>
                 <span class="caret"></span>
               </a>
               <ul class="dropdown-menu" aria-labelledby="m-nav-account-account">

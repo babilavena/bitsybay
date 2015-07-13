@@ -71,6 +71,9 @@ final class Url {
         $this->_addRewrite('account/product/update', 'product/update');
         $this->_addRewrite('account/product/delete', 'product/delete');
 
+        $this->_addRewrite('account/notification', 'notifications');
+        $this->_addRewrite('account/notification/read', 'notification/read');
+
         // Create catalog rewrite rules
         $this->_addRewrite('catalog/category', '');
         $this->_addRewrite('catalog/product', '');
