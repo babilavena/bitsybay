@@ -53,7 +53,7 @@ class ControllerCommonHeader extends Controller {
         $data['href_account_account_update'] = $this->url->link('account/account/update');
         $data['href_account_account'] = $this->url->link('account/account');
         $data['href_account_account_verification'] = $this->url->link('account/account/verification');
-        $data['href_account_account_notification'] = $this->url->link('account/account/notification');
+        $data['href_account_account_subscription'] = $this->url->link('account/account/subscription');
 
         // Buyer section
         $data['href_product_purchased'] = $this->url->link('catalog/search', 'purchased=1');

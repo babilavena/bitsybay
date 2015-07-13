@@ -23,6 +23,7 @@ class ControllerAccountAccount extends Controller {
         // Load dependencies
         $this->load->model('account/user');
         $this->load->model('account/notification');
+        $this->load->model('account/subscription');
         $this->load->helper('validator/user');
         $this->load->helper('validator/upload');
         $this->load->library('bitcoin');
@@ -354,6 +355,81 @@ class ControllerAccountAccount extends Controller {
 
         // Renter the template
         $this->response->setOutput($this->load->view('account/account/notification.tpl', $data));
+
+    }
+
+    public function subscription() {
+
+        // Set headers
+        $this->document->setTitle(tt('Subscriptions'));
+
+        // Redirect if user is already logged
+        if (!$this->auth->isLogged()) {
+            $this->response->redirect($this->url->link('account/account/login'));
+        }
+
+        // Save incoming settings
+        if ('POST' == $this->request->getRequestMethod()) {
+
+            // Remove old settings
+            $this->model_account_subscription->deleteUserSubscriptions($this->auth->getId());
+
+            // If new settings exist
+            if (isset($this->request->post['subscription']) && is_array($this->request->post['subscription'])) {
+
+                foreach ($this->request->post['subscription'] as $subscription_id => $value) {
+
+                    // Validate subscription ID
+                    if ($this->model_account_subscription->checkSubscription((int) $subscription_id)) {
+
+                        // Add new settings
+                        $this->model_account_subscription->addUserSubscription($this->auth->getId(), (int) $subscription_id);
+                    }
+                }
+            }
+
+            // Success alert
+            $this->session->setUserMessage(array('success' => tt('You have successfully modified your subscriptions!')));
+        }
+
+        // Init
+        $data = array();
+
+        // Form
+        $subscriptions = $this->model_account_subscription->getSubscriptions($this->auth->getId());
+
+        foreach ($subscriptions as $subscription) {
+            $data['subscriptions'][$subscription->group][] = array(
+                'subscription_id' => $subscription->subscription_id,
+                'title'           => $subscription->title,
+                'label'           => $subscription->label,
+                'active'          => isset($this->request->post['subscription'][$subscription->subscription_id]) ? true : $this->model_account_subscription->checkUserSubscription($this->auth->getId(), $subscription->subscription_id),
+            );
+        }
+
+        // Errors
+        $data['error'] = $this->_error;
+
+        // Links
+        $data['action'] = $this->url->link('account/account/subscription');
+
+        // Load modules
+        $data['module_account'] = $this->load->controller('module/account');
+
+        $data['footer'] = $this->load->controller('common/footer');
+        $data['header'] = $this->load->controller('common/header');
+
+        $data['alert_danger']  = $this->load->controller('common/alert/danger');
+        $data['alert_success'] = $this->load->controller('common/alert/success');
+
+        $data['module_breadcrumbs'] = $this->load->controller('module/breadcrumbs', array(
+            array('name' => tt('Home'), 'href' => $this->url->link('common/home'), 'active' => false),
+            array('name' => tt('Account'), 'href' => $this->url->link('account/account'), 'active' => false),
+            array('name' => tt('Subscriptions'), 'href' => $this->url->link('account/account/subscription'), 'active' => true),
+        ));
+
+        // Renter the template
+        $this->response->setOutput($this->load->view('account/account/subscription.tpl', $data));
 
     }
 

@@ -656,14 +656,6 @@ CREATE TABLE `user` (
   `buyer` enum('1','0') NOT NULL,
   `seller` enum('1','0') NOT NULL,
   `verified` enum('1','0') NOT NULL,
-  `notify_pf` enum('1', '0') NOT NULL,
-  `notify_pp` enum('1', '0') NOT NULL,
-  `notify_pc` enum('1', '0') NOT NULL,
-  `notify_pn` enum('1', '0') NOT NULL,
-  `notify_on` enum('1', '0') NOT NULL,
-  `notify_au` enum('1', '0') NOT NULL,
-  `notify_ni` enum('1', '0') NOT NULL,
-  `notify_ns` enum('1', '0') NOT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
@@ -826,6 +818,70 @@ CREATE TABLE IF NOT EXISTS `log_withdraw` (
   CONSTRAINT `fk_log_withdraw_user_id`
     FOREIGN KEY (`user_id`)
     REFERENCES `user` (`user_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+
+-- -----------------------------------------------------
+-- Table `subscription`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `subscription` ;
+
+CREATE TABLE IF NOT EXISTS `subscription` (
+  `subscription_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`subscription_id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `subscription_description`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `subscription_description` ;
+
+CREATE TABLE IF NOT EXISTS `subscription_description` (
+  `subscription_description_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `subscription_id` INT UNSIGNED NOT NULL,
+  `language_id` INT UNSIGNED NOT NULL,
+  `group` VARCHAR(255) NOT NULL,
+  `label` VARCHAR(255) NOT NULL,
+  `title` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`subscription_description_id`),
+  INDEX `fk_subscription_description_subscription_id` (`subscription_id` ASC),
+  INDEX `fk_subscription_description_language_id` (`language_id` ASC),
+  CONSTRAINT `fk_subscription_description_subscription_id`
+    FOREIGN KEY (`subscription_id`)
+    REFERENCES `subscription` (`subscription_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_subscription_description_language_id`
+    FOREIGN KEY (`language_id`)
+    REFERENCES `language` (`language_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `user_subscription`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `user_subscription` ;
+
+CREATE TABLE IF NOT EXISTS `user_subscription` (
+  `user_subscription_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` INT UNSIGNED NOT NULL,
+  `subscription_id` INT UNSIGNED NOT NULL,
+  PRIMARY KEY (`user_subscription_id`),
+  INDEX `fk_user_subscription_user_id` (`user_id` ASC),
+  INDEX `fk_user_subscription_subscription_id` (`subscription_id` ASC),
+  CONSTRAINT `fk_user_subscription_user_id`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `user` (`user_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_user_subscription_subscription_id`
+    FOREIGN KEY (`subscription_id`)
+    REFERENCES `subscription` (`subscription_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

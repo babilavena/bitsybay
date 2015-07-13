@@ -22,7 +22,7 @@ class ControllerModuleAccount extends Controller {
         $data['href_account_account_edit'] = $this->url->link('account/account/update');
         $data['href_account_account_logout'] = $this->url->link('account/account/logout');
         $data['href_account_account_verification'] = $this->url->link('account/account/verification');
-        $data['href_account_account_notification'] = $this->url->link('account/account/notification');
+        $data['href_account_account_subscription'] = $this->url->link('account/account/subscription');
 
         $data['verified'] = !$this->auth->isVerified();
 

@@ -104,7 +104,7 @@
                 <?php if ($bool_is_verified) { ?>
                   <li><a href="<?php echo $href_account_account_verification ?>"><span class="glyphicon glyphicon-leaf"></span>&nbsp; <?php echo tt('Verification') ?></a></li>
                 <?php } ?>
-                <li><a href="<?php echo $href_account_account_notification ?>"><span class="glyphicon glyphicon-envelope"></span>&nbsp; <?php echo tt('Notification center') ?></a></li>
+                <li><a href="<?php echo $href_account_account_subscription ?>"><span class="glyphicon glyphicon-envelope"></span>&nbsp; <?php echo tt('Subscriptions') ?></a></li>
                 <li><a href="<?php echo $href_account_account_update ?>"><span class="glyphicon glyphicon-cog"></span>&nbsp; <?php echo tt('Account settings') ?></a></li>
                 <li class="divider"></li>
                 <li><a href="<?php echo $href_account_logout ?>"><span class="glyphicon glyphicon-log-out"></span>&nbsp; <?php echo tt('Logout') ?></a></li>
