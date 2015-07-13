@@ -67,34 +67,37 @@ class ControllerAccountProduct extends Controller {
 
         $filter_data = array('user_id' => $this->auth->getId());
 
-        $total = $this->model_catalog_product->getTotalProducts($filter_data);
 
-        if ($total) {
-            $products = $this->model_catalog_product->getProducts($filter_data, $this->language->getId(), $this->auth->getId(), ORDER_APPROVED_STATUS_ID);
+        $products = $this->model_catalog_product->getProducts($filter_data, $this->language->getId(), $this->auth->getId(), ORDER_APPROVED_STATUS_ID);
 
-            foreach ($products as $product) {
-                $data['products'][] = array(
-                    'product_id'              => $product->product_id,
-                    'title'                   => $product->title,
-                    'image'                   => $this->cache->image($product->main_product_image_id, $product->user_id, 36, 36),
-                    'date_added'              => date(tt('Y.m.d'), strtotime($product->date_added)),
-                    'special_regular_price'   => $product->special_regular_price ? $this->currency->format($product->special_regular_price, $product->currency_id) : 0,
-                    'special_exclusive_price' => $product->special_exclusive_price ? $this->currency->format($product->special_exclusive_price, $product->currency_id) : 0,
-                    'regular_price'           => $this->currency->format($product->regular_price, $product->currency_id),
-                    'exclusive_price'         => $this->currency->format($product->exclusive_price, $product->currency_id),
-                    'regular_status'          => $product->special_regular_price > 0 || $product->regular_price > 0 ? true : false,
-                    'exclusive_status'        => $product->special_exclusive_price > 0 || $product->exclusive_price > 0 ? true : false,
-                    'sales'                   => $product->sales,
-                    'favorites'               => $product->favorites,
-                    'viewed'                  => $product->viewed,
-                    'status'                  => $product->status,
-                    'href_edit'               => $this->url->link('account/product/update', 'product_id=' . $product->product_id),
-                    'href_delete'             => $this->url->link('account/product/delete', 'product_id=' . $product->product_id),
-                    'href_download'           => $this->url->link('catalog/product/download', 'product_id=' . $product->product_id),
-                    'href_view'               => $this->url->link('catalog/product', 'product_id=' . $product->product_id)
-                );
-            }
+        // Skip unnecessary clicks
+        if (!$products) {
+            $this->response->redirect($this->url->link('account/product/create'));
         }
+
+        foreach ($products as $product) {
+            $data['products'][] = array(
+                'product_id'              => $product->product_id,
+                'title'                   => $product->title,
+                'image'                   => $this->cache->image($product->main_product_image_id, $product->user_id, 36, 36),
+                'date_added'              => date(tt('Y.m.d'), strtotime($product->date_added)),
+                'special_regular_price'   => $product->special_regular_price ? $this->currency->format($product->special_regular_price, $product->currency_id) : 0,
+                'special_exclusive_price' => $product->special_exclusive_price ? $this->currency->format($product->special_exclusive_price, $product->currency_id) : 0,
+                'regular_price'           => $this->currency->format($product->regular_price, $product->currency_id),
+                'exclusive_price'         => $this->currency->format($product->exclusive_price, $product->currency_id),
+                'regular_status'          => $product->special_regular_price > 0 || $product->regular_price > 0 ? true : false,
+                'exclusive_status'        => $product->special_exclusive_price > 0 || $product->exclusive_price > 0 ? true : false,
+                'sales'                   => $product->sales,
+                'favorites'               => $product->favorites,
+                'viewed'                  => $product->viewed,
+                'status'                  => $product->status,
+                'href_edit'               => $this->url->link('account/product/update', 'product_id=' . $product->product_id),
+                'href_delete'             => $this->url->link('account/product/delete', 'product_id=' . $product->product_id),
+                'href_download'           => $this->url->link('catalog/product/download', 'product_id=' . $product->product_id),
+                'href_view'               => $this->url->link('catalog/product', 'product_id=' . $product->product_id)
+            );
+        }
+
         $data['module_breadcrumbs'] = $this->load->controller('module/breadcrumbs', array(
                     array('name' => tt('Home'), 'href' => $this->url->link('common/home'), 'active' => false),
                     array('name' => tt('Product list'), 'href' => $this->url->link('account/product'), 'active' => true)
