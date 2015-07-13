@@ -72,7 +72,6 @@ $statement = $db->prepare('SELECT `o`.`order_id`,
                                   `p`.`product_id`,
                                   `p`.`currency_id`,
                                   `p`.`withdraw_address`,
-                                  `us`.`notify_pp` AS `seller_notify_pp`,
                                   `us`.`email` AS `seller_email`,
                                   `ub`.`email` AS `buyer_email`,
                                   `ub`.`username` AS `buyer_username`,
@@ -206,22 +205,21 @@ if ($statement->rowCount()) {
 
 
                         // Alert to seller
-                        if ($order->seller_notify_pp) {
-                            $output = sprintf("Hi,\n\n");
-                            $output .= sprintf("Someone has purchased your product - awesome! \n\n");
-                            $output .= sprintf("%s\n", $order->product_title);
-                            $output .= sprintf("Order: %s\n\n", $order->order_id);
-                            $output .= sprintf("Keep it going!\n%s\n", PROJECT_NAME);
+                        $output = sprintf("Hi,\n\n");
+                        $output .= sprintf("Someone has purchased your product - awesome! \n\n");
+                        $output .= sprintf("%s\n", $order->product_title);
+                        $output .= sprintf("Order: %s\n\n", $order->order_id);
+                        $output .= sprintf("Keep it going!\n%s\n", PROJECT_NAME);
 
-                            $mail = new Mail();
-                            $mail->setTo($order->seller_email);
-                            $mail->setFrom(MAIL_EMAIL_SUPPORT_ADDRESS);
-                            $mail->setReplyTo(MAIL_EMAIL_SUPPORT_ADDRESS);
-                            $mail->setSender(MAIL_EMAIL_SENDER_NAME);
-                            $mail->setSubject(sprintf('Your product has been purchased - %s', PROJECT_NAME));
-                            $mail->setText($output);
-                            $mail->send();
-                        }
+                        $mail = new Mail();
+                        $mail->setTo($order->seller_email);
+                        $mail->setFrom(MAIL_EMAIL_SUPPORT_ADDRESS);
+                        $mail->setReplyTo(MAIL_EMAIL_SUPPORT_ADDRESS);
+                        $mail->setSender(MAIL_EMAIL_SENDER_NAME);
+                        $mail->setSubject(sprintf('Your product has been purchased - %s', PROJECT_NAME));
+                        $mail->setText($output);
+                        $mail->send();
+
 
                         // Alert to buyer
                         $output  = sprintf("Hi,\n\n");
