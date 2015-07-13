@@ -59,9 +59,10 @@ try {
     exit;
 }
 
-// Get registered users
-$statement = $db->prepare('SELECT `username`, `email` FROM `user` WHERE `notify_au` = 1');
+$i = 0;
 
+// Get registered users
+$statement = $db->prepare('SELECT `user_id`, `username`, `email` FROM `user` WHERE `notify_au` = 1');
 $statement->execute();
 
 if ($statement->rowCount()) {
@@ -77,8 +78,29 @@ if ($statement->rowCount()) {
         $mail->setSubject(sprintf($subject, PROJECT_NAME));
         $mail->setText(sprintf($body, $user->username, URL_BASE . 'licenses', URL_BASE . 'notification', PROJECT_NAME));
         $mail->send();
+
+        // Add notification
+        $notification = $db->prepare('INSERT INTO `user_notification` SET `user_id`     = :user_id,
+                                                                          `language_id` = :language_id,
+                                                                          `type`        = :type,
+                                                                          `title`       = :title,
+                                                                          `description` = :description,
+                                                                          `sent`        = 0,
+                                                                          `read`        = 0,
+                                                                          `date_added`  = NOW()');
+        $notification->execute(
+            array(
+                ':user_id'     => $user->user_id,
+                ':language_id' => DEFAULT_LANGUAGE_ID,
+                ':type'        => 'pn', // Project news
+                ':title'       => 'Licensing Policy has been updated',
+                ':description' => 'Please read our Licensing Policy carefully, and contact us if you have any questions.'
+            )
+        );
+
+        $i++;
     }
 }
 
 
-
+die(sprintf('total: %s', $i));

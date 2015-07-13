@@ -249,8 +249,8 @@ if ($statement->rowCount()) {
                                 ':user_id'     => $order->seller_user_id,
                                 ':language_id' => DEFAULT_LANGUAGE_ID,
                                 ':type'        => 'pp', // Product purchase
-                                ':title'       => tt('Your product has been purchased'),
-                                ':description' => sprintf(tt("@%s has purchased your product %s.\n"), $order->buyer_username, $order->product_title)
+                                ':title'       => 'Your product has been purchased',
+                                ':description' => sprintf("@%s has purchased your product %s.\n", $order->buyer_username, $order->product_title)
                             )
                         );
                     }
