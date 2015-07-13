@@ -40,6 +40,7 @@ FEATURES
 * Basic brute force protection
 * IP / access logging
 * Profile page and account settings
+* Global notification system
 
 **Catalog**
 
