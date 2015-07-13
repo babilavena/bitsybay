@@ -389,6 +389,7 @@ class ModelAccountUser extends Model {
                                             `notify_au`     = 1,
                                             `notify_ni`     = 1,
                                             `notify_ns`     = 1,
+                                            `notify_ca`     = 1,
 
                                             `date_added`    = NOW(),
                                             `date_modified` = NOW(),
