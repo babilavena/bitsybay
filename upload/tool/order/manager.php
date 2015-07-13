@@ -241,7 +241,7 @@ if ($statement->rowCount()) {
                                                                                           `type`        = :type,
                                                                                           `title`       = :title,
                                                                                           `description` = :description,
-                                                                                          `sent`        = 0,
+                                                                                          `sent`        = 1,
                                                                                           `read`        = 0,
                                                                                           `date_added`  = NOW()');
                         $notification->execute(

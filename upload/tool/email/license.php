@@ -59,25 +59,34 @@ try {
     exit;
 }
 
-$i = 0;
+$i_total = 0;
+$i_sent  = 0;
+$mail    = new Mail();
 
 // Get registered users
-$statement = $db->prepare('SELECT `user_id`, `username`, `email` FROM `user` WHERE `notify_au` = 1');
+$statement = $db->prepare('SELECT `user_id`, `username`, `email`, `notify_au` FROM `user`');
 $statement->execute();
 
 if ($statement->rowCount()) {
 
     foreach ($statement->fetchAll() as $user) {
 
-        // Send email
-        $mail = new Mail();
-        $mail->setFrom(MAIL_EMAIL_SUPPORT_ADDRESS);
-        $mail->setReplyTo(MAIL_EMAIL_SUPPORT_ADDRESS);
-        $mail->setSender(sprintf('%s Notification Center', MAIL_EMAIL_SENDER_NAME));
-        $mail->setTo($user->email);
-        $mail->setSubject(sprintf($subject, PROJECT_NAME));
-        $mail->setText(sprintf($body, $user->username, URL_BASE . 'licenses', URL_BASE . 'notification', PROJECT_NAME));
-        $mail->send();
+        // If subscribed
+        if ($user->notify_au == 1) {
+
+            // Send email
+            $mail->setFrom(MAIL_EMAIL_SUPPORT_ADDRESS);
+            $mail->setReplyTo(MAIL_EMAIL_SUPPORT_ADDRESS);
+            $mail->setSender(sprintf('%s Notification Center', MAIL_EMAIL_SENDER_NAME));
+            $mail->setTo($user->email);
+            $mail->setSubject(sprintf($subject, PROJECT_NAME));
+            $mail->setText(sprintf($body, $user->username, URL_BASE . 'licenses', URL_BASE . 'notification', PROJECT_NAME));
+            $mail->send();
+
+            $i_sent++;
+        }
+
+
 
         // Add notification
         $notification = $db->prepare('INSERT INTO `user_notification` SET `user_id`     = :user_id,
@@ -85,22 +94,23 @@ if ($statement->rowCount()) {
                                                                           `type`        = :type,
                                                                           `title`       = :title,
                                                                           `description` = :description,
-                                                                          `sent`        = 0,
+                                                                          `sent`        = :sent,
                                                                           `read`        = 0,
                                                                           `date_added`  = NOW()');
         $notification->execute(
             array(
                 ':user_id'     => $user->user_id,
+                ':sent'        => $user->notify_au,
                 ':language_id' => DEFAULT_LANGUAGE_ID,
-                ':type'        => 'pn', // Project news
+                ':type'        => 'au', // Agreement update
                 ':title'       => 'Licensing Policy has been updated',
                 ':description' => 'Please read our Licensing Policy carefully, and contact us if you have any questions.'
             )
         );
 
-        $i++;
+        $i_total++;
+
     }
 }
 
-
-die(sprintf('total: %s', $i));
+die(sprintf('total: %s sent: %s', $i_total, $i_sent));
