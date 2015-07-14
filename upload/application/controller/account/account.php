@@ -140,7 +140,7 @@ class ControllerAccountAccount extends Controller {
                     $this->mail->setTo($this->request->post['email']);
                     $this->mail->setSubject(sprintf(tt('Account activation - %s'), PROJECT_NAME));
                     $this->mail->setText(tt("Welcome and thank you for registering!\n\n").
-                                         sprintf(tt("Please, approve your email at the following link: \n%s"), $this->url->link('account/account/approve', 'approval_code=' . $approval_code)));
+                                         sprintf(tt("Please, approve your email at the following link: \n%s"), $this->url->link('account/account/approve', 'code=' . $approval_code)));
                     $this->mail->send();
 
                     $this->response->redirect($this->url->link('account/account'));
@@ -251,8 +251,8 @@ class ControllerAccountAccount extends Controller {
                     $this->mail->send();
                 }
 
-                // If old and new email is not match
-                if ($this->request->post['email'] != $this->auth->getEmail()) {
+                // If old and new email is not match or email is not exist
+                if ($this->request->post['email'] != $this->auth->getEmail() || !$this->model_account_user->checkEmail($this->request->post['email'])) {
 
                     // Send email verification code
                     $mail_data['project_name'] = PROJECT_NAME;
@@ -263,7 +263,7 @@ class ControllerAccountAccount extends Controller {
                     $mail_data['href_home']         = $this->url->link('common/home');
                     $mail_data['href_contact']      = $this->url->link('common/contact');
                     $mail_data['href_subscription'] = $this->url->link('account/account/subscription');
-                    $mail_data['href_approve']      = $this->url->link('account/account', 'approve=' . $approval_code);
+                    $mail_data['href_approve']      = $this->url->link('account/account/approve', 'code=' . $approval_code);
 
                     $mail_data['href_facebook'] = URL_FACEBOOK;
                     $mail_data['href_twitter']  = URL_TWITTER;
@@ -629,13 +629,13 @@ class ControllerAccountAccount extends Controller {
         }
 
         // Redirect if required parameters is missing
-        if (!isset($this->request->get['approval_code']) || empty($this->request->get['approval_code'])) {
+        if (!isset($this->request->get['code']) || empty($this->request->get['code'])) {
             $this->security_log->write('Try to approve email without approve param');
             $this->response->redirect($this->url->link('account/account'));
         }
 
         // Try to approve
-        if (!$this->model_account_user->approveEmail($this->auth->getId(), $this->auth->getEmail(), $this->request->get['approval_code'])) {
+        if (!$this->model_account_user->approveEmail($this->auth->getId(), $this->request->get['code'])) {
             $this->security_log->write('Try to approve email with invalid approve param');
             $this->session->setUserMessage(array('danger' => tt('Invalid approval code!')));
         } else {
