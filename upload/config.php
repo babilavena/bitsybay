@@ -75,6 +75,16 @@ define('ORDER_PENDING_STATUS_ID', 1);   // INT order_status_id in order_status t
 define('ORDER_APPROVED_STATUS_ID', 2);  // INT order_status_id in order_status table
 define('ORDER_PROCESSED_STATUS_ID', 3); // INT order_status_id in order_status table
 
+// SUBSCRIPTIONS
+define('FAVORITE_SUBSCRIPTION_ID', 1);         // INT subscription_id in subscription table
+define('REVIEW_SUBSCRIPTION_ID', 2);           // INT subscription_id in subscription table
+define('PURCHASE_SUBSCRIPTION_ID', 3);         // INT subscription_id in subscription table
+define('PROJECT_NEWS_SUBSCRIPTION_ID', 4);     // INT subscription_id in subscription table
+define('PARTNER_NEWS_SUBSCRIPTION_ID', 5);     // INT subscription_id in subscription table
+define('TERMS_NEWS_SUBSCRIPTION_ID', 6);       // INT subscription_id in subscription table
+define('SECURITY_IP_SUBSCRIPTION_ID', 7);      // INT subscription_id in subscription table
+define('SECURITY_ACCOUNT_SUBSCRIPTION_ID', 8); // INT subscription_id in subscription table
+
 // QUOTA
 define('QUOTA_FILE_SIZE_BY_DEFAULT', 100); // int Mb
 define('QUOTA_BONUS_SIZE_PER_ORDER', 1);   // int Mb
