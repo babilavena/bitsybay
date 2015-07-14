@@ -24,6 +24,8 @@ class ControllerCatalogProduct extends Controller {
         $this->load->model('catalog/category');
         $this->load->model('common/order');
         $this->load->model('account/notification');
+        $this->load->model('account/subscription');
+        $this->load->model('account/user');
 
         $this->load->helper('validator/product');
         $this->load->helper('plural');
@@ -348,10 +350,13 @@ class ControllerCatalogProduct extends Controller {
             exit;
         }
         // Preset variables
-        $json  = array();
+        $json       = array();
         $product_id = (int) $this->request->post['product_id'];
-        $total = $this->model_catalog_product->getProductFavoritesTotal($product_id);
+
+        // Get additional info
+        $total   = $this->model_catalog_product->getProductFavoritesTotal($product_id);
         $product = $this->model_catalog_product->getProduct($product_id, $this->auth->getId(), ORDER_APPROVED_STATUS_ID);
+        $user    = $this->model_account_user->getUser($product->user_id);
 
         // Favorite
         if ($this->model_catalog_product->createProductFavorite($product_id, $this->auth->getId())) {
@@ -364,8 +369,31 @@ class ControllerCatalogProduct extends Controller {
                                                                    $this->language->getId(),
                                                                    'activity',
                                                                    tt('Your product has been marked as favorite'),
-                                                                   sprintf(tt("@%s has marked %s as favorite.\n"), $this->auth->getUsername(), $product->title) .
-                                                                   tt("Cheers!"));
+                                                                   sprintf(tt("@%s has marked %s as favorite.\nCheers!"), $this->auth->getUsername(), $product->title));
+
+                // If subscription enabled
+                if ($this->model_account_subscription->checkUserSubscription($product->user_id, FAVORITE_SUBSCRIPTION_ID)) {
+
+                    // Send mail
+                    $mail_data['project_name'] = PROJECT_NAME;
+
+                    $mail_data['title']   = sprintf(tt('Your product has been marked as favorite - %s'), PROJECT_NAME);
+                    $mail_data['message'] = sprintf(tt("@%s has marked %s as favorite.\nCheers!"), $this->auth->getUsername(), $product->title);
+
+                    $mail_data['href_home']         = $this->url->link('common/home');
+                    $mail_data['href_contact']      = $this->url->link('common/contact');
+                    $mail_data['href_subscription'] = $this->url->link('account/account/subscription');
+
+                    $mail_data['href_facebook'] = URL_FACEBOOK;
+                    $mail_data['href_twitter']  = URL_TWITTER;
+                    $mail_data['href_tumblr']   = URL_TUMBLR;
+                    $mail_data['href_github']   = URL_GITHUB;
+
+                    $this->mail->setTo($user->email);
+                    $this->mail->setSubject(sprintf(tt('Your product has been marked as favorite - %s'), PROJECT_NAME));
+                    $this->mail->setHtml($this->load->view('email/common.tpl', $mail_data));
+                    $this->mail->send();
+                }
             }
 
             // Set output
@@ -396,6 +424,7 @@ class ControllerCatalogProduct extends Controller {
         if ($this->model_catalog_product->createReport($product_id, $message, $this->auth->getId())) {
             $json = array('status' => 200, 'title' => tt('Report successfully sent!'), 'message' => tt('Your message will be reviewed in the near time.'));
 
+            $this->mail->setTo(MAIL_EMAIL_SUPPORT_ADDRESS);
             $this->mail->setSubject(tt('Report for product_id #' . $product_id));
             $this->mail->setText($this->request->post['message']);
             $this->mail->send();
@@ -479,6 +508,7 @@ class ControllerCatalogProduct extends Controller {
 
                 // Get requires
                 $product = $this->model_catalog_product->getProduct((int) $this->request->post['product_id'], $this->auth->getId(), ORDER_APPROVED_STATUS_ID);
+                $user    = $this->model_account_user->getUser($product->user_id);
 
                 // Is not seller
                 if ($product->user_id != $this->auth->getId()) {
@@ -489,6 +519,31 @@ class ControllerCatalogProduct extends Controller {
                                                                        'activity',
                                                                        tt('Your product has been commented'),
                                                                        sprintf(tt("@%s has posted a comment about your product %s.\n"), $this->auth->getUsername(), $product->title));
+
+
+                    // If subscription enabled
+                    if ($this->model_account_subscription->checkUserSubscription($product->user_id, REVIEW_SUBSCRIPTION_ID)) {
+
+                        // Send mail
+                        $mail_data['project_name'] = PROJECT_NAME;
+
+                        $mail_data['title']   = sprintf(tt('Your product has been commented - %s'), PROJECT_NAME);
+                        $mail_data['message'] = sprintf(tt("@%s has posted a comment about your product %s.\n"), $this->auth->getUsername(), $product->title);
+
+                        $mail_data['href_home']         = $this->url->link('common/home');
+                        $mail_data['href_contact']      = $this->url->link('common/contact');
+                        $mail_data['href_subscription'] = $this->url->link('account/account/subscription');
+
+                        $mail_data['href_facebook'] = URL_FACEBOOK;
+                        $mail_data['href_twitter']  = URL_TWITTER;
+                        $mail_data['href_tumblr']   = URL_TUMBLR;
+                        $mail_data['href_github']   = URL_GITHUB;
+
+                        $this->mail->setTo($user->email);
+                        $this->mail->setSubject(sprintf(tt('Your product has been marked as favorite - %s'), PROJECT_NAME));
+                        $this->mail->setHtml($this->load->view('email/common.tpl', $mail_data));
+                        $this->mail->send();
+                    }
                 }
 
                 $json = array('success_message' => tt('Thank you for your review!'));
