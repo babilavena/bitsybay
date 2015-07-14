@@ -75,6 +75,7 @@
      .module {
        text-align: center;
        border: 1px #E2E2E2 solid;
+       background: #FDFDFD;
        border-radius: 5px;
        padding: 20px;
        margin: 20px 0;
