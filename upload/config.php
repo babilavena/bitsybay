@@ -19,6 +19,11 @@ define('HOST_COUNTRY', 'Sweden'); // Law
 // URL
 define('URL_BASE', 'http://localhost/');
 
+define('URL_FACEBOOK', '');
+define('URL_TWITTER', '');
+define('URL_TUMBLR', '');
+define('URL_GITHUB', '');
+
 // DIR
 define('DIR_BASE', '/var/www/html/');
 define('DIR_STORAGE', '/var/www/html/storage/');
