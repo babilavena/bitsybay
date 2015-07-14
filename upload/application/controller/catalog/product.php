@@ -377,7 +377,7 @@ class ControllerCatalogProduct extends Controller {
                     // Send mail
                     $mail_data['project_name'] = PROJECT_NAME;
 
-                    $mail_data['title']   = sprintf(tt('Your product has been marked as favorite - %s'), PROJECT_NAME);
+                    $mail_data['subject'] = sprintf(tt('Your product has been marked as favorite - %s'), PROJECT_NAME);
                     $mail_data['message'] = sprintf(tt("@%s has marked %s as favorite.\nCheers!"), $this->auth->getUsername(), $product->title);
 
                     $mail_data['href_home']         = $this->url->link('common/home');
@@ -390,7 +390,7 @@ class ControllerCatalogProduct extends Controller {
                     $mail_data['href_github']   = URL_GITHUB;
 
                     $this->mail->setTo($user->email);
-                    $this->mail->setSubject(sprintf(tt('Your product has been marked as favorite - %s'), PROJECT_NAME));
+                    $this->mail->setSubject($mail_data['subject']);
                     $this->mail->setHtml($this->load->view('email/common.tpl', $mail_data));
                     $this->mail->send();
                 }
@@ -527,7 +527,7 @@ class ControllerCatalogProduct extends Controller {
                         // Send mail
                         $mail_data['project_name'] = PROJECT_NAME;
 
-                        $mail_data['title']   = sprintf(tt('Your product has been commented - %s'), PROJECT_NAME);
+                        $mail_data['subject'] = sprintf(tt('Your product has been commented - %s'), PROJECT_NAME);
                         $mail_data['message'] = sprintf(tt("@%s has posted a comment about your product %s.\n"), $this->auth->getUsername(), $product->title);
 
                         $mail_data['href_home']         = $this->url->link('common/home');
@@ -540,7 +540,7 @@ class ControllerCatalogProduct extends Controller {
                         $mail_data['href_github']   = URL_GITHUB;
 
                         $this->mail->setTo($user->email);
-                        $this->mail->setSubject(sprintf(tt('Your product has been marked as favorite - %s'), PROJECT_NAME));
+                        $this->mail->setSubject($mail_data['subject']);
                         $this->mail->setHtml($this->load->view('email/common.tpl', $mail_data));
                         $this->mail->send();
                     }
