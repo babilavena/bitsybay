@@ -476,6 +476,105 @@ class ControllerAccountAccount extends Controller {
         }
     }
 
+    public function reset() {
+
+        // Redirect if user is already logged
+        if ($this->auth->isLogged()) {
+            $this->response->redirect($this->url->link('account/account'));
+        }
+
+        // Redirect to step one if code not exist
+        if (!isset($this->request->get['code'])) {
+            $this->security_log->write('Undefined verification code.');
+            $this->response->redirect($this->url->link('account/account/forgot'));
+        }
+
+        // If reset code is not valid
+        if (!$user_id = $this->model_account_user->getPasswordReset($this->request->get['code'])) {
+            $this->security_log->write('Code is either invalid, expired or reached it\'s usage limit.');
+            $this->session->setUserMessage(array('danger' => tt('Your code is either invalid or expired!')));
+            $this->response->redirect($this->url->link('account/account/forgot'));
+        }
+
+        // Processing incoming data
+        if ('POST' == $this->request->getRequestMethod() && $this->_validateReset()) {
+
+            // Get user info
+            $user = $this->model_account_user->getUser($user_id);
+
+            // Reset password and login
+            if ($this->model_account_user->updatePassword($user->user_id, $this->request->post['password']) &&
+                $this->auth->login($user->username, $this->request->post['password'], false)) {
+
+                // Clear all password requests
+                $this->model_account_user->deletePasswordReset($user->user_id);
+
+                // Send mail
+                $mail_data['project_name'] = PROJECT_NAME;
+
+                $mail_data['subject'] = sprintf(tt('Your password has been updated - %s'), PROJECT_NAME);
+                $mail_data['message'] = sprintf(tt('You recently changed the password associated with your %s account.'), $user->username);
+                $mail_data['message'].= tt('If you did not make this change, please contact us.');
+
+                $mail_data['href_home']         = $this->url->link('common/home');
+                $mail_data['href_contact']      = $this->url->link('common/contact');
+                $mail_data['href_subscription'] = $this->url->link('account/account/subscription');
+
+                $mail_data['href_facebook'] = URL_FACEBOOK;
+                $mail_data['href_twitter']  = URL_TWITTER;
+                $mail_data['href_tumblr']   = URL_TUMBLR;
+                $mail_data['href_github']   = URL_GITHUB;
+
+                $this->mail->setTo($user->email);
+                $this->mail->setSubject($mail_data['subject']);
+                $this->mail->setHtml($this->load->view('email/common.tpl', $mail_data));
+                $this->mail->send();
+
+                // Add notification
+                $this->model_account_notification->addNotification($user->user_id,
+                                                                   DEFAULT_LANGUAGE_ID,
+                                                                   'security',
+                                                                   tt('Your password has been updated'),
+                                                                   tt('If you did not make this change and believe your account has been compromised, please contact us.'));
+
+                // Set success message
+                $this->session->setUserMessage(array('success' => tt('Your new password has been successfully changed!')));
+
+                // Redirect to the login page
+                $this->response->redirect($this->url->link('account/account'));
+            }
+        }
+
+        $this->document->setTitle(tt('Password reset'));
+
+        $data = array();
+
+        $data['error']  = $this->_error;
+        $data['action'] = $this->url->link('account/account/reset', 'code=' . $this->request->get['code']);
+        $data['href_account_account_create'] = $this->url->link('account/account/create');
+        $data['href_account_account_login']  = $this->url->link('account/account/login');
+        $data['href_common_information_faq'] = $this->url->link('common/information/faq');
+        $data['href_common_contact'] = $this->url->link('common/contact');
+
+        $data['footer'] = $this->load->controller('common/footer');
+        $data['header'] = $this->load->controller('common/header');
+
+        $data['password'] = isset($this->request->post['password']) ? $this->request->post['password'] : false;
+        $data['confirm']  = isset($this->request->post['confirm'])  ? $this->request->post['confirm']  : false;
+
+        $data['alert_danger']  = $this->load->controller('common/alert/danger');
+        $data['alert_success'] = $this->load->controller('common/alert/success');
+
+        $data['module_breadcrumbs'] = $this->load->controller('module/breadcrumbs', array(
+                    array('name' => tt('Home'), 'href' => $this->url->link('common/home'), 'active' => false),
+                    array('name' => tt('Account'), 'href' => $this->url->link('account/account'), 'active' => false),
+                    array('name' => tt('Password reset'), 'href' => $this->url->link('account/account/reset', 'code=' . $this->request->get['code']), 'active' => true)
+        ));
+
+        // Renter the template
+        $this->response->setOutput($this->load->view('account/account/reset.tpl', $data));
+    }
+
     public function forgot() {
 
         // Redirect if user is already logged
@@ -483,42 +582,45 @@ class ControllerAccountAccount extends Controller {
             $this->response->redirect($this->url->link('account/account'));
         }
 
-        $this->document->setTitle(tt('Request a password reset'));
+        $this->document->setTitle(tt('Account recovery'));
 
         $data = array();
 
         if ('POST' == $this->request->getRequestMethod() && $this->_validateForgot()) {
 
-            // Reset password
-            $password = substr(sha1(uniqid(mt_rand(), true)), 0, 10);
-
-            $this->model_account_user->resetPassword($this->request->post['email'], $password);
+            // Get user info
             $user = $this->model_account_user->getUserByEmail($this->request->post['email']);
 
-            // Add notification
-            $this->model_account_notification->addNotification($user->user_id,
-                                                               DEFAULT_LANGUAGE_ID,
-                                                               'security',
-                                                               tt('Your password has been updated'),
-                                                               tt('If you did not make this change and believe your account has been compromised, please contact us.'));
+            // Generate temporary code
+            $reset_code = sha1($user->salt . microtime() . rand());
 
-            // Send email
-            // todo: add password reset page
-            $this->mail->setTo($this->request->post['email']);
-            $this->mail->setSubject(sprintf(tt('Password recovery - %s'), PROJECT_NAME));
-            $this->mail->setText(
-                sprintf(tt("Hi,\n\n")) .
-                sprintf(tt("A new password was requested from %s\n"), $this->request->post['email']) .
-                sprintf(tt("Your temporary password is: %s\n\n"), $password) .
-                sprintf(tt("Best Regards,\n%s\n%s"), PROJECT_NAME, $this->url->link('common/home'))
-            );
+            // Register new password request
+            $this->model_account_user->addPasswordReset($user->user_id, $this->request->getRemoteAddress(), $reset_code);
+
+            // Send email verification code
+            $mail_data['project_name'] = PROJECT_NAME;
+
+            $mail_data['subject'] = sprintf(tt('New password request - %s'), PROJECT_NAME);
+            $mail_data['message'] = sprintf(tt('Somebody requested a new password for your account. If you did not make this change please contact us.'), $user->username);
+
+            $mail_data['href_home']         = $this->url->link('common/home');
+            $mail_data['href_contact']      = $this->url->link('common/contact');
+            $mail_data['href_subscription'] = $this->url->link('account/account/subscription');
+            $mail_data['href_change']       = $this->url->link('account/account/reset', 'code=' . $reset_code);
+
+            $mail_data['href_facebook'] = URL_FACEBOOK;
+            $mail_data['href_twitter']  = URL_TWITTER;
+            $mail_data['href_tumblr']   = URL_TUMBLR;
+            $mail_data['href_github']   = URL_GITHUB;
+
+            $mail_data['module'] = $this->load->view('email/module/forgot.tpl', $mail_data);
+
+            $this->mail->setTo($user->email);
+            $this->mail->setSubject($mail_data['subject']);
+            $this->mail->setHtml($this->load->view('email/common.tpl', $mail_data));
             $this->mail->send();
-            // todo: end
 
-            $this->session->setUserMessage(array('success' => tt('Recovery instructions sent to your email address!')));
-
-            // Redirect to login page
-            $this->response->redirect($this->url->link('account/account/login', isset($this->request->get['redirect']) ? 'redirect=' . $this->request->get['redirect'] : false));
+            $this->session->setUserMessage(array('success' => tt('Further instructions have been sent to your e-mail address!')));
         }
 
         $data['error']  = $this->_error;
@@ -533,10 +635,13 @@ class ControllerAccountAccount extends Controller {
 
         $data['email']    = isset($this->request->post['email']) ? $this->request->post['email'] : false;
 
+        $data['alert_success'] = $this->load->controller('common/alert/success');
+        $data['alert_danger']  = $this->load->controller('common/alert/danger');
+
         $data['module_breadcrumbs'] = $this->load->controller('module/breadcrumbs', array(
                     array('name' => tt('Home'), 'href' => $this->url->link('common/home'), 'active' => false),
                     array('name' => tt('Account'), 'href' => $this->url->link('account/account'), 'active' => false),
-                    array('name' => tt('Forgot'), 'href' => $this->url->link('account/account/forgot'), 'active' => true)
+                    array('name' => tt('Recovery'), 'href' => $this->url->link('account/account/forgot'), 'active' => true)
         ));
 
         // Renter the template
@@ -763,6 +868,27 @@ class ControllerAccountAccount extends Controller {
             if (!$this->_error) {
                 $this->_error['bull'] = true;
             }
+        }
+
+        return !$this->_error;
+    }
+
+    private function _validateReset() {
+
+        // Password
+        if (!isset($this->request->post['password']) || empty($this->request->post['password'])) {
+            $this->_error['password'] = tt('Password is required');
+        } else if ((mb_strlen($this->request->post['password']) < ValidatorUser::getPasswordMinLength()) || (mb_strlen($this->request->post['password']) > ValidatorUser::getPasswordMaxLength())) {
+            $this->_error['password'] = sprintf(tt('Password must be between %s and %s characters'), ValidatorUser::getPasswordMinLength(), ValidatorUser::getPasswordMaxLength());
+        } else if (!ValidatorUser::passwordValid($this->request->post['password'])) {
+            $this->_error['password'] = tt('Invalid password');
+        }
+
+        // Password confirm
+        if (!isset($this->request->post['confirm']) || empty($this->request->post['confirm'])) {
+            $this->_error['confirm'] = tt('Confirm is required');
+        } else if ($this->request->post['confirm'] != $this->request->post['password']) {
+            $this->_error['confirm'] = tt('Password confirmation does not match password');
         }
 
         return !$this->_error;

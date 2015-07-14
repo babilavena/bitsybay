@@ -167,21 +167,93 @@ class ModelAccountUser extends Model {
     }
 
     /**
-    * Reset user's password
+    * Check password reset by code
     *
-    * @param string $email
+    * @param string $code
+    * @return int|bool user_id or false if throw exception
+    */
+    public function getPasswordReset($code) {
+
+        try {
+
+            $statement = $this->db->prepare('SELECT `user_id` FROM `user_password_reset` WHERE `code` = ? AND `date_added` > NOW() - INTERVAL 30 MINUTE LIMIT 1');
+            $statement->execute(array($code));
+
+            if ($statement->rowCount()) {
+                $result = $statement->fetch();
+                return $result->user_id;
+            } else {
+                return false;
+            }
+
+        } catch (PDOException $e) {
+
+            trigger_error($e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+    * Add new password reset
+    *
+    * @param int $user_id
+    * @param string $code
+    * @param string $ip
+    * @return int|bool last insert id or false if throw exception
+    */
+    public function addPasswordReset($user_id, $ip, $code) {
+
+        try {
+
+            $statement = $this->db->prepare('INSERT INTO `user_password_reset` SET `user_id` = ?, `ip` = ?, `code` = ?, `date_added` = NOW()');
+            $statement->execute(array($user_id, $ip, $code));
+
+            return $this->db->lastInsertId();
+
+        } catch (PDOException $e) {
+
+            trigger_error($e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+    * Delete all password reset requests
+    *
+    * @param int $user_id
+    * @return int|bool row count or false if throw exception
+    */
+    public function deletePasswordReset($user_id) {
+
+        try {
+
+            $statement = $this->db->prepare('DELETE FROM `user_password_reset` WHERE `user_id` = ?');
+            $statement->execute(array($user_id));
+
+            return $statement->rowCount();
+
+        } catch (PDOException $e) {
+
+            trigger_error($e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+    * Update user password
+    *
+    * @param int $user_id
     * @param string $password Raw password string
     * @return int|bool Count affected rows or false if throw exception
     */
-    public function resetPassword($email, $password) {
+    public function updatePassword($user_id, $password) {
 
         try {
             $salt = substr(md5(uniqid(rand(), true)), 0, 9);
             $password = sha1($salt . sha1($salt . sha1($password)));
-            $email = mb_strtolower($email);
 
-            $statement = $this->db->prepare('UPDATE `user` SET `salt` = ?, `password` = ? WHERE `email` = ? LIMIT 1');
-            $statement->execute(array($salt, $password, $email));
+            $statement = $this->db->prepare('UPDATE `user` SET `salt` = ?, `password` = ? WHERE `user_id` = ? LIMIT 1');
+            $statement->execute(array($salt, $password, $user_id));
 
             return $statement->rowCount();
 

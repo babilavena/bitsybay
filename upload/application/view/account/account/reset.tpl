@@ -16,7 +16,7 @@
 <div class="row">
   <div class="col-lg-12">
     <div class="page-header">
-      <h1 id="forms"><?php echo tt('Account recovery') ?></h1>
+      <h1 id="forms"><?php echo tt('Password reset') ?></h1>
     </div>
   </div>
 </div>
@@ -32,18 +32,26 @@
     <div class="well bs-component">
       <form class="form-horizontal" action="<?php echo $action ?>" method="POST">
         <fieldset>
-          <legend><?php echo tt("What’s your registered email?") ?></legend>
-          <div class="form-group<?php if (isset($error['email'])) { ?> has-error<?php } ?>">
+          <legend><?php echo tt("Change your new password") ?></legend>
+          <div class="form-group<?php if (isset($error['password'])) { ?> has-error<?php } ?>">
             <div class="col-lg-12">
-              <input type="text" name="email" class="form-control" id="inputEmail" placeholder="<?php echo tt('Email') ?>" value="<?php echo $email ?>">
-              <?php if (isset($error['email'])) { ?>
-                <div class="text-danger"><?php echo $error['email'] ?></div>
+              <input type="password" name="password" class="form-control" id="inputPassword" placeholder="<?php echo tt('Password') ?>">
+              <?php if (isset($error['password'])) { ?>
+                <div class="text-danger"><?php echo $error['password'] ?></div>
+              <?php } ?>
+            </div>
+          </div>
+          <div class="form-group<?php if (isset($error['confirm'])) { ?> has-error<?php } ?>">
+            <div class="col-lg-12">
+              <input type="password" name="confirm" class="form-control" id="inputConfirm" placeholder="<?php echo tt('Confirm Password') ?>">
+              <?php if (isset($error['confirm'])) { ?>
+                <div class="text-danger"><?php echo $error['confirm'] ?></div>
               <?php } ?>
             </div>
           </div>
           <div class="form-group">
             <div class="col-lg-10">
-              <button type="submit" class="btn btn-primary"><?php echo tt('Continue') ?></button>
+              <button type="submit" class="btn btn-primary"><?php echo tt('Save changes') ?></button>
             </div>
           </div>
         </fieldset>

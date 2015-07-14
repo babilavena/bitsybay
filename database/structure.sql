@@ -719,6 +719,26 @@ CREATE TABLE `user_email` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 
+-- -----------------------------------------------------
+-- Table `user_password_reset`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `user_password_reset` ;
+
+CREATE TABLE IF NOT EXISTS `user_password_reset` (
+  `user_password_reset_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` INT UNSIGNED NOT NULL,
+  `code` VARCHAR(255) NOT NULL,
+  `ip` VARCHAR(255) NOT NULL,
+  `date_added` DATETIME NOT NULL,
+  PRIMARY KEY (`user_password_reset_id`),
+  INDEX `fk_user_password_reset_user_id` (`user_id` ASC),
+  CONSTRAINT `fk_user_password_reset_user_id`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `user` (`user_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
 --
 -- Table structure for table `user_ip`
 --
