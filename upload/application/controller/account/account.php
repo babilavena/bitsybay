@@ -639,7 +639,7 @@ class ControllerAccountAccount extends Controller {
             $this->security_log->write('Try to approve email with invalid approve param');
             $this->session->setUserMessage(array('danger' => tt('Invalid approval code!')));
         } else {
-            $this->session->setUserMessage(array('success' => tt('Your email successfully approved!')));
+            $this->session->setUserMessage(array('success' => tt('Your email has been successfully approved!')));
         }
 
         $this->response->redirect($this->url->link('account/account'));
