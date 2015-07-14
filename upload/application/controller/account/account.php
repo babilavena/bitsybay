@@ -136,11 +136,27 @@ class ControllerAccountAccount extends Controller {
                                                                        tt("We're so happy you've joined us.\n") .
                                                                        tt("Make every day awesome with inspired finds!"));
 
-                    // Send email approval link
+                    // Send greetings email with verification code
+                    $mail_data['project_name'] = PROJECT_NAME;
+
+                    $mail_data['subject'] = sprintf(tt('Welcome to %s!'), PROJECT_NAME);
+                    $mail_data['message'] = tt('Welcome and thank you for registering!');
+
+                    $mail_data['href_home']         = $this->url->link('common/home');
+                    $mail_data['href_contact']      = $this->url->link('common/contact');
+                    $mail_data['href_subscription'] = $this->url->link('account/account/subscription');
+                    $mail_data['href_approve']      = $this->url->link('account/account/approve', 'code=' . $approval_code);
+
+                    $mail_data['href_facebook'] = URL_FACEBOOK;
+                    $mail_data['href_twitter']  = URL_TWITTER;
+                    $mail_data['href_tumblr']   = URL_TUMBLR;
+                    $mail_data['href_github']   = URL_GITHUB;
+
+                    $mail_data['module'] = $this->load->view('email/module/approve.tpl', $mail_data);
+
                     $this->mail->setTo($this->request->post['email']);
-                    $this->mail->setSubject(sprintf(tt('Account activation - %s'), PROJECT_NAME));
-                    $this->mail->setText(tt("Welcome and thank you for registering!\n\n").
-                                         sprintf(tt("Please, approve your email at the following link: \n%s"), $this->url->link('account/account/approve', 'code=' . $approval_code)));
+                    $this->mail->setSubject($mail_data['subject']);
+                    $this->mail->setHtml($this->load->view('email/common.tpl', $mail_data));
                     $this->mail->send();
 
                     $this->response->redirect($this->url->link('account/account'));
@@ -157,15 +173,16 @@ class ControllerAccountAccount extends Controller {
 
         $captcha = new Captcha();
         $this->session->setCaptcha($captcha->getCode());
-        $data['captcha'] = $this->url->link('account/account/captcha');
 
-        $data['action'] = $this->url->link('account/account/create', isset($this->request->get['redirect']) ? 'redirect=' . $this->request->get['redirect'] : false);
-        $data['href_account_account_login'] = $this->url->link('account/account/login');
-        $data['href_account_account_forgot'] = $this->url->link('account/account/forgot');
-        $data['href_common_information_terms'] = $this->url->link('common/information/terms');
+        $data['captcha'] = $this->url->link('account/account/captcha');
+        $data['action']  = $this->url->link('account/account/create', isset($this->request->get['redirect']) ? 'redirect=' . $this->request->get['redirect'] : false);
+
+        $data['href_account_account_login']       = $this->url->link('account/account/login');
+        $data['href_account_account_forgot']      = $this->url->link('account/account/forgot');
+        $data['href_common_information_terms']    = $this->url->link('common/information/terms');
         $data['href_common_information_licenses'] = $this->url->link('common/information/licenses');
-        $data['href_common_information_faq'] = $this->url->link('common/information/faq');
-        $data['href_common_contact'] = $this->url->link('common/contact');
+        $data['href_common_information_faq']      = $this->url->link('common/information/faq');
+        $data['href_common_contact']              = $this->url->link('common/contact');
 
         $data['username'] = isset($this->request->post['username']) ? $this->request->post['username'] : false;
         $data['email']    = isset($this->request->post['email'])    ? $this->request->post['email']    : false;
@@ -270,7 +287,7 @@ class ControllerAccountAccount extends Controller {
                     $mail_data['href_tumblr']   = URL_TUMBLR;
                     $mail_data['href_github']   = URL_GITHUB;
 
-                    $mail_data['module'] = $this->load->view('email/module/email_confirmation.tpl', $mail_data);
+                    $mail_data['module'] = $this->load->view('email/module/approve.tpl', $mail_data);
 
                     $this->mail->setTo($user->email);
                     $this->mail->setSubject($mail_data['subject']);
