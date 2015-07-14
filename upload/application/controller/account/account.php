@@ -509,26 +509,30 @@ class ControllerAccountAccount extends Controller {
                 // Clear all password requests
                 $this->model_account_user->deletePasswordReset($user->user_id);
 
-                // Send mail
-                $mail_data['project_name'] = PROJECT_NAME;
+                // If subscription enabled
+                if ($this->model_account_subscription->checkUserSubscription($user->user_id, SECURITY_ACCOUNT_SUBSCRIPTION_ID)) {
 
-                $mail_data['subject'] = sprintf(tt('Your password has been updated - %s'), PROJECT_NAME);
-                $mail_data['message'] = sprintf(tt('You recently changed the password associated with your %s account.'), $user->username);
-                $mail_data['message'].= tt('If you did not make this change, please contact us.');
+                    // Send mail
+                    $mail_data['project_name'] = PROJECT_NAME;
 
-                $mail_data['href_home']         = $this->url->link('common/home');
-                $mail_data['href_contact']      = $this->url->link('common/contact');
-                $mail_data['href_subscription'] = $this->url->link('account/account/subscription');
+                    $mail_data['subject'] = sprintf(tt('Your password has been updated - %s'), PROJECT_NAME);
+                    $mail_data['message'] = sprintf(tt('You recently changed the password associated with your @%s account.'), $user->username);
+                    $mail_data['message'].= tt('If you did not make this change, please contact us.');
 
-                $mail_data['href_facebook'] = URL_FACEBOOK;
-                $mail_data['href_twitter']  = URL_TWITTER;
-                $mail_data['href_tumblr']   = URL_TUMBLR;
-                $mail_data['href_github']   = URL_GITHUB;
+                    $mail_data['href_home']         = $this->url->link('common/home');
+                    $mail_data['href_contact']      = $this->url->link('common/contact');
+                    $mail_data['href_subscription'] = $this->url->link('account/account/subscription');
 
-                $this->mail->setTo($user->email);
-                $this->mail->setSubject($mail_data['subject']);
-                $this->mail->setHtml($this->load->view('email/common.tpl', $mail_data));
-                $this->mail->send();
+                    $mail_data['href_facebook'] = URL_FACEBOOK;
+                    $mail_data['href_twitter']  = URL_TWITTER;
+                    $mail_data['href_tumblr']   = URL_TUMBLR;
+                    $mail_data['href_github']   = URL_GITHUB;
+
+                    $this->mail->setTo($user->email);
+                    $this->mail->setSubject($mail_data['subject']);
+                    $this->mail->setHtml($this->load->view('email/common.tpl', $mail_data));
+                    $this->mail->send();
+                }
 
                 // Add notification
                 $this->model_account_notification->addNotification($user->user_id,
