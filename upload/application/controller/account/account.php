@@ -122,7 +122,7 @@ class ControllerAccountAccount extends Controller {
                     $image->save(DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR . 'thumb.' . STORAGE_IMAGE_EXTENSION);
 
                     // Subscription
-                    $subscriptions = $this->model_account_subscription->getSubscriptions($this->auth->getId());
+                    $subscriptions = $this->model_account_subscription->getSubscriptions($this->language->getId());
 
                     foreach ($subscriptions as $subscription) {
                         $this->model_account_subscription->addUserSubscription($this->auth->getId(), $subscription->subscription_id);
@@ -329,7 +329,7 @@ class ControllerAccountAccount extends Controller {
         $data = array();
 
         // Form
-        $subscriptions = $this->model_account_subscription->getSubscriptions($this->auth->getId());
+        $subscriptions = $this->model_account_subscription->getSubscriptions($this->language->getId());
 
         foreach ($subscriptions as $subscription) {
             $data['subscriptions'][$subscription->group][] = array(
