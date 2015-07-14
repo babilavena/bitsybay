@@ -23,18 +23,29 @@ final class Auth {
     private $_verified   = false;
     private $_date_added = false;
 
+    private $_db;
+    private $_url;
+    private $_mail;
+    private $_load;
+    private $_request;
+    private $_session;
+
     public function __construct(Registry $registry) {
 
-        $this->db      = $registry->get('db');
-        $this->request = $registry->get('request');
-        $this->session = $registry->get('session');
+        // Registry
+        $this->_db      = $registry->get('db');
+        $this->_url     = $registry->get('url');
+        $this->_mail    = $registry->get('mail');
+        $this->_load    = $registry->get('load');
+        $this->_request = $registry->get('request');
+        $this->_session = $registry->get('session');
 
         // If user has id
-        if ($this->session->getUserId()) {
+        if ($this->_session->getUserId()) {
 
             // Find Customer in Database
             try {
-                $statement = $this->db->prepare('
+                $statement = $this->_db->prepare('
                 SELECT
 
                 `u`.`user_id`,
@@ -51,12 +62,12 @@ final class Auth {
                 AND `u`.`status` = 1
                 LIMIT 1');
 
-                $statement->execute(array($this->session->getUserId()));
+                $statement->execute(array($this->_session->getUserId()));
 
             } catch (PDOException $e) {
 
-                if ($this->db->inTransaction()) {
-                    $this->db->rollBack();
+                if ($this->_db->inTransaction()) {
+                    $this->_db->rollBack();
                 }
 
                 trigger_error($e->getMessage());
@@ -80,7 +91,7 @@ final class Auth {
                 $this->_setVisitDate($user->user_id);
 
                 // Update IP Log
-                $this->_saveIP($user->user_id, $this->request->getRemoteAddress());
+                $this->_saveIP();
 
             } else {
                 $this->logout();
@@ -99,15 +110,15 @@ final class Auth {
 
         try {
 
-            $statement = $this->db->prepare('UPDATE `user` SET `date_visit` = NOW() WHERE `user_id` = ? LIMIT 1');
+            $statement = $this->_db->prepare('UPDATE `user` SET `date_visit` = NOW() WHERE `user_id` = ? LIMIT 1');
             $statement->execute(array($user_id));
 
             return $statement->rowCount();
 
         } catch (PDOException $e) {
 
-            if ($this->db->inTransaction()) {
-                $this->db->rollBack();
+            if ($this->_db->inTransaction()) {
+                $this->_db->rollBack();
             }
 
             trigger_error($e->getMessage());
@@ -119,58 +130,78 @@ final class Auth {
     /**
     * Save user IP to database
     *
-    * @param int $user_id
-    * @param string $ip
     * @return int|bool Return user_ip_id if add new row, true if row already exists or false if throw exception
     */
-    private function _saveIP($user_id, $ip) {
+    private function _saveIP() {
 
         try {
 
-            // If IP not registered
-            $statement = $this->db->prepare('SELECT * FROM `user_ip` WHERE `user_id` = ? AND `ip` = ? LIMIT 1');
-            $statement->execute(array($user_id, $ip));
+            $statement = $this->_db->prepare('SELECT * FROM `user_ip` WHERE `user_id` = ? AND `ip` = ? LIMIT 1');
+            $statement->execute(array($this->_user_id, $this->_request->getRemoteAddress()));
 
+            // If IP not registered
             if (!$statement->rowCount()) {
 
-                // If IP changed
-                $statement = $this->db->prepare('SELECT NULL FROM `user_ip` WHERE `user_id` = ? LIMIT 1');
-                $statement->execute(array($user_id));
+                // Add notification
+                $statement = $this->_db->prepare('INSERT INTO `user_notification` SET  `user_id`     = :user_id,
+                                                                                      `language_id` = :language_id,
+                                                                                      `label`       = :label,
+                                                                                      `title`       = :title,
+                                                                                      `description` = :description,
+                                                                                      `read`        = 0,
+                                                                                      `date_added`  = NOW()');
+                $statement->execute(
+                    array(
+                        ':user_id'     => $this->_user_id,
+                        ':language_id' => DEFAULT_LANGUAGE_ID,
+                        ':label'       => 'security',
+                        ':title'       => tt('Login with new IP'),
+                        ':description' => sprintf(tt("Login with new IP (%s) has been registered.\n"), $this->_request->getRemoteAddress()) .
+                                          tt('If you believe your account has been compromised, please contact us.')
+                    )
+                );
+
+                // If subscription enabled
+                $statement = $this->_db->prepare('SELECT NULL FROM `user_subscription` WHERE `user_id` = ? AND `subscription_id` = ? LIMIT 1');
+                $statement->execute(array($this->_user_id, SECURITY_IP_SUBSCRIPTION_ID));
 
                 if ($statement->rowCount()) {
 
-                    // Add notification
-                    $statement = $this->db->prepare('INSERT INTO `user_notification` SET  `user_id`     = :user_id,
-                                                                                          `language_id` = :language_id,
-                                                                                          `label`       = :label,
-                                                                                          `title`       = :title,
-                                                                                          `description` = :description,
-                                                                                          `read`        = 0,
-                                                                                          `date_added`  = NOW()');
-                    $statement->execute(
-                        array(
-                            ':user_id'     => $user_id,
-                            ':language_id' => DEFAULT_LANGUAGE_ID,
-                            ':label'       => 'security',
-                            ':title'       => tt('Login with new IP'),
-                            ':description' => sprintf(tt("Login with new IP (%s) has been registered.\n"), $ip) . tt('If you believe your account has been compromised, please contact us.')
-                        )
-                    );
+                    // Send mail
+                    $mail_data['project_name'] = PROJECT_NAME;
+
+                    $mail_data['subject'] = sprintf(tt('Login with new IP - %s'), PROJECT_NAME);
+                    $mail_data['message'] = sprintf(tt("Login with new IP (%s) has been registered. If you believe your account has been compromised, please contact us."),
+                                                    $this->_request->getRemoteAddress());
+
+                    $mail_data['href_home']         = $this->_url->link('common/home');
+                    $mail_data['href_contact']      = $this->_url->link('common/contact');
+                    $mail_data['href_subscription'] = $this->_url->link('account/account/subscription');
+
+                    $mail_data['href_facebook'] = URL_FACEBOOK;
+                    $mail_data['href_twitter']  = URL_TWITTER;
+                    $mail_data['href_tumblr']   = URL_TUMBLR;
+                    $mail_data['href_github']   = URL_GITHUB;
+
+                    $this->_mail->setTo($this->_email);
+                    $this->_mail->setSubject($mail_data['subject']);
+                    $this->_mail->setHtml($this->_load->view('email/common.tpl', $mail_data));
+                    $this->_mail->send();
                 }
 
                 // Save new IP
-                $statement = $this->db->prepare('INSERT INTO `user_ip` SET `user_id` = ?, `ip` = ?, `date_added` = NOW()');
-                $statement->execute(array($user_id, $ip));
+                $statement = $this->_db->prepare('INSERT INTO `user_ip` SET `user_id` = ?, `ip` = ?, `date_added` = NOW()');
+                $statement->execute(array($this->_user_id, $this->_request->getRemoteAddress()));
 
-                return $this->db->lastInsertId();
+                return $this->_db->lastInsertId();
             }
 
             return true;
 
         } catch (PDOException $e) {
 
-            if ($this->db->inTransaction()) {
-                $this->db->rollBack();
+            if ($this->_db->inTransaction()) {
+                $this->_db->rollBack();
             }
 
             trigger_error($e->getMessage());
@@ -187,7 +218,7 @@ final class Auth {
     public function getLastIP() {
 
         try {
-            $statement = $this->db->prepare('SELECT `ip` FROM `user_ip` WHERE `user_id` = ? ORDER BY `user_ip_id` DESC LIMIT 1');
+            $statement = $this->_db->prepare('SELECT `ip` FROM `user_ip` WHERE `user_id` = ? ORDER BY `user_ip_id` DESC LIMIT 1');
             $statement->execute(array($this->_user_id));
 
             $result = $statement->fetch();
@@ -214,7 +245,7 @@ final class Auth {
         try {
             // Login by email
             if ($login_is_email) {
-                $statement = $this->db->prepare('SELECT
+                $statement = $this->_db->prepare('SELECT
                 `u`.*,
                 (SELECT `ue`.`approved` FROM `user_email` AS `ue` WHERE `ue`.`email` = `u`.`email` LIMIT 1) AS `approved`
                 FROM `user` AS `u`
@@ -230,7 +261,7 @@ final class Auth {
 
             // Login by username
             } else {
-                $statement = $this->db->prepare('SELECT
+                $statement = $this->_db->prepare('SELECT
                 `u`.*,
                 (SELECT `ue`.`approved` FROM `user_email` AS `ue` WHERE `ue`.`email` = `u`.`email` LIMIT 1) AS `approved`
                 FROM `user` AS `u`
@@ -246,8 +277,8 @@ final class Auth {
             }
         } catch (PDOException $e) {
 
-            if ($this->db->inTransaction()) {
-                $this->db->rollBack();
+            if ($this->_db->inTransaction()) {
+                $this->_db->rollBack();
             }
 
             trigger_error($e->getMessage());
@@ -261,7 +292,7 @@ final class Auth {
 
             $user = $statement->fetch();
 
-            $this->session->setUserId($user->user_id);
+            $this->_session->setUserId($user->user_id);
 
             // Update Global Variables
             $this->_user_id     = $user->user_id;
@@ -274,7 +305,7 @@ final class Auth {
             $this->_date_added  = $user->date_added;
 
             // Update IP Log
-            $this->_saveIP($user->user_id, $this->request->getRemoteAddress());
+            $this->_saveIP();
 
             return true;
 
@@ -292,7 +323,7 @@ final class Auth {
     public function logout() {
 
         // Remove Session
-        $this->session->setUserId();
+        $this->_session->setUserId();
 
         // Update Variables
         $this->_user_id    = 0;
