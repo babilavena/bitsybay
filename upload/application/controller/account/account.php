@@ -224,29 +224,62 @@ class ControllerAccountAccount extends Controller {
                                                                    tt('Your account settings has been updated'),
                                                                    tt('If you did not make this change and believe your account has been compromised, please contact us.'));
 
+
+
+                // If subscription enabled
+                if ($this->model_account_subscription->checkUserSubscription($this->auth->getId(), SECURITY_ACCOUNT_SUBSCRIPTION_ID)) {
+
+                    // Send mail
+                    $mail_data['project_name'] = PROJECT_NAME;
+
+                    $mail_data['subject'] = sprintf(tt('Your account settings has been updated - %s'), PROJECT_NAME);
+                    $mail_data['message'] = tt('Your account settings has been updated.') . ' ';
+                    $mail_data['message'].= tt('If you did not make this change, please contact us.');
+
+                    $mail_data['href_home']         = $this->url->link('common/home');
+                    $mail_data['href_contact']      = $this->url->link('common/contact');
+                    $mail_data['href_subscription'] = $this->url->link('account/account/subscription');
+
+                    $mail_data['href_facebook'] = URL_FACEBOOK;
+                    $mail_data['href_twitter']  = URL_TWITTER;
+                    $mail_data['href_tumblr']   = URL_TUMBLR;
+                    $mail_data['href_github']   = URL_GITHUB;
+
+                    $this->mail->setTo($user->email);
+                    $this->mail->setSubject($mail_data['subject']);
+                    $this->mail->setHtml($this->load->view('email/common.tpl', $mail_data));
+                    $this->mail->send();
+                }
+
                 // If old and new email is not match
                 if ($this->request->post['email'] != $this->auth->getEmail()) {
 
-                    // Add notification with email approving instructions
-                    $this->model_account_notification->addNotification($this->auth->getId(),
-                                                                       DEFAULT_LANGUAGE_ID,
-                                                                       'security',
-                                                                       tt('Your email address has been changed'),
-                                                                       tt('If you did not make this change and believe your account has been compromised, please contact us.'));
-
-
                     // Send email verification code
-                    $this->mail->setTo($this->request->post['email']);
-                    $this->mail->setSubject(sprintf(tt('E-mail verification - %s'), PROJECT_NAME));
-                    $this->mail->setText(
-                        sprintf(tt("Your email address has been changed.\n")) .
-                        sprintf(tt("Please, approve your new email at the following URL:\n"), $this->url->link('account/account', 'approve=' . $approval_code)));
-                    $this->mail->send();
+                    $mail_data['project_name'] = PROJECT_NAME;
 
+                    $mail_data['subject'] = sprintf(tt('Your email address has been changed - %s'), PROJECT_NAME);
+                    $mail_data['message'] = tt('Your email address has been successfully changed!');
+
+                    $mail_data['href_home']         = $this->url->link('common/home');
+                    $mail_data['href_contact']      = $this->url->link('common/contact');
+                    $mail_data['href_subscription'] = $this->url->link('account/account/subscription');
+                    $mail_data['href_approve']      = $this->url->link('account/account', 'approve=' . $approval_code);
+
+                    $mail_data['href_facebook'] = URL_FACEBOOK;
+                    $mail_data['href_twitter']  = URL_TWITTER;
+                    $mail_data['href_tumblr']   = URL_TUMBLR;
+                    $mail_data['href_github']   = URL_GITHUB;
+
+                    $mail_data['module'] = $this->load->view('email/module/email_confirmation.tpl', $mail_data);
+
+                    $this->mail->setTo($user->email);
+                    $this->mail->setSubject($mail_data['subject']);
+                    $this->mail->setHtml($this->load->view('email/common.tpl', $mail_data));
+                    $this->mail->send();
 
                     // Success alert
                     $this->session->setUserMessage(array(
-                        'success' => tt('Well done! You have successfully modified account settings!'),
+                        'success' => tt('You have successfully modified account settings!'),
                         'warning' => tt('You have successfully modified account settings! Please, check your mailbox to approve the new email address.')
                     ));
                 }
