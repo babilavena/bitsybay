@@ -12,6 +12,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU General Public License, Version 3
  */
 
+die('unsupported'); // todo
+
 // Build the template
 $subject = "The Terms of Service has been updated - %s";
 $body    =
@@ -73,7 +75,7 @@ if ($statement->rowCount()) {
     foreach ($statement->fetchAll() as $user) {
 
         // If subscribed
-        if ($user->notify_au == 1) {
+        if ($user->notify_au == 1) { // todo
 
             // Send email
             $mail->setFrom(MAIL_EMAIL_SUPPORT_ADDRESS);
@@ -90,7 +92,7 @@ if ($statement->rowCount()) {
         // Add notification
         $notification = $db->prepare('INSERT INTO `user_notification` SET `user_id`     = :user_id,
                                                                           `language_id` = :language_id,
-                                                                          `type`        = :type,
+                                                                          `label`       = :label,
                                                                           `title`       = :title,
                                                                           `description` = :description,
                                                                           `sent`        = :sent,
@@ -101,7 +103,7 @@ if ($statement->rowCount()) {
                 ':user_id'     => $user->user_id,
                 ':sent'        => $user->notify_au,
                 ':language_id' => DEFAULT_LANGUAGE_ID,
-                ':type'        => 'au', // Agreement update
+                ':label'       => 'news',
                 ':title'       => 'Terms of Service has been updated',
                 ':description' => 'Please read our Terms carefully, and contact us if you have any questions'
             )
