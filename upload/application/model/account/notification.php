@@ -19,28 +19,27 @@ class ModelAccountNotification extends Model {
     *
     * @param  int $user_id
     * @param  int $language_id
-    * @param  string $type ENUM notify_code
+    * @param  string $label ENUM
     * @param  string $title
     * @param  string $description
     * @return int|bool Email approved status or false if throw exception
     */
-    public function addNotification($user_id, $language_id, $type, $title, $description) {
+    public function addNotification($user_id, $language_id, $label, $title, $description) {
 
         try {
 
             $statement = $this->db->prepare('INSERT INTO `user_notification` SET `user_id`     = :user_id,
                                                                                  `language_id` = :language_id,
-                                                                                 `type`        = :type,
+                                                                                 `label`       = :label,
                                                                                  `title`       = :title,
                                                                                  `description` = :description,
-                                                                                 `sent`        = 0,
                                                                                  `read`        = 0,
                                                                                  `date_added`  = NOW()');
             $statement->execute(
                 array(
                     ':user_id'     => $user_id,
                     ':language_id' => $language_id,
-                    ':type'        => $type,
+                    ':label'       => $label,
                     ':title'       => $title,
                     ':description' => $description
                 )
@@ -67,7 +66,7 @@ class ModelAccountNotification extends Model {
 
         try {
 
-            $statement = $this->db->prepare('UPDATE `user_notification` SET `read` = ? WHERE `user_notification_id` = ? AND `user_id` = ? LIMIT 1');
+            $statement = $this->db->prepare('UPDATE `user_notification` SET `read` = ?, `date_read` = NOW() WHERE `user_notification_id` = ? AND `user_id` = ? LIMIT 1');
             $statement->execute(array($read, $notification_id, $user_id));
 
             return $statement->rowCount();

@@ -131,7 +131,7 @@ class ControllerAccountAccount extends Controller {
                     // Add welcome notification
                     $this->model_account_notification->addNotification($user_id,
                                                                        DEFAULT_LANGUAGE_ID,
-                                                                       'ca', // Common activity
+                                                                       'common',
                                                                        sprintf(tt('Welcome to %s!'), PROJECT_NAME),
                                                                        tt("We're so happy you've joined us.\n") .
                                                                        tt("Make every day awesome with inspired finds!"));
@@ -220,7 +220,7 @@ class ControllerAccountAccount extends Controller {
                 // Add notification about new account settings
                 $this->model_account_notification->addNotification($this->auth->getId(),
                                                                    DEFAULT_LANGUAGE_ID,
-                                                                   'ns', // New Settings
+                                                                   'security',
                                                                    tt('Your account settings has been updated'),
                                                                    tt('If you did not make this change and believe your account has been compromised, please contact us.'));
 
@@ -230,7 +230,7 @@ class ControllerAccountAccount extends Controller {
                     // Add notification with email approving instructions
                     $this->model_account_notification->addNotification($this->auth->getId(),
                                                                        DEFAULT_LANGUAGE_ID,
-                                                                       'ns', // New Settings
+                                                                       'security',
                                                                        tt('Your email address has been changed'),
                                                                        tt('If you did not make this change and believe your account has been compromised, please contact us.'));
 
@@ -448,7 +448,7 @@ class ControllerAccountAccount extends Controller {
             // Add notification
             $this->model_account_notification->addNotification($user->user_id,
                                                                DEFAULT_LANGUAGE_ID,
-                                                               'ns', // New Settings
+                                                               'security',
                                                                tt('Your password has been updated'),
                                                                tt('If you did not make this change and believe your account has been compromised, please contact us.'));
 
@@ -532,7 +532,7 @@ class ControllerAccountAccount extends Controller {
                 // Add notification
                 $this->model_account_notification->addNotification($this->auth->getId(),
                                                                    DEFAULT_LANGUAGE_ID,
-                                                                   'ca', // Common activity
+                                                                   'common',
                                                                    tt('Your verification request was sent successfully'),
                                                                    tt('We will process the request as quickly as possible.'));
 

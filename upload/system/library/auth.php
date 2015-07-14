@@ -142,17 +142,16 @@ final class Auth {
                     // Add notification
                     $statement = $this->db->prepare('INSERT INTO `user_notification` SET  `user_id`     = :user_id,
                                                                                           `language_id` = :language_id,
-                                                                                          `type`        = :type,
+                                                                                          `label`       = :label,
                                                                                           `title`       = :title,
                                                                                           `description` = :description,
-                                                                                          `sent`        = 0,
                                                                                           `read`        = 0,
                                                                                           `date_added`  = NOW()');
                     $statement->execute(
                         array(
                             ':user_id'     => $user_id,
                             ':language_id' => DEFAULT_LANGUAGE_ID,
-                            ':type'        => 'ni', // New IP
+                            ':label'       => 'security',
                             ':title'       => tt('Login with new IP'),
                             ':description' => sprintf(tt("Login with new IP (%s) has been registered.\n"), $ip) . tt('If you believe your account has been compromised, please contact us.')
                         )

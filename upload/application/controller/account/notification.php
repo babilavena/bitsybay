@@ -49,7 +49,7 @@ class ControllerAccountNotification extends Controller
             $data['notifications'][] = array(
                 'title'       => $notification->title,
                 'read'        => $notification->read,
-                'label'       => $this->_getNotificationLabel($notification->type),
+                'label'       => $this->_prepareLabel($notification->label),
                 'date_added'  => date(tt('Y.m.d H:i'), strtotime($notification->date_added)),
                 'href'        => $this->url->link('account/notification/read', 'notification_id=' . $notification->user_notification_id),
             );
@@ -90,7 +90,7 @@ class ControllerAccountNotification extends Controller
 
         $data['title']       = $notification->title;
         $data['description'] = $notification->description;
-        $data['label']       = $this->_getNotificationLabel($notification->type);
+        $data['label']       = $this->_prepareLabel($notification->label);
         $data['date_added']  = date(tt('Y.m.d H:i'), strtotime($notification->date_added));
 
         $data['footer'] = $this->load->controller('common/footer');
@@ -110,29 +110,24 @@ class ControllerAccountNotification extends Controller
         $this->response->setOutput($this->load->view('account/notification/notification_read.tpl', $data));
     }
 
-    private function _getNotificationLabel($type) {
+    private function _prepareLabel($label) {
 
-        switch ($type) {
-            case 'pf':
-            case 'pp':
-            case 'pc':
+        switch ($label) {
+            case 'activity':
                 $label = array(
                     'name'  => tt('activity'),
                     'class' => tt('label-success')
                 );
                 break;
 
-            case 'pn':
-            case 'on':
-            case 'au':
+            case 'news':
                 $label = array(
                     'name'  => tt('news'),
                     'class' => tt('label-primary')
                 );
                 break;
 
-            case 'ni':
-            case 'ns':
+            case 'security':
                 $label = array(
                     'name'  => tt('security'),
                     'class' => tt('label-danger')

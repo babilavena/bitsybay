@@ -362,7 +362,7 @@ class ControllerCatalogProduct extends Controller {
                 // Add notification
                 $this->model_account_notification->addNotification($product->user_id,
                                                                    $this->language->getId(),
-                                                                   'pf', // Product favorite
+                                                                   'activity',
                                                                    tt('Your product has been marked as favorite'),
                                                                    sprintf(tt("@%s has marked %s as favorite.\n"), $this->auth->getUsername(), $product->title) .
                                                                    tt("Cheers!"));
@@ -486,7 +486,7 @@ class ControllerCatalogProduct extends Controller {
                     // Add notification
                     $this->model_account_notification->addNotification($product->user_id,
                                                                        $this->language->getId(),
-                                                                       'pc', // Product comment
+                                                                       'activity',
                                                                        tt('Your product has been commented'),
                                                                        sprintf(tt("@%s has posted a comment about your product %s.\n"), $this->auth->getUsername(), $product->title));
                 }
