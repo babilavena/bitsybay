@@ -82,6 +82,7 @@
         </div>
         <div class="body">
           <?php echo $message ?>
+          <?php echo (isset($module) ? $module : false) ?>
         </div>
         <div class="footer">
           <p><?php echo tt('Sent by') ?> <a href="<?php echo $href_home ?>"><?php echo $project_name ?></a></p>
