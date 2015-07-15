@@ -411,6 +411,14 @@ table img {
     float: right;
     color: #777;
 
+    background: #FFF;
+    padding:20px 30px;
+    min-height:100px;
+    min-width:100px;
+    border-radius:1000px
+}
+.catalog-product .product-misc .text-success {
+    opacity: 0.8
 }
 
 .catalog-product .product-user a {

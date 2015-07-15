@@ -87,9 +87,9 @@
           <?php } else { ?>
             <div><span class="glyphicon glyphicon-eye-close"></span> <strong><?php echo tt('Unverified Seller') ?></strong></div>
           <?php } ?>
-          <div><?php echo tt('Release:') ?> <?php echo $product_date_added ?></div>
-          <div><?php echo tt('Update:') ?> <?php echo $product_date_modified ?></div>
-          <div><?php echo $product_sales ? tt('Sales:') . ' ' . $product_sales : false ?></div>
+          <div><?php echo sprintf(tt('Release: %s'), $product_date_added) ?></div>
+          <div><?php echo sprintf(tt('Update: %s'), $product_date_modified) ?></div>
+          <div><?php echo $product_sales ? sprintf(tt('Sales: %s'), $product_sales)  : false ?></div>
         </div>
         <div class="product-user">
           <?php if ($product_is_self) { ?>
