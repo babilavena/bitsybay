@@ -303,6 +303,7 @@ if ($error) {
 if ($pending_count || $approved_count || $transaction_count || $error) {
     $mail->setTo(MAIL_EMAIL_BILLING_ADDRESS);
     $mail->setSubject(sprintf('%s REPORT', PROJECT_NAME));
+    $mail->setHtml(false);
     $mail->setText($output);
     $mail->send();
 }
