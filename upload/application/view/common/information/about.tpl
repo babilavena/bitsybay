@@ -30,20 +30,26 @@
       <section>
         <article>
           <p>
-            BitsyBay is a simple and minimalistic service to help you buy and or sell creative digital products with cryptocurrency like BitCoin.
+            BitsyBay is a simple and minimalistic service to help you buy and or sell creative digital products with cryptocurrency like BitCoin.<br />
             It includes a marketplace for legal CMS extensions, illustrations, photos, themes and other creative assets from various authors.
           </p>
           <p>
-            Buy or sell any available content fast and directly, from any country without bank commissions and other restrictions.
+            Buy or sell any available content fast and directly, from any country without compromises.
           </p>
-          <h2>Open Source Engine</h2>
+          <h2>Philosophy</h2>
+          <p> 
+            We don't like restrictions. We are not corporation. We respect copyright.<br /> 
+            Project was made by and for creative peoples who love a freedom and looking for easy trading around the world.<br /> 
+            This project has an open source code, available for contributors and trademark-free. It makes world better.
+           </p>
+          <h2>Engine</h2>
           <p>
-            The project is 100% open source and licensed under GNU GPL version 3.<br />
+            Our Engine is 100% open source licensed under GNU GPL version 3.<br />
             You can fork us on <a href="http://github.com/bitsybay" target="_blank" rel="nofollow">GitHub</a> to help improve this project or use this engine as an example project for your own BitCoin service.
           </p>
           <h2>Other</h2>
           <p>
-            This project is currently in Beta mode, so if you find any bug, we would greatly appreciate it if you <a href="contact">notify</a> us.<br />
+            Our service is currently in Beta mode, so if you find any bug, we would greatly appreciate it if you notify us.<br />
             Also, if you have any questions, please visit the <a href="faq">F.A.Q.</a> or <a href="contact">Contact Us</a> pages.
           </p>
           <p>&mdash;</p>
