@@ -65,8 +65,8 @@ FEATURES
 **Analytics**
 
 * Search log
+* Security log
 * 404 log
-* Withdraw log
 
 **Payment**
 
