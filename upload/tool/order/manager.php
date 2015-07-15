@@ -295,8 +295,6 @@ if ($error) {
 
 // Send report
 if ($pending_count || $approved_count || $transaction_count || $error) {
-
-    $mail = new Mail();
     $mail->setTo(MAIL_EMAIL_BILLING_ADDRESS);
     $mail->setSubject(sprintf('%s REPORT', PROJECT_NAME));
     $mail->setText($output);
