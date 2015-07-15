@@ -142,51 +142,58 @@ final class Auth {
             // If IP not registered
             if (!$statement->rowCount()) {
 
-                // Add notification
-                $statement = $this->_db->prepare('INSERT INTO `user_notification` SET  `user_id`     = :user_id,
-                                                                                      `language_id` = :language_id,
-                                                                                      `label`       = :label,
-                                                                                      `title`       = :title,
-                                                                                      `description` = :description,
-                                                                                      `read`        = 0,
-                                                                                      `date_added`  = NOW()');
-                $statement->execute(
-                    array(
-                        ':user_id'     => $this->_user_id,
-                        ':language_id' => DEFAULT_LANGUAGE_ID,
-                        ':label'       => 'security',
-                        ':title'       => tt('Login with new IP'),
-                        ':description' => sprintf(tt("Login with new IP (%s) has been registered.\n"), $this->_request->getRemoteAddress()) .
-                                          tt('If you believe your account has been compromised, please contact us.')
-                    )
-                );
-
-                // If subscription enabled
-                $statement = $this->_db->prepare('SELECT NULL FROM `user_subscription` WHERE `user_id` = ? AND `subscription_id` = ? LIMIT 1');
-                $statement->execute(array($this->_user_id, SECURITY_IP_SUBSCRIPTION_ID));
+                // Ignore notifications for first login
+                $statement = $this->_db->prepare('SELECT NULL FROM `user_ip` WHERE `user_id` = ? LIMIT 1');
+                $statement->execute(array($this->_user_id));
 
                 if ($statement->rowCount()) {
 
-                    // Send mail
-                    $mail_data['project_name'] = PROJECT_NAME;
+                    // Add notification
+                    $statement = $this->_db->prepare('INSERT INTO `user_notification` SET  `user_id`     = :user_id,
+                                                                                          `language_id` = :language_id,
+                                                                                          `label`       = :label,
+                                                                                          `title`       = :title,
+                                                                                          `description` = :description,
+                                                                                          `read`        = 0,
+                                                                                          `date_added`  = NOW()');
+                    $statement->execute(
+                        array(
+                            ':user_id'     => $this->_user_id,
+                            ':language_id' => DEFAULT_LANGUAGE_ID,
+                            ':label'       => 'security',
+                            ':title'       => tt('Login with new IP'),
+                            ':description' => sprintf(tt("Login with new IP (%s) has been registered.\n"), $this->_request->getRemoteAddress()) .
+                                              tt('If you believe your account has been compromised, please contact us.')
+                        )
+                    );
 
-                    $mail_data['subject'] = sprintf(tt('Login with new IP - %s'), PROJECT_NAME);
-                    $mail_data['message'] = sprintf(tt("Login with new IP (%s) has been registered. If you believe your account has been compromised, please contact us."),
-                                                    $this->_request->getRemoteAddress());
+                    // If subscription enabled
+                    $statement = $this->_db->prepare('SELECT NULL FROM `user_subscription` WHERE `user_id` = ? AND `subscription_id` = ? LIMIT 1');
+                    $statement->execute(array($this->_user_id, SECURITY_IP_SUBSCRIPTION_ID));
 
-                    $mail_data['href_home']         = $this->_url->link('common/home');
-                    $mail_data['href_contact']      = $this->_url->link('common/contact');
-                    $mail_data['href_subscription'] = $this->_url->link('account/account/subscription');
+                    if ($statement->rowCount()) {
 
-                    $mail_data['href_facebook'] = URL_FACEBOOK;
-                    $mail_data['href_twitter']  = URL_TWITTER;
-                    $mail_data['href_tumblr']   = URL_TUMBLR;
-                    $mail_data['href_github']   = URL_GITHUB;
+                        // Send mail
+                        $mail_data['project_name'] = PROJECT_NAME;
 
-                    $this->_mail->setTo($this->_email);
-                    $this->_mail->setSubject($mail_data['subject']);
-                    $this->_mail->setHtml($this->_load->view('email/common.tpl', $mail_data));
-                    $this->_mail->send();
+                        $mail_data['subject'] = sprintf(tt('Login with new IP - %s'), PROJECT_NAME);
+                        $mail_data['message'] = sprintf(tt("Login with new IP (%s) has been registered. If you believe your account has been compromised, please contact us."),
+                                                        $this->_request->getRemoteAddress());
+
+                        $mail_data['href_home']         = $this->_url->link('common/home');
+                        $mail_data['href_contact']      = $this->_url->link('common/contact');
+                        $mail_data['href_subscription'] = $this->_url->link('account/account/subscription');
+
+                        $mail_data['href_facebook'] = URL_FACEBOOK;
+                        $mail_data['href_twitter']  = URL_TWITTER;
+                        $mail_data['href_tumblr']   = URL_TUMBLR;
+                        $mail_data['href_github']   = URL_GITHUB;
+
+                        $this->_mail->setTo($this->_email);
+                        $this->_mail->setSubject($mail_data['subject']);
+                        $this->_mail->setHtml($this->_load->view('email/common.tpl', $mail_data));
+                        $this->_mail->send();
+                    }
                 }
 
                 // Save new IP
