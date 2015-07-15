@@ -680,7 +680,7 @@ CREATE TABLE IF NOT EXISTS `user_notification` (
   `user_id` INT UNSIGNED NOT NULL,
   `language_id` INT UNSIGNED NOT NULL,
   `read` TINYINT(1) NOT NULL,
-  `label` ENUM('activity', 'secutity', 'news', 'common') NOT NULL,
+  `label` ENUM('activity', 'secutity', 'news', 'common', 'billing') NOT NULL,
   `title` VARCHAR(255) NOT NULL,
   `description` MEDIUMTEXT NOT NULL,
   `date_added` DATETIME NOT NULL,
