@@ -42,7 +42,7 @@
                 <ul class="list-unstyled menu">
                   <li><a href="<?php echo $href_facebook ?>" target="_blank" rel="nofollow"><?php echo tt('Facebook') ?></a></li>
                   <li><a href="<?php echo $href_tumblr ?>" target="_blank" rel="nofollow"><?php echo tt('Tumblr') ?></a></li>
-                  <li><a href="<?php echo $href_twitter ?>" target="_blank" rel="nofollow"><?php echo tt('Twitter') ?></a> / <a href="#bitsybay" target="_blank"><?php echo tt('Twister') ?></a></li>
+                  <li><a href="<?php echo $href_twitter ?>" target="_blank" rel="nofollow"><?php echo tt('Twitter') ?></a> / <a class="small" href="#bitsybay" target="_blank"><?php echo tt('Twister') ?></a></li>
                   <li><a href="<?php echo $href_github ?>" target="_blank" rel="nofollow"><?php echo tt('GitHub') ?></a></li>
                 </ul>
               </li>
