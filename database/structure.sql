@@ -796,8 +796,6 @@ DROP TABLE IF EXISTS `log_withdraw`;
 CREATE TABLE IF NOT EXISTS `log_withdraw` (
   `log_withdraw_id` INT NOT NULL AUTO_INCREMENT,
   `currency_id` INT UNSIGNED NULL,
-  `order_id` INT UNSIGNED NULL,
-  `user_id` INT UNSIGNED NULL,
   `target` ENUM('fund', 'seller') NOT NULL,
   `transaction_id` VARCHAR(255) NOT NULL,
   `description` VARCHAR(255) NULL,
