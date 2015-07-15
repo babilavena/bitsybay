@@ -134,6 +134,13 @@ class ControllerAccountNotification extends Controller
                 );
                 break;
 
+            case 'billing':
+                $label = array(
+                    'name'  => tt('billing'),
+                    'class' => tt('label-warning')
+                );
+                break;
+
             default:
                 $label = array(
                     'name'  => tt('common'),
