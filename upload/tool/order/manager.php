@@ -204,7 +204,7 @@ if ($statement->rowCount()) {
                                 ':language_id' => DEFAULT_LANGUAGE_ID,
                                 ':label'       => 'activity',
                                 ':title'       => 'Your product has been purchased',
-                                ':description' => sprintf("@%s has purchased your product %s. Keep it going!", $order->buyer_username, $order->product_title)
+                                ':description' => sprintf("@%s has purchased your product %s. Awesome!", $order->buyer_username, $order->product_title)
                             )
                         );
 
@@ -218,7 +218,7 @@ if ($statement->rowCount()) {
                             $mail_data['project_name'] = PROJECT_NAME;
 
                             $mail_data['subject'] = sprintf('Your product has been purchased - %s', PROJECT_NAME);
-                            $mail_data['message'] = sprintf("@%s has purchased your product %s. Keep it going!", $order->buyer_username, $order->product_title);
+                            $mail_data['message'] = sprintf("@%s has purchased your product %s. Awesome!", $order->buyer_username, $order->product_title);
 
                             $mail_data['href_home']         = URL_BASE;
                             $mail_data['href_contact']      = URL_BASE . 'contact';
@@ -250,7 +250,7 @@ if ($statement->rowCount()) {
                                 ':language_id' => DEFAULT_LANGUAGE_ID,
                                 ':label'       => 'activity',
                                 ':title'       => 'Your purchase has been confirmed',
-                                ':description' => sprintf("Your %s purchase has been confirmed. Cheers!", $order->product_title)
+                                ':description' => sprintf("%s purchase has been confirmed. Cheers!", $order->product_title)
                             )
                         );
 
@@ -258,7 +258,7 @@ if ($statement->rowCount()) {
                         $mail_data['project_name'] = PROJECT_NAME;
 
                         $mail_data['subject'] = sprintf('Your purchase has been confirmed - %s', PROJECT_NAME);
-                        $mail_data['message'] = sprintf("Your %s purchase has been confirmed. Cheers!", $order->product_title);
+                        $mail_data['message'] = sprintf("%s purchase has been confirmed. Cheers!", $order->product_title);
 
                         $mail_data['href_home']         = URL_BASE;
                         $mail_data['href_contact']      = URL_BASE . 'contact';
