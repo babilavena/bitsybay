@@ -202,7 +202,7 @@ if ($statement->rowCount()) {
                             array(
                                 ':user_id'     => $order->seller_user_id,
                                 ':language_id' => DEFAULT_LANGUAGE_ID,
-                                ':label'       => 'billing',
+                                ':label'       => 'activity',
                                 ':title'       => 'Your product has been purchased',
                                 ':description' => sprintf("@%s has purchased your product %s. Keep it going!", $order->buyer_username, $order->product_title)
                             )
@@ -248,7 +248,7 @@ if ($statement->rowCount()) {
                             array(
                                 ':user_id'     => $order->buyer_user_id,
                                 ':language_id' => DEFAULT_LANGUAGE_ID,
-                                ':label'       => 'billing',
+                                ':label'       => 'activity',
                                 ':title'       => 'Your purchase has been confirmed',
                                 ':description' => sprintf("Your %s purchase has been confirmed. Cheers!", $order->product_title)
                             )
