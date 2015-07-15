@@ -38,7 +38,7 @@
           </p>
           <h2>Philosophy</h2>
           <p> 
-            We don't like restrictions. We are not corporation. We respect copyright.<br /> 
+            We love independence. We are not corporation. We respect copyright.<br /> 
             Project was made by and for creative peoples who love a freedom and looking for easy trading around the world.<br /> 
             This project has an open source code, available for contributors and trademark-free. It makes world better.
            </p>
@@ -49,7 +49,7 @@
           </p>
           <h2>Other</h2>
           <p>
-            Our service is currently in Beta mode, so if you find any bug, we would greatly appreciate it if you notify us.<br />
+            Service is currently in Beta mode, so if you find any bug, we would greatly appreciate it if you notify us.<br />
             Also, if you have any questions, please visit the <a href="faq">F.A.Q.</a> or <a href="contact">Contact Us</a> pages.
           </p>
           <p>&mdash;</p>
