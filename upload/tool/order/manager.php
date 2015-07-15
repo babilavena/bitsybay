@@ -167,25 +167,7 @@ if ($statement->rowCount()) {
                             $seller_profit,
                             sprintf("%s Payout - Order ID %s", PROJECT_NAME, $order->order_id)
                         )) {
-                            // Save transaction to the log
-                            $statement = $db->prepare('INSERT INTO `log_withdraw`
-                                                       SET `target` = ?,
-                                                           `currency_id` = ?,
-                                                           `transaction_id` = ?,
-                                                           `description` = ?');
-
-                            $statement->execute(
-                                array(
-                                    'seller',
-                                    $order->currency_id,
-                                    $transaction_id,
-                                    sprintf("%s Payout - Order ID %s", PROJECT_NAME, $order->order_id)
-                                )
-                            );
-
-                            if ($statement->rowCount()) {
-                                $transaction_count++;
-                            }
+                            $transaction_count++;
                         } else {
                             $error[] = sprintf("Seller Withdraw %s", $bitcoin->error);
                         }
@@ -198,25 +180,7 @@ if ($statement->rowCount()) {
                                 $fund_profit,
                                 sprintf("%s Profit - Order ID %s", PROJECT_NAME, $order->order_id)
                             )) {
-                                // Save transaction to the log
-                                $statement = $db->prepare('INSERT INTO `log_withdraw`
-                                                           SET `target` = ?,
-                                                               `currency_id` = ?,
-                                                               `transaction_id` = ?,
-                                                               `description` = ?');
-
-                                $statement->execute(
-                                    array(
-                                        'fund',
-                                        $order->currency_id,
-                                        $transaction_id,
-                                        sprintf("%s Profit - Order ID %s", PROJECT_NAME, $order->order_id)
-                                    )
-                                );
-
-                                if ($statement->rowCount()) {
-                                    $transaction_count++;
-                                }
+                                $transaction_count++;
                             } else {
                                 $error[] = sprintf("[Fund Withdraw] %s", $bitcoin->error);
                             }
