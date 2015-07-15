@@ -655,10 +655,12 @@ CREATE TABLE `user` (
   `status` enum('1','0') NOT NULL,
   `buyer` enum('1','0') NOT NULL,
   `seller` enum('1','0') NOT NULL,
+  `approved` enum('1','0') NOT NULL,
   `verified` enum('1','0') NOT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
+  `approval_code` varchar(255) NOT NULL,
   `salt` varchar(9) NOT NULL,
   `date_added` datetime NOT NULL,
   `date_modified` datetime NOT NULL,
@@ -697,26 +699,6 @@ CREATE TABLE IF NOT EXISTS `user_notification` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-
---
--- Table structure for table `user_email`
---
-
-DROP TABLE IF EXISTS `user_email`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `user_email` (
-  `user_email_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(10) unsigned NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `approval_code` varchar(45) NOT NULL,
-  `approved` enum('1','0') NOT NULL,
-  `date_added` datetime NOT NULL,
-  PRIMARY KEY (`user_email_id`),
-  KEY `fk_user_email_user_id` (`user_id`),
-  CONSTRAINT `fk_user_email_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 
 -- -----------------------------------------------------
