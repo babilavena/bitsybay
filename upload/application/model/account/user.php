@@ -364,7 +364,6 @@ class ModelAccountUser extends Model {
                                             `approval_code` = :approval_code,
                                             `approved`      = :approved,
 
-                                            `approved`      = 0,
                                             `date_added`    = NOW(),
                                             `date_modified` = NOW(),
                                             `date_visit`    = NOW()
