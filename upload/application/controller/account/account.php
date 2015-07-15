@@ -94,6 +94,7 @@ class ControllerAccountAccount extends Controller {
 
             // Generate email approval link
             $approval_code = md5(rand() . microtime() . $this->request->post['email']);
+            $approved      = 0;
 
             // Create new user
             if ($user_id = $this->model_account_user->createUser(  $this->request->post['username'],
@@ -104,7 +105,8 @@ class ControllerAccountAccount extends Controller {
                                                                    NEW_USER_STATUS,
                                                                    NEW_USER_VERIFIED,
                                                                    QUOTA_FILE_SIZE_BY_DEFAULT,
-                                                                   $approval_code)) {
+                                                                   $approval_code,
+                                                                   $approved)) {
 
                 // Clear previous login attempts for unregistered accounts.
                 $this->model_account_user->deleteLoginAttempts($this->request->post['email']);
@@ -222,17 +224,33 @@ class ControllerAccountAccount extends Controller {
         if ('POST' == $this->request->getRequestMethod() && $this->_validateUpdate()) {
 
             // Generate email approval link
-            $approval_code = md5(rand() . microtime() . $this->request->post['email']);
+            if (mb_strtolower($this->request->post['email']) != mb_strtolower($this->auth->getEmail())) {
+                $approval_code   = md5(rand() . microtime() . $this->request->post['email']);
+                $approved        = 0;
+
+                // Verification alert
+                $this->session->setUserMessage(array(
+                    // 'success' => tt('You have successfully modified account settings!'),
+                    'warning' => tt('You have successfully modified account settings! Please, check your mailbox to approve the new email address.')
+                ));
+
+            } else {
+                $approval_code   = false;
+                $approved        = 1;
+
+                // Default alert
+                $this->session->setUserMessage(array(
+                    'success' => tt('You have successfully modified account settings!')
+                ));
+            }
 
             // Create new user
             if ($this->model_account_user->updateUser($this->auth->getId(),
                                                       $this->request->post['username'],
                                                       $this->request->post['email'],
                                                       $this->request->post['password'],
-                                                      $approval_code)) {
-
-                // Success alert
-                $this->session->setUserMessage(array('success' => tt('Well done! You have successfully modified account settings!')));
+                                                      $approval_code,
+                                                      $approved)) {
 
                 // Add notification about new account settings
                 $this->model_account_notification->addNotification($this->auth->getId(),
@@ -269,7 +287,7 @@ class ControllerAccountAccount extends Controller {
                 }
 
                 // If old and new email is not match or email is not exist
-                if ($this->request->post['email'] != $this->auth->getEmail() || !$this->model_account_user->checkEmail($this->request->post['email'])) {
+                if (mb_strtolower($this->request->post['email']) != mb_strtolower($this->auth->getEmail())) {
 
                     // Send email verification code
                     $mail_data['project_name'] = PROJECT_NAME;
@@ -293,12 +311,6 @@ class ControllerAccountAccount extends Controller {
                     $this->mail->setSubject($mail_data['subject']);
                     $this->mail->setHtml($this->load->view('email/common.tpl', $mail_data));
                     $this->mail->send();
-
-                    // Success alert
-                    $this->session->setUserMessage(array(
-                        'success' => tt('You have successfully modified account settings!'),
-                        'warning' => tt('You have successfully modified account settings! Please, check your mailbox to approve the new email address.')
-                    ));
                 }
 
                 $this->response->redirect($this->url->link('account/account/update'));
@@ -1005,17 +1017,7 @@ class ControllerAccountAccount extends Controller {
         if (!isset($this->request->post['email']) || empty($this->request->post['email'])) {
             $this->_error['email'] = tt('Email is required');
         } else if (mb_strtolower($this->request->post['email']) != mb_strtolower($this->auth->getEmail()) && $this->model_account_user->checkEmail($this->request->post['email'])) {
-
-            $user_emails = $this->model_account_user->getEmails($this->auth->getId());
-            $available_emails = array();
-
-            foreach ($user_emails as $user_email) {
-                $available_emails[] = $user_email->email;
-            }
-
-            if (!in_array($this->request->post['email'], $available_emails)) {
-                $this->_error['email'] = tt('Email address is already registered or reserved');
-            }
+            $this->_error['email'] = tt('Email address is already registered or reserved');
         } else if (!ValidatorUser::emailValid($this->request->post['email'])) {
             $this->_error['email'] = tt('Invalid email address');
         }

@@ -61,27 +61,6 @@ class ModelAccountUser extends Model {
     }
 
     /**
-    * Get user emails
-    *
-    * @param int $user_id
-    * @return array|bool user's row set or false if throw exception
-    */
-    public function getEmails($user_id) {
-
-        try {
-            $statement = $this->db->prepare('SELECT `email`, `approved`, `user_id`, `date_added` FROM `user_email` WHERE `user_id` = ?');
-            $statement->execute(array($user_id));
-
-            return $statement->rowCount() ? $statement->fetchAll() : array();
-
-        } catch (PDOException $e) {
-
-            trigger_error($e->getMessage());
-            return false;
-        }
-    }
-
-    /**
     * Check user by password
     *
     * @param int $user_id
@@ -141,14 +120,6 @@ class ModelAccountUser extends Model {
         try {
             // Check user table for email exists
             $statement = $this->db->prepare('SELECT NULL FROM `user` WHERE `email` = ? LIMIT 1');
-            $statement->execute(array($email));
-
-            if ($statement->rowCount()) {
-                return true;
-            }
-
-            // Check user additional email table for email exists
-            $statement = $this->db->prepare('SELECT NULL FROM `user_email` WHERE `email` = ? LIMIT 1');
             $statement->execute(array($email));
 
             if ($statement->rowCount()) {
@@ -265,40 +236,6 @@ class ModelAccountUser extends Model {
     }
 
     /**
-    * Add new email to specific user
-    *
-    * @param int $user_id
-    * @param string $email
-    * @param string $approval_code
-    * @return int|bool Email approved status or false if throw exception
-    */
-    public function addEmail($user_id, $email, $approval_code) {
-
-        try {
-            $statement = $this->db->prepare('SELECT approved FROM `user_email` WHERE `user_id` = ? AND `email`= ? LIMIT 1');
-            $statement->execute(array($user_id, $email));
-
-            if ($statement->rowCount()) {
-                $user_email = $statement->fetch();
-
-                return $user_email->approved;
-
-            } else {
-
-                $email = mb_strtolower($email);
-                $statement = $this->db->prepare('INSERT INTO `user_email` SET `user_id` = ?, `email` = ?, `approved` = "0", `approval_code` = ?, `date_added` = NOW()');
-                $statement->execute(array($user_id, $email, $approval_code));
-
-                return 0;
-            }
-        } catch (PDOException $e) {
-
-            trigger_error($e->getMessage());
-            return false;
-        }
-    }
-
-    /**
     * Approve email
     *
     * @param int $user_id
@@ -308,7 +245,7 @@ class ModelAccountUser extends Model {
     public function approveEmail($user_id, $approval_code) {
 
         try {
-            $statement = $this->db->prepare('UPDATE `user_email` SET `approved` = 1, approval_code = "" WHERE `user_id` = ? AND `approval_code` = ? LIMIT 1');
+            $statement = $this->db->prepare('UPDATE `user` SET `approved` = 1, approval_code = "" WHERE `user_id` = ? AND `approval_code` = ? LIMIT 1');
             $statement->execute(array($user_id, $approval_code));
 
             return $statement->rowCount();
@@ -328,34 +265,59 @@ class ModelAccountUser extends Model {
     * @param string $email
     * @param string $password
     * @param string $approval_code
+    * @param string $approved
     * @return int|bool Affected rows or false if throw exception
     */
-    public function updateUser($user_id, $username, $email, $password, $approval_code) {
+    public function updateUser($user_id, $username, $email, $password, $approval_code, $approved) {
 
         try {
-            $this->addEmail($user_id, $email, $approval_code);
-
             // Update user info
-            $email    = mb_strtolower($email);
+            $email = mb_strtolower($email);
 
             if (!empty($password)) {
+
                 $salt = substr(md5(uniqid(rand(), true)), 0, 9);
                 $password = sha1($salt . sha1($salt . sha1($password)));
 
-                $statement = $this->db->prepare('UPDATE `user` SET `username` = :username, `email` = :email, `salt` = :salt, `password` = :password, `date_modified` = NOW() WHERE `user_id` = :user_id LIMIT 1');
+                $statement = $this->db->prepare('UPDATE `user` SET  `username`      = :username,
+                                                                    `email`         = :email,
+                                                                    `approval_code` = :approval_code,
+                                                                    `approved`      = :approved,
+                                                                    `salt`          = :salt,
+                                                                    `password`      = :password,
+
+                                                                    `date_modified` = NOW()
+
+                                                                    WHERE `user_id` = :user_id
+                                                                    LIMIT 1');
+
                 $statement->execute(array(
-                    ':user_id'  => $user_id,
-                    ':username' => $username,
-                    ':email'    => $email,
-                    ':salt'     => $salt,
-                    ':password' => $password));
+                    ':user_id'       => $user_id,
+                    ':username'      => $username,
+                    ':email'         => $email,
+                    ':approval_code' => $approval_code,
+                    ':approved'      => $approved,
+                    ':salt'          => $salt,
+                    ':password'      => $password));
+
             } else {
 
-                $statement = $this->db->prepare('UPDATE `user` SET `username` = :username, `email` = :email, `date_modified` = NOW() WHERE `user_id` = :user_id LIMIT 1');
+                $statement = $this->db->prepare('UPDATE `user` SET `username`      = :username,
+                                                                   `email`         = :email,
+                                                                   `approval_code` = :approval_code,
+                                                                   `approved`      = :approved,
+
+                                                                   `date_modified` = NOW()
+
+                                                                   WHERE `user_id` = :user_id
+                                                                   LIMIT 1');
+
                 $statement->execute(array(
-                    ':user_id'  => $user_id,
-                    ':username' => $username,
-                    ':email'    => $email));
+                    ':user_id'       => $user_id,
+                    ':username'      => $username,
+                    ':approval_code' => $approval_code,
+                    ':approved'      => $approved,
+                    ':email'         => $email));
             }
 
             return $statement->rowCount();
@@ -378,9 +340,10 @@ class ModelAccountUser extends Model {
     * @param int $verified
     * @param int $file_quota Mb
     * @param string $approval_code
+    * @param string $approved
     * @return int|bool Returns user_id or false if throw exception
     */
-    public function createUser($username, $email, $password, $buyer, $seller, $status, $verified, $file_quota, $approval_code) {
+    public function createUser($username, $email, $password, $buyer, $seller, $status, $verified, $file_quota, $approval_code, $approved) {
 
         try {
             $email     = mb_strtolower($email);
@@ -398,25 +361,28 @@ class ModelAccountUser extends Model {
                                             `password`      = :password,
                                             `salt`          = :salt,
                                             `email`         = :email,
+                                            `approval_code` = :approval_code,
+                                            `approved`      = :approved,
 
+                                            `approved`      = 0,
                                             `date_added`    = NOW(),
                                             `date_modified` = NOW(),
                                             `date_visit`    = NOW()
                                             ');
 
-            $statement->execute(array(  ':file_quota' => $file_quota,
-                                        ':status'     => $status,
-                                        ':buyer'      => $buyer,
-                                        ':seller'     => $seller,
-                                        ':verified'   => $verified,
-                                        ':username'   => $username,
-                                        ':password'   => $password,
-                                        ':email'      => $email,
-                                        ':salt'       => $salt));
+            $statement->execute(array(  ':file_quota'    => $file_quota,
+                                        ':status'        => $status,
+                                        ':buyer'         => $buyer,
+                                        ':seller'        => $seller,
+                                        ':verified'      => $verified,
+                                        ':username'      => $username,
+                                        ':password'      => $password,
+                                        ':email'         => $email,
+                                        ':approval_code' => $approval_code,
+                                        ':approved'      => $approved,
+                                        ':salt'          => $salt));
 
             $user_id = $this->db->lastInsertId();
-
-            $this->addEmail($user_id, $email, $approval_code, $approval_code);
 
             return (int) $user_id;
 

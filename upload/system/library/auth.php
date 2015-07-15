@@ -45,22 +45,19 @@ final class Auth {
 
             // Find Customer in Database
             try {
-                $statement = $this->_db->prepare('
-                SELECT
+                $statement = $this->_db->prepare('SELECT    `user_id`,
+                                                            `file_quota`,
+                                                            `status`,
+                                                            `verified`,
+                                                            `username`,
+                                                            `date_added`,
+                                                            `email`,
+                                                            `approved`
 
-                `u`.`user_id`,
-                `u`.`file_quota`,
-                `u`.`status`,
-                `u`.`verified`,
-                `u`.`username`,
-                `u`.`date_added`,
-                `u`.`email`,
-                (SELECT `ue`.`approved` FROM `user_email` AS `ue` WHERE `ue`.`email` = `u`.`email` LIMIT 1) AS `approved`
-
-                FROM `user` AS `u`
-                WHERE `u`.`user_id` = ?
-                AND `u`.`status` = 1
-                LIMIT 1');
+                                                    FROM  `user`
+                                                    WHERE `user_id` = ?
+                                                    AND   `status` = 1
+                                                    LIMIT 1');
 
                 $statement->execute(array($this->_session->getUserId()));
 
@@ -149,7 +146,7 @@ final class Auth {
                 if ($statement->rowCount()) {
 
                     // Add notification
-                    $statement = $this->_db->prepare('INSERT INTO `user_notification` SET  `user_id`     = :user_id,
+                    $statement = $this->_db->prepare('INSERT INTO `user_notification` SET `user_id`     = :user_id,
                                                                                           `language_id` = :language_id,
                                                                                           `label`       = :label,
                                                                                           `title`       = :title,
@@ -252,15 +249,11 @@ final class Auth {
         try {
             // Login by email
             if ($login_is_email) {
-                $statement = $this->_db->prepare('SELECT
-                `u`.*,
-                (SELECT `ue`.`approved` FROM `user_email` AS `ue` WHERE `ue`.`email` = `u`.`email` LIMIT 1) AS `approved`
-                FROM `user` AS `u`
-                WHERE
-                `u`.`email` = :email AND
-                `u`.`password` = SHA1(CONCAT(`u`.`salt`, SHA1(CONCAT(`salt`, SHA1(:password))))) AND
-                `u`.`status` = 1
-                LIMIT 1');
+                $statement = $this->_db->prepare('SELECT *  FROM `user`
+                                                            WHERE `email`    = LOWER(:email) AND
+                                                                  `password` = SHA1(CONCAT(`salt`, SHA1(CONCAT(`salt`, SHA1(:password))))) AND
+                                                                  `status`   = 1
+                                                            LIMIT 1');
 
                 $statement->execute(array(
                     ':password' => $password,
@@ -268,20 +261,17 @@ final class Auth {
 
             // Login by username
             } else {
-                $statement = $this->_db->prepare('SELECT
-                `u`.*,
-                (SELECT `ue`.`approved` FROM `user_email` AS `ue` WHERE `ue`.`email` = `u`.`email` LIMIT 1) AS `approved`
-                FROM `user` AS `u`
-                WHERE
-                `u`.`username` = :username AND
-                `u`.`password` = SHA1(CONCAT(salt, SHA1(CONCAT(`salt`, SHA1(:password))))) AND
-                `u`.`status` = 1
-                LIMIT 1');
+                $statement = $this->_db->prepare('SELECT *  FROM `user`
+                                                            WHERE `username` = LOWER(:username) AND
+                                                                  `password` = SHA1(CONCAT(`salt`, SHA1(CONCAT(`salt`, SHA1(:password))))) AND
+                                                                  `status`   = 1
+                                                            LIMIT 1');
 
                 $statement->execute(array(
                     ':password' => $password,
                     ':username' => $login));
             }
+
         } catch (PDOException $e) {
 
             if ($this->_db->inTransaction()) {
