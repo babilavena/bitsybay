@@ -320,7 +320,7 @@ class ControllerCatalogProduct extends Controller {
                 $this->storage->getProductFile(
                     $product_file_info->product_file_id,
                     $product_file_info->user_id,
-                    'product_' . $this->request->get['product_id']
+                    sprintf('%s_%s%s', mb_strtolower(PROJECT_NAME), $this->request->get['product_id'], date('dmy'))
                 );
             }
         }
