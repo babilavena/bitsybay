@@ -38,6 +38,10 @@ function helper_load_view($template, array $data = array()) {
     }
 }
 
+function tt($string) {
+    return htmlentities($string);
+}
+
 // Init variables
 $transaction_count = 0;
 $approved_count    = 0;
