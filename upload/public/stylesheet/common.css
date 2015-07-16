@@ -17,6 +17,10 @@ h1, h2 {
     font-weight: normal;
 }
 
+article {
+    margin: 0 12px
+}
+
 footer h5 {
     margin: 0;
 }

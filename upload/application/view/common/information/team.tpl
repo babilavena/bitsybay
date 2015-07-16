@@ -35,7 +35,7 @@
         </div>
         <div class="col-lg-4 text-center jumbotron">
           <p>Our team is only peoples, who love this project and make it better!</p>
-          <p>There are no corporation and authorized fund. We fund our contribution instead money.</p>
+          <p>There are no corporation and authorized fund. We fund our support and contribution instead money.</p>
         </div>
         <div class="col-lg-4 text-center">
           <img src="<?php echo URL_BASE ?>image/team/larisa.jpg" />
