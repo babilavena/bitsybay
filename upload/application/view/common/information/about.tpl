@@ -40,7 +40,7 @@
           <p> 
             We love independence. We are not corporation. We respect copyright.<br /> 
             Project was made by and for creative peoples who love a freedom and looking for easy trading around the world.<br /> 
-            This project has an open source code, available for contributors and trademark-free. It makes world better.
+            This project based on our open source engine, available for contributors and trademark-free. It makes world better.
            </p>
           <h2>Engine</h2>
           <p>
