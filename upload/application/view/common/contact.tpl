@@ -77,7 +77,7 @@
           <li>View <a href="<?php echo $href_common_information_terms ?>">Terms of Service</a> and <a href="<?php echo $href_common_information_licenses ?>">License Policy</a></li>
         </ul>
         <h3><?php echo tt('Physical address') ?></h3>
-        <p><a href="/">BitsyBay</a> do not have a physical address at present as its only a software resource supported by a <a href="team">few enthusiasts</a>. We can however be contacted by means of email through the above form.</p>
+        <p><a href="/">BitsyBay</a> do not have a physical address at present as its only a software resource started by a <a href="team">few enthusiasts</a>. We can however be contacted by means of email through the above form.</p>
       </div>
     </div>
   </div>
