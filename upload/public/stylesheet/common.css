@@ -561,3 +561,22 @@ table img {
 .contributors .contributor img {
     width:100px
 }
+.contributors a.join {
+    width: 100px;
+    height: 100px;
+    background: #EAEAEA;
+    display: block;
+    cursor: pointer;
+    border: 5px #FFF solid;
+    vertical-align: middle;
+    border-radius: 1000px;
+    box-shadow: 0 1px 3px #999;
+    margin:3px;
+    opacity: 0.8;
+    font-size: 4em;
+    color:#999;
+    text-decoration: none;
+}
+.contributors a.join:hover {
+    opacity: 1
+}

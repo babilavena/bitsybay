@@ -58,6 +58,12 @@
                 </a>
               </div>
             <?php } ?>
+            <div class="contributor">
+              <a href="<?php echo URL_GITHUB ?>" class="join" rel="nofollow" target="_blank">+</a>
+              <a href="<?php echo URL_GITHUB ?>" rel="nofollow" target="_blank">
+                <h5>Join Us</h5>
+              </a>
+            </div>
           </div>
         </div>
       <?php } ?>
