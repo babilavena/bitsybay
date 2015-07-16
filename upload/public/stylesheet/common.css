@@ -410,15 +410,6 @@ table img {
     text-align: right;
     float: right;
     color: #777;
-
-    background: #FFF;
-    padding:20px 30px;
-    min-height:100px;
-    min-width:100px;
-    border-radius:1000px
-}
-.catalog-product .product-misc .text-success {
-    opacity: 0.8
 }
 
 .catalog-product .product-user a {
@@ -429,8 +420,6 @@ table img {
 .catalog-product .catalog-product-details {
     margin: 25px 0
 }
-
-
 
 .catalog-product .catalog-product-tags {
     margin: 25px 0;
