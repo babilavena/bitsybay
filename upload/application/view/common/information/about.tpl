@@ -54,7 +54,7 @@
           </p>
           <p>&mdash;</p>
           <p>With best regards, <br />
-            Eugene a.k.a. Lifescale, Project Creator<br />
+            <a href="team">BitsyBay Team</a><br />
           </p>
         </article>
       </section>

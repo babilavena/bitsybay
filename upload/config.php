@@ -123,3 +123,6 @@ define('BITCOIN_FUND_ADDRESS', '');
 define('BITCOIN_ORDER_PREFIX', 'order_');
 define('BITCOIN_USER_VERIFICATION_PREFIX', 'user_verification_');
 define('BITCOIN_MIN_TRANSACTION_CONFIRMATIONS', 6); // Minimum BTC transaction confirmations requires before the order will be marked as APPROVED
+
+// GITHUB API
+define('GITHUB_API_URL_CONTRIBUTORS', '');

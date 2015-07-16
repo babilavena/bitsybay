@@ -90,11 +90,11 @@ final class Url {
         $this->_addRewrite('common/information/terms', 'terms');
         $this->_addRewrite('common/information/licenses', 'licenses');
         $this->_addRewrite('common/information/faq', 'faq');
+        $this->_addRewrite('common/information/team', 'team');
         $this->_addRewrite('common/image/qr', 'qr');
 
         // Create error rewrite rules
         $this->_addRewrite('error/not_found',  '404');
-
 
         // Create categories rewrite rules
         $statement = $this->_db->query('SELECT
@@ -200,6 +200,16 @@ final class Url {
     }
 
     /**
+    * Add rewrite rule
+    *
+    * @param string $key e.g. common/information/about
+    * @param string $value e.g. about
+    */
+    private function _addRewrite($key, $value) {
+        $this->_rewrite[$key] = $value;
+    }
+
+    /**
     * Canonical links creation
     *
     * @param string $route Path to controller. For example: account/account/update
@@ -262,16 +272,6 @@ final class Url {
         }
 
         return $this->link($route, implode('&', $arguments));
-    }
-
-    /**
-    * Add rewrite rule
-    *
-    * @param string $key e.g. common/information/about
-    * @param string $value e.g. about
-    */
-    private function _addRewrite($key, $value) {
-        $this->_rewrite[$key] = $value;
     }
 
 }

@@ -19,6 +19,7 @@
               <li><h5><?php echo tt('Explore') ?></h5>
                 <ul class="list-unstyled menu">
                   <li><a href="<?php echo $href_common_information_about ?>"><?php echo tt('About Us') ?></a></li>
+                  <li><a href="<?php echo $href_common_information_team ?>"><?php echo tt('Our Team') ?></a></li>
                   <li><a href="<?php echo $href_common_information_terms ?>"><?php echo tt('Terms of Service') ?></a></li>
                   <li><a href="<?php echo $href_common_information_licenses ?>"><?php echo tt('Licensing Policy') ?></a></li>
                 </ul>

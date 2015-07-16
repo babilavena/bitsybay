@@ -295,7 +295,8 @@ table img {
     text-decoration: none;
 }
 
-.catalog-category-product.grid .product-item .product-image img {
+.catalog-category-product.grid .product-item .product-image img,
+.information-team img {
     border: 5px #FFF solid;
     vertical-align: middle;
     border-radius: 1000px;
@@ -492,7 +493,7 @@ table img {
     margin-top: 8px
 }
 
-.latest h2, .home h2  {
+.latest h2, .home h2, .contributors h2  {
     font-size: 24px;
     text-transform: uppercase
 }
@@ -540,4 +541,19 @@ table img {
 
 .social-buttons .fb-follow {
     vertical-align: top
+}
+
+/* Team page */
+
+.contributors h2 {
+    padding: 20px 0;
+    border-bottom: 1px #EEE solid
+}
+.contributors .contributor {
+    display: inline-block;
+    margin: 20px;
+}
+
+.contributors .contributor img {
+    width:100px
 }

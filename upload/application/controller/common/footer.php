@@ -28,6 +28,7 @@ class ControllerCommonFooter extends Controller {
         $data['action_account_account_login'] = $this->url->link('account/account/login', 'redirect=' . $redirect);
 
         $data['href_common_information_about']     = $this->url->link('common/information/about');
+        $data['href_common_information_team']      = $this->url->link('common/information/team');
         $data['href_common_information_licenses']  = $this->url->link('common/information/licenses');
         $data['href_common_information_terms']     = $this->url->link('common/information/terms');
         $data['href_common_information_faq']       = $this->url->link('common/information/faq');
