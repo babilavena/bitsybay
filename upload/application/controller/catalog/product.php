@@ -46,7 +46,7 @@ class ControllerCatalogProduct extends Controller {
 
         // Check dependencies
         if (!isset($this->request->get['product_id']) || !$product_info = $this->model_catalog_product->getProduct((int) $this->request->get['product_id'], $this->auth->getId(), ORDER_APPROVED_STATUS_ID)) {
-            $this->security_log->write('Try to get product file without product_id parameter');
+            $this->security_log->write('Try to get product file without product_id parameter' . isset($this->request->get['product_id']) ? (int) $this->request->get['product_id'] : false);
             $this->response->redirect($this->url->link('error/not_found'));
         }
 
@@ -306,7 +306,7 @@ class ControllerCatalogProduct extends Controller {
 
         // Check dependencies
         if (!isset($this->request->get['product_id'])) {
-            $this->security_log->write('Try to get product file without product_id parameter');
+            $this->security_log->write('Try to get product file without product_id parameter' . isset($this->request->get['product_id']) ? (int) $this->request->get['product_id'] : false);
             exit;
         }
 
