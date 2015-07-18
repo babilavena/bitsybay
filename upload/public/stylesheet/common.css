@@ -347,7 +347,8 @@ table img {
 .user-avatar img,
 .catalog-product .product-image img,
 .catalog-product .product-images img,
-.catalog-product .product-videos div {
+.catalog-product .product-videos div,
+.catalog-product .product-audios div {
     cursor: pointer;
     border: 5px #FFF solid;
     vertical-align: middle;
@@ -360,7 +361,8 @@ table img {
     margin: 25px 0;
 }
 
-.catalog-product .product-videos .product-video {
+.catalog-product .product-videos .product-video,
+.catalog-product .product-audios .product-audio {
     display: inline-block;
     width: 60px;
     height: 60px;
@@ -371,13 +373,15 @@ table img {
 }
 
 .catalog-product .product-images img,
-.catalog-product .product-videos .product-video {
+.catalog-product .product-videos .product-video,
+.catalog-product .product-audios .product-audio {
     border-radius: 1000px;
     opacity: 0.8
 }
 
 .catalog-product .product-images img:hover,
-.catalog-product .product-videos .product-video:hover {
+.catalog-product .product-videos .product-video:hover,
+.catalog-product .product-audios .product-audio:hover {
     opacity: 1
 }
 

@@ -137,6 +137,16 @@ function zoomVideo(url, title) {
     });
 }
 
+// Zoom audio
+function zoomAudio(url, title) {
+    $('#zoomAudio .modal-header h4').html(title);
+    $('#zoomAudio .modal-body iframe').attr('src', url);
+
+    $('#zoomAudio').on('hidden.bs.modal', function () {
+        $('#zoomAudio .modal-body iframe').attr('src', false);
+    });
+}
+
 function timer(sec, block, direction) {
     var time    = sec;
     direction   = direction || false;

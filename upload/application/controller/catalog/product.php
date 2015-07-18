@@ -161,6 +161,13 @@ class ControllerCatalogProduct extends Controller {
                     'url'   => $video->iframe_url . $video->id);
         }
 
+        $data['product_audios'] = array();
+        foreach ($this->model_catalog_product->getProductAudios($product_info->product_id, $this->language->getId()) as $audio) {
+                $data['product_audios'][] = array(
+                    'title' => $audio->title,
+                    'url'   => $audio->iframe_url . $audio->id);
+        }
+
         $data['product_tags'] = array();
         foreach ($this->model_catalog_product->getProductTags($product_info->product_id, $this->language->getId()) as $tag) {
             $data['product_tags'][] = array('name' => $tag->name, 'url' => $this->url->link('catalog/search', 'q=' . urlencode($tag->name)));

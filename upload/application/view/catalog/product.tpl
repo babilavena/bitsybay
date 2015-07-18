@@ -52,6 +52,13 @@
           <?php } ?>
         </div>
       <?php } ?>
+      <?php if ($product_audios > 1) { ?>
+        <div class="bs-component product-audios">
+          <?php foreach ($product_audios as $key => $audio) { ?>
+            <div class="product-audio <?php echo $color_labels[$key+3] ?>" onclick="zoomAudio('<?php echo $audio['url'] ?>&amp;auto_play=true&amp;hide_related=false&amp;show_comments=false&amp;show_user=false&amp;show_reposts=false&amp;buying=false&amp;sharing=false&amp;download=false&amp;download=show_bpm&amp;show_artwork=true&amp;show_playcount=false', '<?php echo $audio['title'] ?>')" data-toggle="modal" data-target="#zoomAudio"><i class="glyphicon glyphicon-music"></i></div>
+          <?php } ?>
+        </div>
+      <?php } ?>
       <div id="zoomImage" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="zoomImage" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -74,6 +81,19 @@
                </div>
               <div class="modal-body">
                 <iframe src="" width="570" height="400" frameborder="0"></iframe>
+              </div>
+          </div>
+        </div>
+      </div>
+      <div id="zoomAudio" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="zoomImage" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                 <h4 class="modal-title"><?php echo $product_title ?></h4>
+               </div>
+              <div class="modal-body">
+                <iframe src="" width="100%" height="166" frameborder="0"></iframe>
               </div>
           </div>
         </div>

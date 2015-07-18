@@ -55,7 +55,12 @@
             <li><?php echo tt('Upload your videos to supported video hosting site') ?></li>
             <li><?php echo tt('Then copy share ID to this form') ?></li>
             <li><?php echo sprintf(tt('Allowed videos per product: %s'), QUOTA_VIDEO_PER_PRODUCT) ?></li>
-
+          </ul>
+          <ul id="productAudioHints">
+            <li><?php echo tt('The audio used for demonstration or tutorial of your product') ?></li>
+            <li><?php echo tt('Upload your audios to supported audio hosting site') ?></li>
+            <li><?php echo tt('Then copy share ID to this form') ?></li>
+            <li><?php echo sprintf(tt('Allowed audios per product: %s'), QUOTA_AUDIO_PER_PRODUCT) ?></li>
           </ul>
           <ul id="productPriceHints">
             <li><?php echo tt('Еnter a price for at least one license') ?> (<a href="licenses" target="_blank"><?php echo tt('Available Licenses') ?></a>)</li>
@@ -76,10 +81,11 @@
         </div>
         <ul class="nav nav-tabs">
           <li class="active"><a href="#general" data-toggle="tab"><?php echo tt('General') ?><?php echo isset($error['general']) ? ' <span class="text-danger">*</span>' : false ?></a></li>
-          <li><a href="#files" data-toggle="tab" id="aFiles"><?php echo tt('File') ?><?php echo isset($error['file']) ? ' <span class="text-danger">*</span>' : false ?></a></li>
+          <li><a href="#files" data-toggle="tab" id="aFiles"><?php echo tt('Package') ?><?php echo isset($error['file']) ? ' <span class="text-danger">*</span>' : false ?></a></li>
           <li><a href="#demos" data-toggle="tab"><?php echo tt('Demo') ?><?php echo isset($error['demo']) ? ' <span class="text-danger">*</span>' : false ?></a></li>
           <li><a href="#images" data-toggle="tab" id="aImages"><?php echo tt('Images') ?><?php echo isset($error['image']) ? ' <span class="text-danger">*</span>' : false ?></a></li>
-          <li><a href="#videos" data-toggle="tab"><?php echo tt('Videos') ?><?php echo isset($error['video']) ? ' <span class="text-danger">*</span>' : false ?></a></li>
+          <li><a href="#videos" data-toggle="tab"><?php echo tt('Video') ?><?php echo isset($error['video']) ? ' <span class="text-danger">*</span>' : false ?></a></li>
+          <li><a href="#audios" data-toggle="tab"><?php echo tt('Audio') ?><?php echo isset($error['audio']) ? ' <span class="text-danger">*</span>' : false ?></a></li>
           <li><a href="#prices" data-toggle="tab"><?php echo tt('Price') ?><?php echo isset($error['price']) ? ' <span class="text-danger">*</span>' : false ?></a></li>
         </ul>
         <div id="ProductFormTabContent" class="tab-content">
@@ -370,6 +376,74 @@
               </tfoot>
             </table>
           </div>
+          <div class="tab-pane fade" id="audios">
+            <?php if (isset($error['audio']['common'])) { ?>
+              <div class="alert alert-dismissible alert-danger">
+                <?php echo $error['audio']['common'] ?>
+              </div>
+            <?php } ?>
+            <table class="table table-striped table-hover" id="productAudio">
+              <thead>
+                <tr>
+                  <th><?php echo tt('Source') ?></th>
+                  <th><?php echo tt('ID') ?></th>
+                  <th><?php echo tt('Title') ?></th>
+                  <th class="column-action"><?php echo tt('Action') ?></th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php foreach ($audios as $row => $audio) { ?>
+                  <tr id="productAudioTr<?php echo $row ?>">
+                    <td class="form-group">
+                      <select name="audio[<?php echo $row ?>][source]" class="form-control" id="audioSource<?php echo $row ?>">
+                        <?php foreach ($audio_servers as $audio_server_id => $audio_server_name) { ?>
+                          <option value="<?php echo $audio_server_id ?>" <?php echo $audio_server_id == $audio['source'] ? 'selected="selected"' : false ?>><?php echo $audio_server_name ?></option>
+                        <?php } ?>
+                      </select>
+                      <?php if (isset($error['audio'][$row]['source'])) { ?>
+                        <div class="text-danger"><?php echo $error['audio'][$row]['source'] ?></div>
+                      <?php } ?>
+                    </td>
+
+                    <td class="form-group <?php echo isset($error['audio'][$row]['id']) ? 'has-error' : false ?>">
+                      <input type="text" name="audio[<?php echo $row ?>][id]" class="form-control" id="inputAudioId<?php echo $row ?>" placeholder="<?php echo tt('ID') ?>" value="<?php echo $audio['id'] ?>" />
+                      <?php if (isset($error['audio'][$row]['id'])) { ?>
+                        <div class="text-danger"><?php echo $error['audio'][$row]['id'] ?></div>
+                      <?php } ?>
+                    </td>
+                    <td class="form-group <?php echo isset($error['audio'][$row]['title']) ? 'has-error' : false ?>">
+                      <?php foreach ($audio['title'] as $language_id => $title) { ?>
+                        <div>
+                          <input onkeyup="lengthFilter(this, <?php echo VALIDATOR_PRODUCT_TITLE_MAX_LENGTH ?>)" type="text" name="audio[<?php echo $row ?>][title][<?php echo $language_id ?>]" class="form-control" id="inputAudioTitle<?php echo $row ?>l<?php echo $language_id ?>" placeholder="<?php echo tt('Title') ?>" value="<?php echo $title ?>" />
+                          <?php if (isset($error['audio'][$row]['title'][$language_id])) { ?>
+                            <div class="text-danger"><?php echo $error['audio'][$row]['title'][$language_id] ?></div>
+                          <?php } ?>
+                        </div>
+                      <?php } ?>
+                    </td>
+                    <td class="form-group">
+                      <input type="hidden" name="audio[<?php echo $row ?>][sort_order]" value="<?php echo $row ?>"  id="inputAudioSortOrder<?php echo $row ?>" />
+                      <span onclick="removeAudio(<?php echo $row ?>)" class="btn btn-danger">
+                        <i class="glyphicon glyphicon-trash"></i>
+                        <?php echo tt('Remove') ?>
+                      </span>
+                    </td>
+                  </tr>
+                <?php } ?>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="3"></td>
+                  <td>
+                    <span onclick="addAudio()" class="btn btn-success">
+                      <i class="glyphicon glyphicon-plus"></i>
+                      <?php echo tt('Add audio') ?>
+                    </span>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
           <div class="tab-pane fade" id="prices">
             <?php if (isset($error['price']['common'])) { ?>
               <div class="alert alert-dismissible alert-danger">
@@ -519,7 +593,7 @@
   <!-- Hints -->
 
   function hideHints() {
-    $('#productDescriptionHints, #productPackageHints, #productDemoHints, #productImageHints, #productVideoHints, #productPriceHints').addClass('hide');
+    $('#productDescriptionHints, #productPackageHints, #productDemoHints, #productImageHints, #productVideoHints, #productAudioHints, #productPriceHints').addClass('hide');
   }
 
   // Init
@@ -549,6 +623,11 @@
   $('a[href=#videos]').click(function () {
     hideHints();
     $('#productVideoHints').removeClass('hide');
+  });
+
+  $('a[href=#audios]').click(function () {
+    hideHints();
+    $('#productAudioHints').removeClass('hide');
   });
 
   $('a[href=#prices]').click(function () {
@@ -883,6 +962,45 @@
 
     if (video_l >= <?php echo QUOTA_VIDEO_PER_PRODUCT ?>) {
       $('#productVideo tfoot').hide();
+    }
+  }
+
+
+  <!-- Audio -->
+  var audio_r = <?php echo $audio_max_row ?>;
+  var audio_l = <?php echo $audio_total_rows ?>;
+
+  <?php if ($audio_total_rows >= QUOTA_AUDIO_PER_PRODUCT) { ?>
+    $('#productAudio tfoot').hide();
+  <?php } ?>
+
+  function removeAudio(audio_r_id) {
+    $('#productAudioTr' + audio_r_id).remove();
+    $('#productAudio tfoot').show();
+
+    audio_l--;
+  }
+
+  function addAudio() {
+
+    if (audio_l >= <?php echo QUOTA_AUDIO_PER_PRODUCT ?>) {
+      return false;
+    }
+
+    audio_r++;
+    audio_l++;
+
+    html  = '<tr id="productAudioTr' + audio_r + '">';
+    html += '<td class="form-group"><select name="audio[' + audio_r + '][source]" class="form-control" id="audioSource' + audio_r + '"><?php foreach ($audio_servers as $audio_server_id => $audio_server_name) { ?><option value="<?php echo $audio_server_id ?>"><?php echo $audio_server_name ?></option><?php } ?></select></td>';
+    html += '<td class="form-group"><input type="text" name="audio[' + audio_r + '][id]" class="form-control" id="inputAudioId' + audio_r + '" placeholder="<?php echo tt("ID") ?>" value="" /></td>';
+    html += '<td class="form-group"><?php foreach ($languages as $language) { ?><div><input onkeyup="lengthFilter(this, <?php echo VALIDATOR_PRODUCT_TITLE_MAX_LENGTH ?>)" type="text" name="audio[' + audio_r + '][title][<?php echo $language["language_id"] ?>]" class="form-control" id="inputAudioTitle' + audio_r + 'l<?php echo $language["language_id"] ?>" placeholder="<?php echo tt("Title") ?>" value="" /></div><?php } ?></td>';
+    html += '<td class="form-group"><input type="hidden" name="audio[' + audio_r + '][sort_order]" value="' + audio_r + '" /><span onclick="removeAudio(' + audio_r + ')" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> <?php echo tt("Remove") ?></span></td>';
+    html += '</tr>';
+
+    $('#productAudio tbody').append(html, '\n');
+
+    if (audio_l >= <?php echo QUOTA_AUDIO_PER_PRODUCT ?>) {
+      $('#productAudio tfoot').hide();
     }
   }
 

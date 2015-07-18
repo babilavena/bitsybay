@@ -92,6 +92,7 @@ define('QUOTA_IMAGE_MAX_FILE_SIZE', 500);  // int Kb
 define('QUOTA_IMAGES_PER_PRODUCT', 6);     // int Qty
 define('QUOTA_DEMO_PER_PRODUCT', 5);       // int Qty
 define('QUOTA_VIDEO_PER_PRODUCT', 5);      // int Qty
+define('QUOTA_AUDIO_PER_PRODUCT', 5);      // int Qty
 define('QUOTA_SPECIALS_PER_PRODUCT', 5);   // int Qty
 
 // VALIDATORS

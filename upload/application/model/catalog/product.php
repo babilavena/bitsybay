@@ -434,6 +434,70 @@ class ModelCatalogProduct extends Model {
     }
 
     /**
+    * Get product audios
+    *
+    * @param int $product_id
+    * @param int $language_id
+    * @return array|bool Product audio rows or FALSE if throw exception
+    */
+    public function getProductAudios($product_id, $language_id) {
+
+        try {
+            $statement = $this->db->prepare('SELECT
+            `pa`.`product_audio_id`,
+            `pa`.`audio_server_id`,
+            `pa`.`id`,
+            `as`.`iframe_url`,
+            `pad`.`title`
+
+            FROM `product_audio` AS `pa`
+            JOIN `audio_server` AS `as` ON (`as`.`audio_server_id` = `pa`.`audio_server_id`)
+            LEFT JOIN `product_audio_description` AS `pad` ON (`pa`.`product_audio_id` = `pad`.`product_audio_id`)
+            WHERE `pa`.`product_id` = ? AND `pad`.`language_id` = ?');
+
+            $statement->execute(array($product_id, $language_id));
+
+            return $statement->rowCount() ? $statement->fetchAll() : array();
+
+        } catch (PDOException $e) {
+
+            if ($this->db->inTransaction()) {
+                $this->db->rollBack();
+            }
+
+            trigger_error($e->getMessage());
+
+            return false;
+        }
+    }
+
+    /**
+    * Get product audio descriptions
+    *
+    * @param int $product_audio_id
+    * @return array|bool Product audio descriptions rows or FALSE if throw exception
+    */
+    public function getProductAudioDescriptions($product_audio_id) {
+
+        try {
+            $statement = $this->db->prepare('SELECT * FROM `product_audio_description` WHERE `product_audio_id` = ?');
+            $statement->execute(array($product_audio_id));
+
+            return $statement->rowCount() ? $statement->fetchAll() : array();
+
+        } catch (PDOException $e) {
+
+            if ($this->db->inTransaction()) {
+                $this->db->rollBack();
+            }
+
+            trigger_error($e->getMessage());
+
+            return false;
+        }
+    }
+
+    /**
     * Get product demo
     *
     * @param int $product_demo_id
@@ -1008,9 +1072,6 @@ class ModelCatalogProduct extends Model {
         }
     }
 
-
-
-
     /**
     * Create product video
     *
@@ -1033,6 +1094,46 @@ class ModelCatalogProduct extends Model {
             $statement->execute(array(
                 ':product_id'      => $product_id,
                 ':video_server_id' => $video_server_id,
+                ':sort_order'      => $sort_order,
+                ':id'              => $id
+            ));
+
+            return $this->db->lastInsertId();
+
+        } catch (PDOException $e) {
+
+            if ($this->db->inTransaction()) {
+                $this->db->rollBack();
+            }
+
+            trigger_error($e->getMessage());
+
+            return false;
+        }
+    }
+
+    /**
+    * Create product audio
+    *
+    * @param int $product_id
+    * @param int $audio_server_id
+    * @param int $sort_order
+    * @param string $id
+    * @return int|bool product_audio_id or FALSE/rollBack if throw exception
+    */
+    public function createProductAudio($product_id, $audio_server_id, $sort_order, $id) {
+
+        try {
+            $statement = $this->db->prepare(
+                'INSERT INTO `product_audio` SET
+                `product_id`      = :product_id,
+                `audio_server_id` = :audio_server_id,
+                `sort_order`      = :sort_order,
+                `id`              = :id');
+
+            $statement->execute(array(
+                ':product_id'      => $product_id,
+                ':audio_server_id' => $audio_server_id,
                 ':sort_order'      => $sort_order,
                 ':id'              => $id
             ));
@@ -1229,6 +1330,43 @@ class ModelCatalogProduct extends Model {
 
             $statement->execute(array(
                 ':product_video_id' => $product_video_id,
+                ':language_id'      => $language_id,
+                ':title'            => $title
+            ));
+
+            return $this->db->lastInsertId();
+
+        } catch (PDOException $e) {
+
+            if ($this->db->inTransaction()) {
+                $this->db->rollBack();
+            }
+
+            trigger_error($e->getMessage());
+
+            return false;
+        }
+    }
+
+    /**
+    * Create product audio description
+    *
+    * @param int $product_audio_id
+    * @param int $language_id
+    * @param string $title
+    * @return int|bool product_audio_id or FALSE/rollBack if throw exception
+    */
+    public function createProductAudioDescription($product_audio_id, $language_id, $title) {
+
+        try {
+            $statement = $this->db->prepare(
+                'INSERT INTO `product_audio_description` SET
+                `product_audio_id` = :product_audio_id,
+                `language_id`      = :language_id,
+                `title`            = :title');
+
+            $statement->execute(array(
+                ':product_audio_id' => $product_audio_id,
                 ':language_id'      => $language_id,
                 ':title'            => $title
             ));
@@ -1464,6 +1602,41 @@ class ModelCatalogProduct extends Model {
         }
     }
 
+    /**
+    * Delete product audios
+    *
+    * @param int $product_id
+    * @return int|bool count affected rows or FALSE/rollBack if throw exception
+    */
+    public function deleteProductAudios($product_id) {
+
+        try {
+            $statement = $this->db->prepare('DELETE `pad` FROM `product_audio_description` AS `pad`
+                                             JOIN `product_audio` AS `pa` ON (`pad`.`product_audio_id` = `pa`.`product_audio_id`)
+                                             WHERE `pa`.`product_id` = ?');
+
+            $statement->execute(array($product_id));
+
+            $affected = $statement->rowCount();
+
+            $statement = $this->db->prepare('DELETE FROM `product_audio` WHERE `product_id` = ?');
+            $statement->execute(array($product_id));
+
+            $affected += $statement->rowCount();
+
+            return $affected;
+
+        } catch (PDOException $e) {
+
+            if ($this->db->inTransaction()) {
+                $this->db->rollBack();
+            }
+
+            trigger_error($e->getMessage());
+
+            return false;
+        }
+    }
 
     /**
     * Update product

@@ -49,6 +49,7 @@ FEATURES
 * Product Reviews
 * Product Demos
 * Product Videos
+* Product Audios
 * Product Specials
 * Product Licenses
 * Product Favorites
