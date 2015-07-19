@@ -65,10 +65,11 @@ define('USER_IMAGE_ORIGINAL_MIN_WIDTH', 200);
 define('USER_IMAGE_ORIGINAL_MIN_HEIGHT', 200);
 
 // PRICES
-define('FEE_PER_ORDER', 11);                  // Percent
-define('FEE_USER_VERIFICATION', 0.1);         // BTC
-define('ALLOWED_PRODUCT_MIN_PRICE', 0.01);    // BTC
-define('ALLOWED_PRODUCT_MAX_PRICE', 1000000); // BTC
+define('FEE_PER_ORDER', 11);                    // Percent
+define('FEE_USER_VERIFICATION_AFFILIATE', 50);  // Percent
+define('FEE_USER_VERIFICATION', 0.1);           // BTC
+define('ALLOWED_PRODUCT_MIN_PRICE', 0.01);      // BTC
+define('ALLOWED_PRODUCT_MAX_PRICE', 1000000);   // BTC
 
 // ORDERS
 define('ORDER_PENDING_STATUS_ID', 1);   // INT order_status_id in order_status table

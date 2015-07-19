@@ -30,6 +30,11 @@ final class Request {
     public $files = array();
 
     /**
+     * @var array
+     */
+    public $cookie = array();
+
+    /**
      * @var string
      */
     private $_remote_address   = 'undefined';
@@ -77,6 +82,10 @@ final class Request {
 
         if (isset($_FILES)) {
             $this->files = $this->_filter($_FILES);
+        }
+
+        if (isset($_COOKIE)) {
+            $this->cookie = $this->_filter($_COOKIE);
         }
 
         if (isset($_SERVER['REMOTE_ADDR'])) {

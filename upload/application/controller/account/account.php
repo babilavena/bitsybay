@@ -24,8 +24,11 @@ class ControllerAccountAccount extends Controller {
         $this->load->model('account/user');
         $this->load->model('account/notification');
         $this->load->model('account/subscription');
+        $this->load->model('account/affiliate');
+        $this->load->model('common/currency');
         $this->load->helper('validator/user');
         $this->load->helper('validator/upload');
+        $this->load->helper('validator/bitcoin');
         $this->load->library('bitcoin');
         $this->load->library('identicon');
         $this->load->library('captcha/captcha');
@@ -106,7 +109,10 @@ class ControllerAccountAccount extends Controller {
                                                                    NEW_USER_VERIFIED,
                                                                    QUOTA_FILE_SIZE_BY_DEFAULT,
                                                                    $approval_code,
-                                                                   $approved)) {
+                                                                   $approved,
+                                                                   (isset($this->request->cookie['referrer']) &&  // If referrer is available
+                                                                   $this->model_account_user->getUser((int) $this->request->cookie['referrer']) ? // Check for existing
+                                                                   (int) $this->request->cookie['referrer'] : false))) {
 
                 // Clear previous login attempts for unregistered accounts.
                 $this->model_account_user->deleteLoginAttempts($this->request->post['email']);
@@ -204,6 +210,59 @@ class ControllerAccountAccount extends Controller {
 
         // Renter the template
         $this->response->setOutput($this->load->view('account/account/create.tpl', $data));
+    }
+
+    private function _validateCreate() {
+
+        // Username
+        if (!isset($this->request->post['username']) || empty($this->request->post['username'])) {
+            $this->_error['username'] = tt('Username is required');
+        } else if ($this->model_account_user->checkUsername($this->request->post['username'])) {
+            $this->_error['username'] = tt('Username is already registered');
+        } else if (mb_strlen($this->request->post['username']) < ValidatorUser::getUsernameMinLength() || mb_strlen($this->request->post['username']) > ValidatorUser::getUsernameMaxLength()) {
+            $this->_error['username'] = sprintf(tt('Username must be between %s and %s characters'), ValidatorUser::getUsernameMinLength(), ValidatorUser::getUsernameMaxLength());
+        } else if (!ValidatorUser::usernameValid($this->request->post['username'])) {
+            $this->_error['username'] = tt('Username can only contain latin letters, numbers and hyphen');
+        }
+
+        // Email
+        if (!isset($this->request->post['email']) || empty($this->request->post['email'])) {
+            $this->_error['email'] = tt('Email is required');
+        } else if ($this->model_account_user->checkEmail($this->request->post['email'])) {
+            $this->_error['email'] = tt('Email address is already registered or reserved');
+        } else if (!ValidatorUser::emailValid($this->request->post['email'])) {
+            $this->_error['email'] = tt('Invalid email address');
+        }
+
+        // Password
+        if (!isset($this->request->post['password']) || empty($this->request->post['password'])) {
+            $this->_error['password'] = tt('Password is required');
+        } else if ((mb_strlen($this->request->post['password']) < ValidatorUser::getPasswordMinLength()) || (mb_strlen($this->request->post['password']) > ValidatorUser::getPasswordMaxLength())) {
+            $this->_error['password'] = sprintf(tt('Password must be between %s and %s characters'), ValidatorUser::getPasswordMinLength(), ValidatorUser::getPasswordMaxLength());
+        } else if (!ValidatorUser::passwordValid($this->request->post['password'])) {
+            $this->_error['password'] = tt('Invalid password');
+        }
+
+        // Password confirm
+        if (!isset($this->request->post['confirm']) || empty($this->request->post['confirm'])) {
+            $this->_error['confirm'] = tt('Confirm is required');
+        } else if ($this->request->post['confirm'] != $this->request->post['password']) {
+            $this->_error['confirm'] = tt('Password confirmation does not match password');
+        }
+
+        // Captcha verification
+        if (!isset($this->request->post['captcha']) || empty($this->request->post['captcha'])) {
+            $this->_error['captcha'] = tt('Magic word is required');
+        } else if (strtoupper($this->request->post['captcha']) != strtoupper($this->session->getCaptcha())) {
+            $this->_error['captcha'] = tt('Incorrect magic word');
+        }
+
+        // Accept terms
+        if (!isset($this->request->post['accept']) || empty($this->request->post['accept']) || $this->request->post['accept'] != 1) {
+            $this->_error['accept'] = tt('You must accept Terms of Service to continue registration');
+        }
+
+        return !$this->_error;
     }
 
     public function update() {
@@ -353,6 +412,61 @@ class ControllerAccountAccount extends Controller {
 
     }
 
+    private function _validateUpdate() {
+
+        // Username
+        if (!isset($this->request->post['username']) || empty($this->request->post['username'])) {
+            $this->_error['username'] = tt('Username is required');
+        } else if (mb_strtolower($this->request->post['username']) != mb_strtolower($this->auth->getUsername()) && $this->model_account_user->checkUsername($this->request->post['username'])) {
+            $this->_error['username'] = tt('Username is already registered');
+        } else if (mb_strlen($this->request->post['username']) < ValidatorUser::getUsernameMinLength() || mb_strlen($this->request->post['username']) > ValidatorUser::getUsernameMaxLength()) {
+            $this->_error['username'] = sprintf(tt('Username must be between %s and %s characters'), ValidatorUser::getUsernameMinLength(), ValidatorUser::getUsernameMaxLength());
+        } else if (!ValidatorUser::usernameValid($this->request->post['username'])) {
+            $this->_error['username'] = tt('Username can only contain latin letters, numbers and hyphen');
+        }
+
+        // Email
+        if (!isset($this->request->post['email']) || empty($this->request->post['email'])) {
+            $this->_error['email'] = tt('Email is required');
+        } else if (mb_strtolower($this->request->post['email']) != mb_strtolower($this->auth->getEmail()) && $this->model_account_user->checkEmail($this->request->post['email'])) {
+            $this->_error['email'] = tt('Email address is already registered or reserved');
+        } else if (!ValidatorUser::emailValid($this->request->post['email'])) {
+            $this->_error['email'] = tt('Invalid email address');
+        }
+
+        if (!isset($this->request->post['confirm']) || !isset($this->request->post['password'])) {
+            $this->_error['password'] = tt('Wrong password fields');
+            $this->security_log->write('Wrong password fields');
+
+        } else if (!empty($this->request->post['password']) || !empty($this->request->post['confirm'])) {
+
+            // New password
+            if (empty($this->request->post['password'])) {
+                $this->_error['password'] = tt('Password is required');
+            } else if ((mb_strlen($this->request->post['password']) < ValidatorUser::getPasswordMinLength()) || (mb_strlen($this->request->post['password']) > ValidatorUser::getPasswordMaxLength())) {
+                $this->_error['password'] = sprintf(tt('Password must be between %s and %s characters'), ValidatorUser::getPasswordMinLength(), ValidatorUser::getPasswordMaxLength());
+            } else if (!ValidatorUser::passwordValid($this->request->post['password'])) {
+                $this->_error['password'] = tt('Invalid password');
+            }
+
+            // New password confirm
+            if (empty($this->request->post['confirm'])) {
+                $this->_error['confirm'] = tt('Confirm is required');
+            } else if ($this->request->post['confirm'] != $this->request->post['password']) {
+                $this->_error['confirm'] = tt('Password confirmation does not match password');
+            }
+        }
+
+        // Check the old password
+        if (!isset($this->request->post['old_password']) || empty($this->request->post['old_password'])) {
+            $this->_error['old_password'] = tt('Old password is required');
+        } else if (!$this->model_account_user->checkPassword($this->auth->getId(), $this->request->post['old_password'])) {
+            $this->_error['old_password'] = tt('Incorrect old password');
+        }
+
+        return !$this->_error;
+    }
+
     public function subscription() {
 
         // Set headers
@@ -428,6 +542,140 @@ class ControllerAccountAccount extends Controller {
 
     }
 
+    public function affiliate() {
+
+        // Set headers
+        $this->document->setTitle(tt('Affiliate'));
+
+        // Redirect if user is already logged
+        if (!$this->auth->isLogged()) {
+            $this->response->redirect($this->url->link('account/account/login'));
+        }
+
+        // Init
+        $data = array();
+        $user = $this->model_account_user->getUser($this->auth->getId());
+
+        // Validate incoming data
+        if ('POST' == $this->request->getRequestMethod() && $this->_validateAffiliate()) {
+
+            // Save new settings
+            if ($this->model_account_affiliate->updateAffiliateInfo($this->auth->getId(), $this->request->post['currency_id'], $this->request->post['withdraw_address'])) {
+
+                // Success alert
+                $this->session->setUserMessage(array('success' => tt('You have successfully modified your settings!')));
+
+                // Add notification about new account settings
+                $this->model_account_notification->addNotification($this->auth->getId(),
+                                                                   DEFAULT_LANGUAGE_ID,
+                                                                   'security',
+                                                                   tt('Your affiliate settings has been updated'),
+                                                                   tt('If you did not make this change and believe your affiliate has been compromised, please contact us.'));
+
+                // If subscription enabled
+                if ($this->model_account_subscription->checkUserSubscription($this->auth->getId(), SECURITY_ACCOUNT_SUBSCRIPTION_ID)) {
+
+                    // Send mail
+                    $mail_data['project_name'] = PROJECT_NAME;
+
+                    $mail_data['subject'] = sprintf(tt('Your affiliate settings has been updated - %s'), PROJECT_NAME);
+                    $mail_data['message'] = tt('Your affiliate settings has been updated.') . ' ';
+                    $mail_data['message'].= tt('If you did not make this change, please contact us.');
+
+                    $mail_data['href_home']         = $this->url->link('common/home');
+                    $mail_data['href_contact']      = $this->url->link('common/contact');
+                    $mail_data['href_subscription'] = $this->url->link('account/account/subscription');
+
+                    $mail_data['href_facebook'] = URL_FACEBOOK;
+                    $mail_data['href_twitter']  = URL_TWITTER;
+                    $mail_data['href_tumblr']   = URL_TUMBLR;
+                    $mail_data['href_github']   = URL_GITHUB;
+
+                    $this->mail->setTo($user->email);
+                    $this->mail->setSubject($mail_data['subject']);
+                    $this->mail->setHtml($this->load->view('email/common.tpl', $mail_data));
+                    $this->mail->send();
+                }
+            }
+        }
+
+        // Errors
+        $data['error'] = $this->_error;
+
+        // Links
+        $data['href_ref'] = substr(URL_BASE, 0, -1) . '?ref=' . $this->auth->getId();
+
+        // Data
+        $data['total_joined']     = $this->model_account_affiliate->getTotalJoined($this->auth->getId());
+        $data['total_requests']   = $this->model_account_affiliate->getTotalVerificationRequests($this->auth->getId());
+        $data['total_purchased']  = $this->model_account_affiliate->getTotalProductsPurchased($this->auth->getId(), ORDER_PENDING_STATUS_ID);
+        $data['total_conversion'] = $data['total_joined'] ? ($data['total_requests'] + $data['total_purchased']) / $data['total_joined'] * 100 : 0;
+        $data['fee_percent']      = FEE_USER_VERIFICATION_AFFILIATE;
+        $data['fee_amount']       = FEE_USER_VERIFICATION - (FEE_USER_VERIFICATION - (FEE_USER_VERIFICATION * FEE_USER_VERIFICATION_AFFILIATE / 100));
+        $data['action']           = $this->url->link('account/account/affiliate');
+
+        // Withdrawal form
+        $data['withdraw_address']  = isset($this->request->post['withdraw_address']) ? $this->request->post['withdraw_address'] : $user->affiliate_address;
+        $data['currency_id']       = isset($this->request->post['currency_id']) ? (int) $this->request->post['currency_id'] : $user->affiliate_currency_id;
+
+        // Referals list
+        $data['referrals'] = array();
+        $referrals = $this->model_account_affiliate->getReferrals($this->auth->getId(), ORDER_PENDING_STATUS_ID);
+        foreach ($referrals as $referral) {
+            $data['referrals'][] = array('user_id'    => $referral->user_id,
+                                         'username'   => $referral->username,
+                                         'requests'   => $referral->requests,
+                                         'purchased'  => $referral->purchased,
+                                         'conversion' => $data['total_joined'] ? ($referral->requests + $referral->purchased) / $data['total_joined'] * 100 : 0,
+                                         'date_added' => date(DATE_FORMAT_DEFAULT, strtotime($referral->date_added)),
+                                         'href'       => $this->url->link('catalog/search', 'user_id=' . $referral->user_id));
+        }
+
+        // Currencies list
+        $data['currencies'] = array();
+        foreach ($this->model_common_currency->getCurrencies() as $currency) {
+            $data['currencies'][$currency->currency_id] = $currency->code;
+        }
+
+        // Load modules
+        $data['module_account'] = $this->load->controller('module/account');
+
+        $data['alert_danger']  = $this->load->controller('common/alert/danger');
+        $data['alert_success'] = $this->load->controller('common/alert/success');
+
+        $data['footer'] = $this->load->controller('common/footer');
+        $data['header'] = $this->load->controller('common/header');
+
+        $data['module_breadcrumbs'] = $this->load->controller('module/breadcrumbs', array(
+            array('name' => tt('Home'), 'href' => $this->url->link('common/home'), 'active' => false),
+            array('name' => tt('Account'), 'href' => $this->url->link('account/account'), 'active' => false),
+            array('name' => tt('Affiliate'), 'href' => $this->url->link('account/account/affiliate'), 'active' => true),
+        ));
+
+        // Renter the template
+        $this->response->setOutput($this->load->view('account/account/affiliate.tpl', $data));
+    }
+
+    private function _validateAffiliate() {
+
+        if (!isset($this->request->post['withdraw_address']) || empty($this->request->post['withdraw_address'])) {
+            $this->_error['withdraw_address'] = tt('Withdraw address required!');
+        } else if (!ValidatorBitcoin::addressValid($this->request->post['withdraw_address'])) {
+            $this->_error['withdraw_address'] = tt('Invalid withdraw address');
+        }
+
+        if (!isset($this->request->post['currency_id']) ||
+            empty($this->request->post['currency_id']) ||
+            !$this->currency->hasId($this->request->post['currency_id'])) {
+
+            // Critical request
+            $this->security_log->write('Wrong affiliate currency_id field');
+            $this->_error['currency_id'] = tt('Invalid currency_id');
+        }
+
+        return !$this->_error;
+    }
+
     public function login() {
 
         // Redirect if user is already logged
@@ -474,6 +722,64 @@ class ControllerAccountAccount extends Controller {
 
         // Renter the template
         $this->response->setOutput($this->load->view('account/account/login.tpl', $data));
+    }
+
+    private function _validateLogin() {
+
+        // Login by email
+        if (preg_match('/^.+[@]{1}.+$/', $this->request->post['login'])) {
+
+            $login_is_email = true;
+
+            if (!isset($this->request->post['login']) || empty($this->request->post['login'])) {
+                $this->_error['login'] = tt('Email is required');
+            } else if (!ValidatorUser::emailValid($this->request->post['login'])) {
+                $this->_error['login'] = tt('Invalid email address');
+            } else if (!$this->model_account_user->checkEmail($this->request->post['login'])) {
+                $this->_error['login'] = tt('E-Mail is not exists');
+            }
+
+        // Login by username
+        } else {
+
+            $login_is_email = false;
+
+            if (!isset($this->request->post['login']) || empty($this->request->post['login'])) {
+                $this->_error['login'] = tt('Username is required');
+            } else if (mb_strlen($this->request->post['login']) < ValidatorUser::getUsernameMinLength() || mb_strlen($this->request->post['login']) > ValidatorUser::getUsernameMaxLength()) {
+                $this->_error['username'] = sprintf(tt('Username must be between %s and %s characters'), ValidatorUser::getUsernameMinLength(), ValidatorUser::getUsernameMaxLength());
+            } else if (!ValidatorUser::usernameValid($this->request->post['login'])) {
+                $this->_error['username'] = tt('Username can only contain latin letters, numbers and hyphen');
+            } else if (!$this->model_account_user->checkUsername($this->request->post['login'])) {
+                $this->_error['login'] = tt('Username is not exists');
+            }
+        }
+
+        // Password
+        if (!isset($this->request->post['password']) || empty($this->request->post['password'])) {
+            $this->_error['password'] = tt('Password is required');
+        } else if ((mb_strlen($this->request->post['password']) < ValidatorUser::getPasswordMinLength()) || (mb_strlen($this->request->post['password']) > ValidatorUser::getPasswordMaxLength())) {
+            $this->_error['password'] = sprintf(tt('Password must be between %s and %s characters'), ValidatorUser::getPasswordMinLength(), ValidatorUser::getPasswordMaxLength());
+        } else if (!ValidatorUser::passwordValid($this->request->post['password'])) {
+            $this->_error['password'] = tt('Invalid password');
+        }
+
+        // Try to login
+        if (!isset($this->_error['login']) &&
+            !isset($this->_error['password']) &&
+            $this->auth->login($this->request->post['login'], $this->request->post['password'], $login_is_email)) {
+
+            unset($this->_error['warning']);
+            $this->model_account_user->deleteLoginAttempts($this->request->post['login']);
+        } else {
+            $this->model_account_user->addLoginAttempt($this->request->post['login']);
+
+            if (!$this->_error) {
+                $this->_error['bull'] = true;
+            }
+        }
+
+        return !$this->_error;
     }
 
     public function logout() {
@@ -591,6 +897,31 @@ class ControllerAccountAccount extends Controller {
         $this->response->setOutput($this->load->view('account/account/reset.tpl', $data));
     }
 
+    // AJAX actions begin
+
+    private function _validateReset() {
+
+        // Password
+        if (!isset($this->request->post['password']) || empty($this->request->post['password'])) {
+            $this->_error['password'] = tt('Password is required');
+        } else if ((mb_strlen($this->request->post['password']) < ValidatorUser::getPasswordMinLength()) || (mb_strlen($this->request->post['password']) > ValidatorUser::getPasswordMaxLength())) {
+            $this->_error['password'] = sprintf(tt('Password must be between %s and %s characters'), ValidatorUser::getPasswordMinLength(), ValidatorUser::getPasswordMaxLength());
+        } else if (!ValidatorUser::passwordValid($this->request->post['password'])) {
+            $this->_error['password'] = tt('Invalid password');
+        }
+
+        // Password confirm
+        if (!isset($this->request->post['confirm']) || empty($this->request->post['confirm'])) {
+            $this->_error['confirm'] = tt('Confirm is required');
+        } else if ($this->request->post['confirm'] != $this->request->post['password']) {
+            $this->_error['confirm'] = tt('Password confirmation does not match password');
+        }
+
+        return !$this->_error;
+    }
+
+    // Local helpers begin
+
     public function forgot() {
 
         // Redirect if user is already logged
@@ -664,6 +995,19 @@ class ControllerAccountAccount extends Controller {
         $this->response->setOutput($this->load->view('account/account/forgot.tpl', $data));
     }
 
+    private function _validateForgot() {
+
+        if (!isset($this->request->post['email']) || empty($this->request->post['email'])) {
+            $this->_error['email'] = tt('Email is required');
+        } else if (!ValidatorUser::emailValid($this->request->post['email'])) {
+            $this->_error['email'] = tt('Invalid email address');
+        } else if (!$this->model_account_user->checkEmail($this->request->post['email'])) {
+            $this->_error['email'] = tt('E-Mail is not exists');
+        }
+
+        return !$this->_error;
+    }
+
     public function verification() {
 
         // Redirect if user is not logged
@@ -695,8 +1039,8 @@ class ControllerAccountAccount extends Controller {
             // Save verification request into the DB
             if ($this->model_account_user->addVerificationRequest($this->auth->getId(),
                                                                   $this->currency->getId(),
+                                                                  FEE_USER_VERIFICATION,
                                                                   'pending',
-                                                                  $address,
                                                                   $code,
                                                                   $this->request->post['proof'])) {
 
@@ -715,11 +1059,6 @@ class ControllerAccountAccount extends Controller {
 
                 // Success message
                 $this->session->setUserMessage(array('success' => tt('Your verification request was sent successfully!')));
-
-            } else {
-
-                // Something wrong
-                $this->session->setUserMessage(array('danger' => tt('Undefined error! Please contact us.')));
             }
         }
 
@@ -759,6 +1098,30 @@ class ControllerAccountAccount extends Controller {
         $this->response->setOutput($this->load->view('account/account/verification.tpl', $data));
     }
 
+    private function _validateVerification() {
+
+        // Proof should be available
+        if (!isset($this->request->post['proof']) || empty($this->request->post['proof'])) {
+            $this->_error['proof'] = tt('Proof information is required!');
+        }
+
+        // Accept terms
+        if (!isset($this->request->post['accept_1']) || empty($this->request->post['accept_1']) || $this->request->post['accept_1'] != 1) {
+            $this->_error['accept_1'] = tt('You must accept terms and conditions!');
+        }
+
+        if (!isset($this->request->post['accept_2']) || empty($this->request->post['accept_2']) || $this->request->post['accept_2'] != 1) {
+            $this->_error['accept_2'] = tt('You must accept terms and conditions!');
+        }
+
+        // Common message
+        if ($this->_error) {
+            $this->session->setUserMessage(array('danger' => tt('Please check the form carefully for errors!')));
+        }
+
+        return !$this->_error;
+    }
+
     public function approve() {
 
         // Redirect if user is already logged
@@ -789,7 +1152,6 @@ class ControllerAccountAccount extends Controller {
         $captcha->getImage($this->session->getCaptcha());
     }
 
-    // AJAX actions begin
     public function uploadAvatar() {
 
         if (!$this->auth->isLogged()) {
@@ -828,231 +1190,6 @@ class ControllerAccountAccount extends Controller {
 
         $this->response->addHeader('Content-Type: application/json');
         $this->response->setOutput(json_encode($json));
-    }
-
-    // Local helpers begin
-    private function _validateLogin() {
-
-        // Login by email
-        if (preg_match('/^.+[@]{1}.+$/', $this->request->post['login'])) {
-
-            $login_is_email = true;
-
-            if (!isset($this->request->post['login']) || empty($this->request->post['login'])) {
-                $this->_error['login'] = tt('Email is required');
-            } else if (!ValidatorUser::emailValid($this->request->post['login'])) {
-                $this->_error['login'] = tt('Invalid email address');
-            } else if (!$this->model_account_user->checkEmail($this->request->post['login'])) {
-                $this->_error['login'] = tt('E-Mail is not exists');
-            }
-
-        // Login by username
-        } else {
-
-            $login_is_email = false;
-
-            if (!isset($this->request->post['login']) || empty($this->request->post['login'])) {
-                $this->_error['login'] = tt('Username is required');
-            } else if (mb_strlen($this->request->post['login']) < ValidatorUser::getUsernameMinLength() || mb_strlen($this->request->post['login']) > ValidatorUser::getUsernameMaxLength()) {
-                $this->_error['username'] = sprintf(tt('Username must be between %s and %s characters'), ValidatorUser::getUsernameMinLength(), ValidatorUser::getUsernameMaxLength());
-            } else if (!ValidatorUser::usernameValid($this->request->post['login'])) {
-                $this->_error['username'] = tt('Username can only contain latin letters, numbers and hyphen');
-            } else if (!$this->model_account_user->checkUsername($this->request->post['login'])) {
-                $this->_error['login'] = tt('Username is not exists');
-            }
-        }
-
-        // Password
-        if (!isset($this->request->post['password']) || empty($this->request->post['password'])) {
-            $this->_error['password'] = tt('Password is required');
-        } else if ((mb_strlen($this->request->post['password']) < ValidatorUser::getPasswordMinLength()) || (mb_strlen($this->request->post['password']) > ValidatorUser::getPasswordMaxLength())) {
-            $this->_error['password'] = sprintf(tt('Password must be between %s and %s characters'), ValidatorUser::getPasswordMinLength(), ValidatorUser::getPasswordMaxLength());
-        } else if (!ValidatorUser::passwordValid($this->request->post['password'])) {
-            $this->_error['password'] = tt('Invalid password');
-        }
-
-        // Try to login
-        if (!isset($this->_error['login']) &&
-            !isset($this->_error['password']) &&
-            $this->auth->login($this->request->post['login'], $this->request->post['password'], $login_is_email)) {
-
-            unset($this->_error['warning']);
-            $this->model_account_user->deleteLoginAttempts($this->request->post['login']);
-        } else {
-            $this->model_account_user->addLoginAttempt($this->request->post['login']);
-
-            if (!$this->_error) {
-                $this->_error['bull'] = true;
-            }
-        }
-
-        return !$this->_error;
-    }
-
-    private function _validateReset() {
-
-        // Password
-        if (!isset($this->request->post['password']) || empty($this->request->post['password'])) {
-            $this->_error['password'] = tt('Password is required');
-        } else if ((mb_strlen($this->request->post['password']) < ValidatorUser::getPasswordMinLength()) || (mb_strlen($this->request->post['password']) > ValidatorUser::getPasswordMaxLength())) {
-            $this->_error['password'] = sprintf(tt('Password must be between %s and %s characters'), ValidatorUser::getPasswordMinLength(), ValidatorUser::getPasswordMaxLength());
-        } else if (!ValidatorUser::passwordValid($this->request->post['password'])) {
-            $this->_error['password'] = tt('Invalid password');
-        }
-
-        // Password confirm
-        if (!isset($this->request->post['confirm']) || empty($this->request->post['confirm'])) {
-            $this->_error['confirm'] = tt('Confirm is required');
-        } else if ($this->request->post['confirm'] != $this->request->post['password']) {
-            $this->_error['confirm'] = tt('Password confirmation does not match password');
-        }
-
-        return !$this->_error;
-    }
-
-    private function _validateForgot() {
-
-        if (!isset($this->request->post['email']) || empty($this->request->post['email'])) {
-            $this->_error['email'] = tt('Email is required');
-        } else if (!ValidatorUser::emailValid($this->request->post['email'])) {
-            $this->_error['email'] = tt('Invalid email address');
-        } else if (!$this->model_account_user->checkEmail($this->request->post['email'])) {
-            $this->_error['email'] = tt('E-Mail is not exists');
-        }
-
-        return !$this->_error;
-    }
-
-    private function _validateVerification() {
-
-        // Proof should be available
-        if (!isset($this->request->post['proof']) || empty($this->request->post['proof'])) {
-            $this->_error['proof'] = tt('Proof information is required!');
-        }
-
-        // Accept terms
-        if (!isset($this->request->post['accept_1']) || empty($this->request->post['accept_1']) || $this->request->post['accept_1'] != 1) {
-            $this->_error['accept_1'] = tt('You must accept terms and conditions!');
-        }
-
-        if (!isset($this->request->post['accept_2']) || empty($this->request->post['accept_2']) || $this->request->post['accept_2'] != 1) {
-            $this->_error['accept_2'] = tt('You must accept terms and conditions!');
-        }
-
-        // Common message
-        if ($this->_error) {
-            $this->session->setUserMessage(array('danger' => tt('Please check the form carefully for errors!')));
-        }
-
-        return !$this->_error;
-    }
-
-    private function _validateCreate() {
-
-        // Username
-        if (!isset($this->request->post['username']) || empty($this->request->post['username'])) {
-            $this->_error['username'] = tt('Username is required');
-        } else if ($this->model_account_user->checkUsername($this->request->post['username'])) {
-            $this->_error['username'] = tt('Username is already registered');
-        } else if (mb_strlen($this->request->post['username']) < ValidatorUser::getUsernameMinLength() || mb_strlen($this->request->post['username']) > ValidatorUser::getUsernameMaxLength()) {
-            $this->_error['username'] = sprintf(tt('Username must be between %s and %s characters'), ValidatorUser::getUsernameMinLength(), ValidatorUser::getUsernameMaxLength());
-        } else if (!ValidatorUser::usernameValid($this->request->post['username'])) {
-            $this->_error['username'] = tt('Username can only contain latin letters, numbers and hyphen');
-        }
-
-        // Email
-        if (!isset($this->request->post['email']) || empty($this->request->post['email'])) {
-            $this->_error['email'] = tt('Email is required');
-        } else if ($this->model_account_user->checkEmail($this->request->post['email'])) {
-            $this->_error['email'] = tt('Email address is already registered or reserved');
-        } else if (!ValidatorUser::emailValid($this->request->post['email'])) {
-            $this->_error['email'] = tt('Invalid email address');
-        }
-
-        // Password
-        if (!isset($this->request->post['password']) || empty($this->request->post['password'])) {
-            $this->_error['password'] = tt('Password is required');
-        } else if ((mb_strlen($this->request->post['password']) < ValidatorUser::getPasswordMinLength()) || (mb_strlen($this->request->post['password']) > ValidatorUser::getPasswordMaxLength())) {
-            $this->_error['password'] = sprintf(tt('Password must be between %s and %s characters'), ValidatorUser::getPasswordMinLength(), ValidatorUser::getPasswordMaxLength());
-        } else if (!ValidatorUser::passwordValid($this->request->post['password'])) {
-            $this->_error['password'] = tt('Invalid password');
-        }
-
-        // Password confirm
-        if (!isset($this->request->post['confirm']) || empty($this->request->post['confirm'])) {
-            $this->_error['confirm'] = tt('Confirm is required');
-        } else if ($this->request->post['confirm'] != $this->request->post['password']) {
-            $this->_error['confirm'] = tt('Password confirmation does not match password');
-        }
-
-        // Captcha verification
-        if (!isset($this->request->post['captcha']) || empty($this->request->post['captcha'])) {
-            $this->_error['captcha'] = tt('Magic word is required');
-        } else if (strtoupper($this->request->post['captcha']) != strtoupper($this->session->getCaptcha())) {
-            $this->_error['captcha'] = tt('Incorrect magic word');
-        }
-
-        // Accept terms
-        if (!isset($this->request->post['accept']) || empty($this->request->post['accept']) || $this->request->post['accept'] != 1) {
-            $this->_error['accept'] = tt('You must accept Terms of Service to continue registration');
-        }
-
-        return !$this->_error;
-    }
-
-    private function _validateUpdate() {
-
-        // Username
-        if (!isset($this->request->post['username']) || empty($this->request->post['username'])) {
-            $this->_error['username'] = tt('Username is required');
-        } else if (mb_strtolower($this->request->post['username']) != mb_strtolower($this->auth->getUsername()) && $this->model_account_user->checkUsername($this->request->post['username'])) {
-            $this->_error['username'] = tt('Username is already registered');
-        } else if (mb_strlen($this->request->post['username']) < ValidatorUser::getUsernameMinLength() || mb_strlen($this->request->post['username']) > ValidatorUser::getUsernameMaxLength()) {
-            $this->_error['username'] = sprintf(tt('Username must be between %s and %s characters'), ValidatorUser::getUsernameMinLength(), ValidatorUser::getUsernameMaxLength());
-        } else if (!ValidatorUser::usernameValid($this->request->post['username'])) {
-            $this->_error['username'] = tt('Username can only contain latin letters, numbers and hyphen');
-        }
-
-        // Email
-        if (!isset($this->request->post['email']) || empty($this->request->post['email'])) {
-            $this->_error['email'] = tt('Email is required');
-        } else if (mb_strtolower($this->request->post['email']) != mb_strtolower($this->auth->getEmail()) && $this->model_account_user->checkEmail($this->request->post['email'])) {
-            $this->_error['email'] = tt('Email address is already registered or reserved');
-        } else if (!ValidatorUser::emailValid($this->request->post['email'])) {
-            $this->_error['email'] = tt('Invalid email address');
-        }
-
-        if (!isset($this->request->post['confirm']) || !isset($this->request->post['password'])) {
-            $this->_error['password'] = tt('Wrong password fields');
-            $this->security_log->write('Wrong password fields');
-
-        } else if (!empty($this->request->post['password']) || !empty($this->request->post['confirm'])) {
-
-            // New password
-            if (empty($this->request->post['password'])) {
-                $this->_error['password'] = tt('Password is required');
-            } else if ((mb_strlen($this->request->post['password']) < ValidatorUser::getPasswordMinLength()) || (mb_strlen($this->request->post['password']) > ValidatorUser::getPasswordMaxLength())) {
-                $this->_error['password'] = sprintf(tt('Password must be between %s and %s characters'), ValidatorUser::getPasswordMinLength(), ValidatorUser::getPasswordMaxLength());
-            } else if (!ValidatorUser::passwordValid($this->request->post['password'])) {
-                $this->_error['password'] = tt('Invalid password');
-            }
-
-            // New password confirm
-            if (empty($this->request->post['confirm'])) {
-                $this->_error['confirm'] = tt('Confirm is required');
-            } else if ($this->request->post['confirm'] != $this->request->post['password']) {
-                $this->_error['confirm'] = tt('Password confirmation does not match password');
-            }
-        }
-
-        // Check the old password
-        if (!isset($this->request->post['old_password']) || empty($this->request->post['old_password'])) {
-            $this->_error['old_password'] = tt('Old password is required');
-        } else if (!$this->model_account_user->checkPassword($this->auth->getId(), $this->request->post['old_password'])) {
-            $this->_error['old_password'] = tt('Incorrect old password');
-        }
-
-        return !$this->_error;
     }
 
     private function _validateAvatar() {

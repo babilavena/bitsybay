@@ -694,12 +694,15 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user` (
   `user_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `referrer_user_id` int(10) unsigned NULL,
   `file_quota` int(10) unsigned NOT NULL,
   `status` enum('1','0') NOT NULL,
   `buyer` enum('1','0') NOT NULL,
   `seller` enum('1','0') NOT NULL,
   `approved` enum('1','0') NOT NULL,
   `verified` enum('1','0') NOT NULL,
+  `affiliate_currency_id` int(10) unsigned NULL,
+  `affiliate_address` varchar(255) NOT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
@@ -708,7 +711,19 @@ CREATE TABLE `user` (
   `date_added` datetime NOT NULL,
   `date_modified` datetime NOT NULL,
   `date_visit` datetime NOT NULL,
-  PRIMARY KEY (`user_id`)
+  PRIMARY KEY (`user_id`),
+  INDEX `fk_user_referrer_user_id` (`referrer_user_id` ASC),
+  INDEX `fk_user_affiliate_currency_id` (`affiliate_currency_id` ASC),
+  CONSTRAINT `fk_user_referrer_user_id`
+    FOREIGN KEY (`referrer_user_id`)
+    REFERENCES `user` (`user_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_user_affiliate_currency_id`
+    FOREIGN KEY (`affiliate_currency_id`)
+    REFERENCES `currency` (`currency_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -791,7 +806,8 @@ CREATE TABLE IF NOT EXISTS `user_verification_request` (
   `user_verification_request_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` INT UNSIGNED NOT NULL,
   `currency_id` INT UNSIGNED NOT NULL,
-  `status` ENUM('pending', 'approved', 'declined') NOT NULL,
+  `amount` decimal(16,8) NOT NULL,
+  `status` ENUM('pending', 'processed', 'approved', 'declined') NOT NULL,
   `address` VARCHAR(255) NOT NULL,
   `code` VARCHAR(255) NOT NULL,
   `proof` LONGTEXT NOT NULL,

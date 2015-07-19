@@ -23,6 +23,7 @@ class ControllerModuleAccount extends Controller {
         $data['href_account_account_logout'] = $this->url->link('account/account/logout');
         $data['href_account_account_verification'] = $this->url->link('account/account/verification');
         $data['href_account_account_subscription'] = $this->url->link('account/account/subscription');
+        $data['href_account_account_affiliate'] = $this->url->link('account/account/affiliate');
 
         $data['verified'] = !$this->auth->isVerified();
 

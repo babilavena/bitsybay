@@ -93,6 +93,11 @@ $registry->set('auth', $auth);
 $security_log = new Log('security.txt', $auth->getId(), $request->getRemoteAddress());
 $registry->set('security_log', $security_log);
 
+// Tracking Code
+if (isset($request->get['ref'])) {
+    setcookie('referrer', (int) $request->get['ref'], time() + 3600 * 24 * 1000, '/');
+}
+
 // Front Controller
 $controller = new Front($registry);
 

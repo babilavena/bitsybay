@@ -64,6 +64,7 @@ final class Url {
         $this->_addRewrite('account/account/logout', 'logout');
         $this->_addRewrite('account/account/forgot', 'forgot');
         $this->_addRewrite('account/account/reset', 'reset');
+        $this->_addRewrite('account/account/affiliate', 'affiliate');
         $this->_addRewrite('account/account/verification', 'verification');
         $this->_addRewrite('account/account/subscription', 'subscriptions');
 

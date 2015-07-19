@@ -341,9 +341,10 @@ class ModelAccountUser extends Model {
     * @param int $file_quota Mb
     * @param string $approval_code
     * @param string $approved
+    * @param bool|int $referrer_user_id
     * @return int|bool Returns user_id or false if throw exception
     */
-    public function createUser($username, $email, $password, $buyer, $seller, $status, $verified, $file_quota, $approval_code, $approved) {
+    public function createUser($username, $email, $password, $buyer, $seller, $status, $verified, $file_quota, $approval_code, $approved, $referrer_user_id = false) {
 
         try {
             $email     = mb_strtolower($email);
@@ -364,9 +365,12 @@ class ModelAccountUser extends Model {
                                             `approval_code` = :approval_code,
                                             `approved`      = :approved,
 
-                                            `date_added`    = NOW(),
-                                            `date_modified` = NOW(),
-                                            `date_visit`    = NOW()
+                                            `referrer_user_id`      = ' . ($referrer_user_id ? (int) $referrer_user_id : 'NULL') . ',
+                                            `affiliate_address`     = NULL,
+                                            `affiliate_currency_id` = NULL,
+                                            `date_added`            = NOW(),
+                                            `date_modified`         = NOW(),
+                                            `date_visit`            = NOW()
                                             ');
 
             $statement->execute(array(  ':file_quota'    => $file_quota,
@@ -397,19 +401,19 @@ class ModelAccountUser extends Model {
     *
     * @param int $user_id
     * @param int $currency_id
+    * @param float $amount
     * @param string $status ENUM('pending','approved','declined')
-    * @param string $address Payment address
     * @param string $code Unique verification code
     * @param string $proof Proof info
     * @return int|bool Returns login_attempt_id or false if throw exception
     */
-    public function addVerificationRequest($user_id, $currency_id, $status, $address, $code, $proof) {
+    public function addVerificationRequest($user_id, $currency_id, $amount, $status, $code, $proof) {
         try {
             $statement = $this->db->prepare('INSERT INTO `user_verification_request` SET
             `user_id` = ?,
             `currency_id` = ?,
+            `amount` = ?,
             `status` = ?,
-            `address` = ?,
             `code` = ?,
             `proof` = ?,
             `comment` = NULL,
@@ -420,8 +424,8 @@ class ModelAccountUser extends Model {
                 array(
                     $user_id,
                     $currency_id,
+                    $amount,
                     $status,
-                    $address,
                     $code,
                     $proof
                 )
