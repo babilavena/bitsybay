@@ -45,7 +45,7 @@
               <span class="glyphicon glyphicon-circle-arrow-right"></span>&nbsp;&nbsp;&nbsp;The verification process is based on our expert judgement and we charge a small fee for this.<br />
               <span class="glyphicon glyphicon-circle-arrow-right"></span>&nbsp;&nbsp;&nbsp;Be sure that the information provided is correct and that all relevant facts and links are provided.<br />
               <span class="glyphicon glyphicon-circle-arrow-right"></span>&nbsp;&nbsp;&nbsp;We do not refund any payments and neither do we guarantee that your request will be approved.<br />
-              <span class="glyphicon glyphicon-circle-arrow-right"></span>&nbsp;&nbsp;&nbsp;The review and verification process takes between 1 to 7 days.<br />
+              <span class="glyphicon glyphicon-circle-arrow-right"></span>&nbsp;&nbsp;&nbsp;The review and verification process takes between 1 to 14 days.<br />
             </p>
           </div>
         </div>
