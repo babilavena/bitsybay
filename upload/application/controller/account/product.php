@@ -1412,8 +1412,6 @@ class ControllerAccountProduct extends Controller {
         return $data;
     }
 
-    // AJAX actions begin
-
     public function update() {
 
         $product_id = 0;
@@ -1635,6 +1633,8 @@ class ControllerAccountProduct extends Controller {
         $this->response->setOutput($this->load->view('account/product/product_form.tpl', $data));
     }
 
+    // AJAX actions begin
+
     public function delete() {
 
         // Redirect to product create if product_id is not exists
@@ -1765,67 +1765,6 @@ class ControllerAccountProduct extends Controller {
 
     // Local helpers begin
 
-    public function uploadPackage() {
-
-        if (!$this->auth->isLogged()) {
-            $this->security_log->write('Trying to access to uploadPackage method from guest request');
-            exit;
-        }
-
-        if (!$this->request->isAjax()) {
-            $this->security_log->write('Trying to access to uploadPackage method without ajax request');
-            exit;
-        }
-
-        $json = array('error_message' => tt('Undefined upload error'));
-
-        if ('POST' == $this->request->getRequestMethod() && $this->_validatePackage()) {
-
-            $file_content = file_get_contents($this->request->files['package']['tmp_name']);
-
-            // Generate unique path names
-            $filename  = '_' . sha1(rand().microtime().$this->auth->getId());
-
-            // Create user's folder if not exists
-            if (!is_dir(DIR_STORAGE . $this->auth->getId())) {
-                mkdir(DIR_STORAGE . $this->auth->getId(), 0755);
-            }
-
-            // Return result
-            if (move_uploaded_file($this->request->files['package']['tmp_name'], DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR . $filename . '.' . STORAGE_FILE_EXTENSION)) {
-                $json = array('success_message'   => tt('Package file was successfully uploaded!'),
-                              'product_file_id'   => $filename,
-                              'hash_md5'          => 'MD5:  ' . md5($file_content),
-                              'hash_sha1'         => 'SHA1: ' . sha1($file_content));
-            }
-
-        } else if (isset($this->_error['file']['common'])) {
-            $json = array('error_message' => $this->_error['file']['common']);
-        }
-
-
-        $this->response->addHeader('Content-Type: application/json');
-        $this->response->setOutput(json_encode($json));
-    }
-
-    private function _validatePackage() {
-
-        if (!isset($this->request->files['package']['tmp_name']) || !isset($this->request->files['package']['name'])) {
-
-            $this->_error['file']['common'] = tt('Uploaded package file is wrong!');
-            $this->security_log->write('Uploaded package file is wrong (tmp_name or name indexes is not exists)');
-
-        } else if (!ValidatorUpload::fileValid( $this->request->files['package'],
-                                                $this->auth->getFileQuota() - ($this->storage->getUsedSpace($this->auth->getId()) - filesize($this->request->files['package']['tmp_name']) / 1000000),
-                                                STORAGE_FILE_EXTENSION)) {
-
-            $this->_error['file']['common'] = sprintf(tt('Package file is a not valid %s archive!'), mb_strtoupper(STORAGE_FILE_EXTENSION));
-            $this->security_log->write('Uploaded package file is not valid');
-        }
-
-        return !$this->_error;
-    }
-
     public function uploadImage() {
 
         if (!$this->auth->isLogged()) {
@@ -1892,6 +1831,67 @@ class ControllerAccountProduct extends Controller {
 
             $this->_error['image']['common'] = tt('This is a not valid image file!');
             $this->security_log->write('Uploaded image file is not valid');
+        }
+
+        return !$this->_error;
+    }
+
+    public function uploadPackage() {
+
+        if (!$this->auth->isLogged()) {
+            $this->security_log->write('Trying to access to uploadPackage method from guest request');
+            exit;
+        }
+
+        if (!$this->request->isAjax()) {
+            $this->security_log->write('Trying to access to uploadPackage method without ajax request');
+            exit;
+        }
+
+        $json = array('error_message' => tt('Undefined upload error'));
+
+        if ('POST' == $this->request->getRequestMethod() && $this->_validatePackage()) {
+
+            $file_content = file_get_contents($this->request->files['package']['tmp_name']);
+
+            // Generate unique path names
+            $filename  = '_' . sha1(rand().microtime().$this->auth->getId());
+
+            // Create user's folder if not exists
+            if (!is_dir(DIR_STORAGE . $this->auth->getId())) {
+                mkdir(DIR_STORAGE . $this->auth->getId(), 0755);
+            }
+
+            // Return result
+            if (move_uploaded_file($this->request->files['package']['tmp_name'], DIR_STORAGE . $this->auth->getId() . DIR_SEPARATOR . $filename . '.' . STORAGE_FILE_EXTENSION)) {
+                $json = array('success_message'   => tt('Package file was successfully uploaded!'),
+                              'product_file_id'   => $filename,
+                              'hash_md5'          => 'MD5:  ' . md5($file_content),
+                              'hash_sha1'         => 'SHA1: ' . sha1($file_content));
+            }
+
+        } else if (isset($this->_error['file']['common'])) {
+            $json = array('error_message' => $this->_error['file']['common']);
+        }
+
+
+        $this->response->addHeader('Content-Type: application/json');
+        $this->response->setOutput(json_encode($json));
+    }
+
+    private function _validatePackage() {
+
+        if (!isset($this->request->files['package']['tmp_name']) || !isset($this->request->files['package']['name'])) {
+
+            $this->_error['file']['common'] = tt('Uploaded package file is wrong!');
+            $this->security_log->write('Uploaded package file is wrong (tmp_name or name indexes is not exists)');
+
+        } else if (!ValidatorUpload::fileValid( $this->request->files['package'],
+                                                $this->auth->getFileQuota() - ($this->storage->getUsedSpace($this->auth->getId()) - filesize($this->request->files['package']['tmp_name']) / 1000000),
+                                                STORAGE_FILE_EXTENSION)) {
+
+            $this->_error['file']['common'] = sprintf(tt('Package file is a not valid %s archive!'), mb_strtoupper(STORAGE_FILE_EXTENSION));
+            $this->security_log->write('Uploaded package file is not valid');
         }
 
         return !$this->_error;

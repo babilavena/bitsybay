@@ -34,6 +34,7 @@ class ControllerAccountAccount extends Controller {
         $this->load->library('captcha/captcha');
     }
 
+    // Actions
     public function index() {
 
         $this->document->setTitle(tt('Profile'));
