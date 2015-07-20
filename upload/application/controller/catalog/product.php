@@ -109,9 +109,10 @@ class ControllerCatalogProduct extends Controller {
         $data['verified']          = $product_info->verified;
 
         $image_info = $this->model_catalog_product->getProductImageInfo($product_info->main_product_image_id);
-        $data['product_image_url']     = $this->cache->image($product_info->main_product_image_id, $product_info->user_id, 350, 350, $image_info->watermark, false, true);
-        $data['product_image_orig_url'] = $this->cache->image($product_info->main_product_image_id, $product_info->user_id, 570, 570, $image_info->watermark, false, true);
-        $data['product_image_id']  = $product_info->main_product_image_id;
+
+        $data['product_image_url']      = $this->cache->image($product_info->main_product_image_id, $product_info->user_id, 350, 1000, $image_info->watermark, false, true);
+        $data['product_image_orig_url'] = $this->cache->image($product_info->main_product_image_id, $product_info->user_id, 570, 1000, $image_info->watermark, false, true);
+        $data['product_image_id']       = $product_info->main_product_image_id;
 
         switch ($product_info->order_status_id) {
             case ORDER_APPROVED_STATUS_ID:
@@ -124,10 +125,10 @@ class ControllerCatalogProduct extends Controller {
                 $data['product_order_status'] = $product_info->user_id == $this->auth->getId() ? 'approved' : false;
         }
 
-        $data['product_demo']      = $product_info->main_product_demo_id ? true : false;
-        $data['product_favorites'] = $product_info->favorites ? $product_info->favorites : false;
-        $data['product_favorite']  = $product_info->favorite;
-        $data['product_description'] = nl2br($product_info->description);
+        $data['product_demo']          = $product_info->main_product_demo_id ? true : false;
+        $data['product_favorites']     = $product_info->favorites ? $product_info->favorites : false;
+        $data['product_favorite']      = $product_info->favorite;
+        $data['product_description']   = nl2br($product_info->description);
 
         $data['product_href_view']     = $this->url->link('catalog/product', 'product_id=' . $product_info->product_id);
         $data['product_href_download'] = $this->url->link('catalog/product/download', 'product_id=' . $product_info->product_id);
@@ -150,7 +151,7 @@ class ControllerCatalogProduct extends Controller {
                 $data['product_images'][] = array(
                     'title'    => $image->title,
                     'preview'  => $this->cache->image($image->product_image_id, $product_info->user_id, 50, 50),
-                    'original' => $this->cache->image($image->product_image_id, $product_info->user_id, 570, 570, $image->watermark));
+                    'original' => $this->cache->image($image->product_image_id, $product_info->user_id, 570, 1000, $image->watermark, false, true));
             }
         }
 
