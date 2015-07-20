@@ -783,6 +783,7 @@
 
             $('#aImages .text-danger, #images .alert-danger, #imagePicture' + r + ' span').remove();
 
+            $('#images .alert.alert-dismissible.alert-success').remove();
             $('#images').prepend('<div class="alert alert-dismissible alert-success"><button type="button" class="close" data-dismiss="alert">×</button> ' + e['success_message'] + '</div>');
             $('#productImageId' + r).val(e['product_image_id']);
             $('#imagePicture' + r + ' img').removeClass('hide').attr('src', e['url']);
