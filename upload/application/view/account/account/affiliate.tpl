@@ -58,8 +58,9 @@
       </div>
       <ul class="nav nav-tabs">
         <li class="active"><a href="#affiliateReport" data-toggle="tab"><?php echo tt('Reports') ?></a></li>
+        <li><a href="#affiliateInvite" data-toggle="tab"><?php echo tt('Invite') ?><?php echo isset($error['invite_email']) ? ' <span class="text-danger">*</span>' : false ?></a></li>
         <li><a href="#affiliateLinks" data-toggle="tab"><?php echo tt('Links') ?></a></li>
-        <li><a href="#affiliateSettings" data-toggle="tab"><?php echo tt('Settings') ?></a></li>
+        <li><a href="#affiliateSettings" data-toggle="tab"><?php echo tt('Settings') ?><?php echo isset($error['currency_id']) || isset($error['withdraw_address']) ? ' <span class="text-danger">*</span>' : false ?></a></li>
       </ul>
       <div class="tab-content">
         <div class="tab-pane fade" id="affiliateSettings">
@@ -71,7 +72,7 @@
           <div class="row">
             <div class="col-lg-12">
               <div class="well">
-                <form action="<?php echo $action ?>" method="POST" class="form-inline">
+                <form action="<?php echo $action_settings ?>" method="POST" class="form-inline">
                   <span class="<?php if (isset($error['withdraw_address'])) { ?> has-error<?php } ?>">
                     <input type="text" name="withdraw_address" value="<?php echo $withdraw_address ?>" placeholder="<?php echo tt('Address') ?>" size="50" class="form-control form-group" />
                   </span>
@@ -94,6 +95,29 @@
             </div>
           </div>
         </div>
+        <div class="tab-pane fade" id="affiliateInvite">
+          <div class="row">
+            <div class="col-lg-12">
+              <legend><?php echo tt('Invite by Email') ?></legend>
+              <p><?php echo sprintf(tt('To invite others to join %s, submit their email address below.'), PROJECT_NAME) ?></p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="well">
+                <form action="<?php echo $action_invite_email ?>" method="POST" class="form-inline">
+                  <span class="<?php if (isset($error['invite_email'])) { ?> has-error<?php } ?>">
+                    <input type="text" name="invite_email" value="<?php echo $invite_email ?>" placeholder="<?php echo tt('Email') ?>" size="50" class="form-control form-group" />
+                  </span>
+                  <button type="submit" class="btn btn-primary form-control form-group" id="affiliateInviteSend"><?php echo tt('Send') ?></button>
+                  <?php if (isset($error['invite_email'])) { ?>
+                    <div class="text-danger small"><?php echo $error['invite_email'] ?></div>
+                  <?php } ?>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="tab-pane fade" id="affiliateLinks">
           <div class="row">
             <div class="col-lg-12">
@@ -108,33 +132,33 @@
           </div>
         </div>
         <div class="tab-pane fade active in" id="affiliateReport">
-        <div class="row">
-          <div class="col-lg-12">
-            <legend><?php echo tt('Your referrals') ?></legend>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-lg-12 text-center">
-            <div class="col-lg-3 col-md-3 col-sm-3 alert alert-warning" >
-              <h5><?php echo tt('Products Purchased') ?></h5>
-              <h2><?php echo $total_purchased ?></h2>
-            </div>
-            <div class="col-lg-3 col-lg-offset-1 col-rg-offset-1 col-md-3 col-md-offset-1 col-sm-3 col-sm-offset-1 alert alert-success" >
-              <h5><?php echo tt('Verifies Requested') ?></h5>
-              <h2>
-                <?php echo $total_requests ?>
-                <?php if ($total_joined) { ?>
-                  <sup class="small"><?php echo $total_joined ?></sup>
-                <?php } ?>
-              </h2>
-            </div>
-            <div class="col-lg-3 col-lg-offset-1 col-md-3 col-md-offset-1 col-sm-3 col-sm-offset-1 alert alert-info" >
-              <h5><?php echo tt('Conversion Rate') ?></h5>
-              <h2><?php echo $total_conversion ?> <sup class="small">%<sup></h2>
+          <div class="row">
+            <div class="col-lg-12">
+              <legend><?php echo tt('Your referrals') ?></legend>
             </div>
           </div>
-        </div>
-        <div class="row">
+          <div class="row">
+            <div class="col-lg-12 text-center">
+              <div class="col-lg-3 col-md-3 col-sm-3 alert alert-warning" >
+                <h5><?php echo tt('Products Purchased') ?></h5>
+                <h2><?php echo $total_purchased ?></h2>
+              </div>
+              <div class="col-lg-3 col-lg-offset-1 col-rg-offset-1 col-md-3 col-md-offset-1 col-sm-3 col-sm-offset-1 alert alert-success" >
+                <h5><?php echo tt('Verifies Requested') ?></h5>
+                <h2>
+                  <?php echo $total_requests ?>
+                  <?php if ($total_joined) { ?>
+                    <sup class="small"><?php echo $total_joined ?></sup>
+                  <?php } ?>
+                </h2>
+              </div>
+              <div class="col-lg-3 col-lg-offset-1 col-md-3 col-md-offset-1 col-sm-3 col-sm-offset-1 alert alert-info" >
+                <h5><?php echo tt('Conversion Rate') ?></h5>
+                <h2><?php echo $total_conversion ?> <sup class="small">%<sup></h2>
+              </div>
+            </div>
+          </div>
+          <div class="row">
           <div class="col-lg-12">
             <?php if (!$referrals) { ?>
               <?php echo tt('No Referrals Found.') ?>
@@ -164,7 +188,7 @@
             <?php } ?>
           </div>
         </div>
-      </div>
+        </div>
       </div>
     </div>
   </div>

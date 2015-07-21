@@ -68,7 +68,8 @@
     <h3><?php echo tt('Get started') ?></h3>
       <p><a href="<?php echo $href_catalog_search_favorites ?>"><?php echo tt('Favorites') ?></a></p>
       <p><a href="<?php echo $href_catalog_search_purchased ?>"><?php echo tt('Purchases') ?></a></p>
-      <p><a href="<?php echo $href_account_product_create ?>" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i> <?php echo tt('Make coins') ?></a></p>
+      <p><a href="<?php echo $href_account_product_create ?>" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i> <?php echo tt('Make coins') ?> </a></p>
+      <p><a href="<?php echo $href_account_account_affiliate ?>" class="btn btn-primary"><i class="glyphicon glyphicon-send"></i> <?php echo tt('Invite friend') ?></a></p>
   </div>
 </div>
 <div class="row">

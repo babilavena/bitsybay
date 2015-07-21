@@ -25,6 +25,7 @@ $body    = "";
 
 $module_link_enabled = true;
 $module_link_title   = "";
+$module_link_button  = "";
 $module_link_href    = "";
 
 /*
@@ -125,8 +126,9 @@ if ($statement->rowCount()) {
             $mail_data['href_github']   = URL_GITHUB;
 
             if (!empty($module_link_enabled)) {
-                $mail_data['module_link_title'] = $module_link_title;
-                $mail_data['module_link_href']  = $module_link_href;
+                $mail_data['module_link_title']  = $module_link_title;
+                $mail_data['module_link_button'] = $module_link_button;
+                $mail_data['module_link_href']   = $module_link_href;
                 $mail_data['module'] = helper_load_view('email/module/link.tpl', $mail_data);
             }
 

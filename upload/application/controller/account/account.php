@@ -59,6 +59,7 @@ class ControllerAccountAccount extends Controller {
         $data['href_catalog_search_favorites']     = $this->url->link('catalog/search', 'favorites=1');
         $data['href_catalog_search_purchased']     = $this->url->link('catalog/search', 'purchased=1');
         $data['href_account_account_update']       = $this->url->link('account/account/update');
+        $data['href_account_account_affiliate']    = $this->url->link('account/account/affiliate');
         $data['href_account_product_create']       = $this->url->link('account/product');
         $data['href_account_account_verification'] = $this->url->link('account/account/verification');
 
@@ -448,47 +449,96 @@ class ControllerAccountAccount extends Controller {
         // Init
         $data = array();
         $user = $this->model_account_user->getUser($this->auth->getId());
+        $link = substr(URL_BASE, 0, -1) . '?ref=' . $this->auth->getId();
 
         // Validate incoming data
-        if ('POST' == $this->request->getRequestMethod() && $this->_validateAffiliate()) {
+        if ('POST' == $this->request->getRequestMethod()) {
 
-            // Save new settings
-            if ($this->model_account_affiliate->updateAffiliateInfo($this->auth->getId(), $this->request->post['currency_id'], $this->request->post['withdraw_address'])) {
+            // Request is valid
+            if ($this->_validateAffiliate()) {
 
-                // Success alert
-                $this->session->setUserMessage(array('success' => tt('You have successfully modified your settings!')));
+                // Invite request
+                if (isset($this->request->get['invite_email'])) {
 
-                // Add notification about new account settings
-                $this->model_account_notification->addNotification($this->auth->getId(),
-                                                                   DEFAULT_LANGUAGE_ID,
-                                                                   'security',
-                                                                   tt('Your affiliate settings has been updated'),
-                                                                   tt('If you did not make this change and believe your affiliate has been compromised, please contact us.'));
-
-                // If subscription enabled
-                if ($this->model_account_subscription->checkUserSubscription($this->auth->getId(), SECURITY_ACCOUNT_SUBSCRIPTION_ID)) {
-
-                    // Send mail
+                    // Send invite via email
                     $mail_data['project_name'] = PROJECT_NAME;
 
-                    $mail_data['subject'] = sprintf(tt('Your affiliate settings has been updated - %s'), PROJECT_NAME);
-                    $mail_data['message'] = tt('Your affiliate settings has been updated.') . ' ';
-                    $mail_data['message'].= tt('If you did not make this change, please contact us.');
+                    $mail_data['subject'] = sprintf(tt('Join %s in %s!'), $this->auth->getUsername(), PROJECT_NAME);
+                    $mail_data['message'] = sprintf(tt('@%s has invited you to join %s!'), $this->auth->getUsername(), PROJECT_NAME);
 
                     $mail_data['href_home']         = $this->url->link('common/home');
                     $mail_data['href_contact']      = $this->url->link('common/contact');
                     $mail_data['href_subscription'] = $this->url->link('account/account/subscription');
+                    $mail_data['href_approve']      = $link;
 
                     $mail_data['href_facebook'] = URL_FACEBOOK;
                     $mail_data['href_twitter']  = URL_TWITTER;
                     $mail_data['href_tumblr']   = URL_TUMBLR;
                     $mail_data['href_github']   = URL_GITHUB;
 
-                    $this->mail->setTo($user->email);
+                    $mail_data['module_link_title']  = tt('Accept the invitation below');
+                    $mail_data['module_link_button'] = sprintf(tt('Join %s'), PROJECT_NAME);
+                    $mail_data['module_link_href']   = $link;
+                    $mail_data['module'] = $this->load->view('email/module/link.tpl', $mail_data);
+
+                    $this->mail->setTo($this->request->post['invite_email']);
                     $this->mail->setSubject($mail_data['subject']);
                     $this->mail->setHtml($this->load->view('email/common.tpl', $mail_data));
                     $this->mail->send();
+
+                     // Success alert
+                    $this->session->setUserMessage(array('success' => sprintf(tt('We\'ve sent a link to join %s to %s'), PROJECT_NAME, $this->request->post['invite_email'])));
                 }
+
+                // Save new settings
+                else if (isset($this->request->get['settings'])) {
+
+                    // Update settings
+                    $this->model_account_affiliate->updateAffiliateInfo($this->auth->getId(),
+                                                                        $this->request->post['currency_id'],
+                                                                        $this->request->post['withdraw_address']);
+
+                    // Add notification about new account settings
+                    $this->model_account_notification->addNotification($this->auth->getId(),
+                                                                       DEFAULT_LANGUAGE_ID,
+                                                                       'security',
+                                                                       tt('Your affiliate settings has been updated'),
+                                                                       tt('If you did not make this change and believe your affiliate has been compromised, please contact us.'));
+
+                    // If subscription enabled
+                    if ($this->model_account_subscription->checkUserSubscription($this->auth->getId(), SECURITY_ACCOUNT_SUBSCRIPTION_ID)) {
+
+                        // Send mail
+                        $mail_data['project_name'] = PROJECT_NAME;
+
+                        $mail_data['subject'] = sprintf(tt('Your affiliate settings has been updated - %s'), PROJECT_NAME);
+                        $mail_data['message'] = tt('Your affiliate settings has been updated.') . ' ';
+                        $mail_data['message'].= tt('If you did not make this change, please contact us.');
+
+                        $mail_data['href_home']         = $this->url->link('common/home');
+                        $mail_data['href_contact']      = $this->url->link('common/contact');
+                        $mail_data['href_subscription'] = $this->url->link('account/account/subscription');
+
+                        $mail_data['href_facebook'] = URL_FACEBOOK;
+                        $mail_data['href_twitter']  = URL_TWITTER;
+                        $mail_data['href_tumblr']   = URL_TUMBLR;
+                        $mail_data['href_github']   = URL_GITHUB;
+
+                        $this->mail->setTo($user->email);
+                        $this->mail->setSubject($mail_data['subject']);
+                        $this->mail->setHtml($this->load->view('email/common.tpl', $mail_data));
+                        $this->mail->send();
+                    }
+
+                    // Success alert
+                    $this->session->setUserMessage(array('success' => tt('You have successfully modified your settings!')));
+                }
+
+            // Request is invalid
+            } else {
+
+                // Danger alert
+                $this->session->setUserMessage(array('danger' => tt('Please check the form carefully for errors!')));
             }
         }
 
@@ -496,7 +546,7 @@ class ControllerAccountAccount extends Controller {
         $data['error'] = $this->_error;
 
         // Links
-        $data['href_ref'] = substr(URL_BASE, 0, -1) . '?ref=' . $this->auth->getId();
+        $data['href_ref'] = $link;
 
         // Data
         $data['total_joined']     = $this->model_account_affiliate->getTotalJoined($this->auth->getId());
@@ -505,9 +555,12 @@ class ControllerAccountAccount extends Controller {
         $data['total_conversion'] = $data['total_joined'] ? ($data['total_requests'] + $data['total_purchased']) / $data['total_joined'] * 100 : 0;
         $data['fee_percent']      = FEE_USER_VERIFICATION_AFFILIATE;
         $data['fee_amount']       = FEE_USER_VERIFICATION - (FEE_USER_VERIFICATION - (FEE_USER_VERIFICATION * FEE_USER_VERIFICATION_AFFILIATE / 100));
-        $data['action']           = $this->url->link('account/account/affiliate');
+
+        $data['action_settings']     = $this->url->link('account/account/affiliate', 'settings=1');
+        $data['action_invite_email'] = $this->url->link('account/account/affiliate', 'invite_email=1');
 
         // Withdrawal form
+        $data['invite_email']      = isset($this->request->post['invite_email']) ? $this->request->post['invite_email'] : false;
         $data['withdraw_address']  = isset($this->request->post['withdraw_address']) ? $this->request->post['withdraw_address'] : $user->affiliate_address;
         $data['currency_id']       = isset($this->request->post['currency_id']) ? (int) $this->request->post['currency_id'] : $user->affiliate_currency_id;
 
@@ -1173,22 +1226,44 @@ class ControllerAccountAccount extends Controller {
 
     private function _validateAffiliate() {
 
-        if (!isset($this->request->post['withdraw_address']) || empty($this->request->post['withdraw_address'])) {
-            $this->_error['withdraw_address'] = tt('Withdraw address required!');
-        } else if (!ValidatorBitcoin::addressValid($this->request->post['withdraw_address'])) {
-            $this->_error['withdraw_address'] = tt('Invalid withdraw address');
+        // Validate invite email address
+        if (isset($this->request->get['invite_email'])) {
+
+            if (!isset($this->request->post['invite_email']) || empty($this->request->post['invite_email'])) {
+                $this->_error['invite_email'] = tt('Email address to required');
+            } else if (!ValidatorUser::emailValid($this->request->post['invite_email'])) {
+                $this->_error['invite_email'] = tt('Invalid email address');
+            } else if ($this->model_account_user->checkEmail($this->request->post['invite_email'])) {
+                $this->_error['invite_email'] = tt('User with this e-mail address already registered');
+            }
+
+            return !$this->_error;
         }
 
-        if (!isset($this->request->post['currency_id']) ||
-            empty($this->request->post['currency_id']) ||
-            !$this->currency->hasId($this->request->post['currency_id'])) {
+        // Validate withdraw settings
+        else if (isset($this->request->get['settings'])) {
 
-            // Critical request
-            $this->security_log->write('Wrong affiliate currency_id field');
-            $this->_error['currency_id'] = tt('Invalid currency_id');
+            if (!isset($this->request->post['withdraw_address']) || empty($this->request->post['withdraw_address'])) {
+                $this->_error['withdraw_address'] = tt('Withdraw address required!');
+            } else if (!ValidatorBitcoin::addressValid($this->request->post['withdraw_address'])) {
+                $this->_error['withdraw_address'] = tt('Invalid withdraw address');
+            }
+
+            if (!isset($this->request->post['currency_id']) ||
+                empty($this->request->post['currency_id']) ||
+                !$this->currency->hasId($this->request->post['currency_id'])) {
+
+                $this->security_log->write('Wrong affiliate currency_id field');
+                $this->_error['currency_id'] = tt('Invalid currency_id');
+            }
+
+            return !$this->_error;
+
+        // Validate request
+        } else {
+
+            return false;
         }
-
-        return !$this->_error;
     }
 
     private function _validateAvatar() {

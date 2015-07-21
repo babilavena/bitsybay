@@ -42,6 +42,7 @@ FEATURES
 * Profile page and account settings
 * Global notification system
 * Affiliate program
+* Invite feature
 
 **Catalog**
 
