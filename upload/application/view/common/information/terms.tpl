@@ -61,7 +61,7 @@
                 <li>We save and use your personal information only for providing services of this website and for contacting you;</li>
                 <li>We do not give your personal information to third parties;</li>
                 <li>We add cookies in various places on our website. They serve only to ensure correct login and for providing affiliate program;</li>
-                <li>Social plug-ins from Facebook, Twitter, Youtube, Vimeo, SoundCloud and GitHub are integrated into our web pages;</li>
+                <li>Social plug-ins from Facebook, Twitter, Tumblr, Youtube, Vimeo, SoundCloud and GitHub are integrated into our web pages;</li>
                 <li>For further information or questions regarding data protection at <?php echo PROJECT_NAME ?>, please <a href="contact">contact us</a>.</li>
               </ul>
             </div>
