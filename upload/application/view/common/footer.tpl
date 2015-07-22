@@ -22,6 +22,7 @@
                   <li><a href="<?php echo $href_common_information_team ?>"><?php echo tt('Our Team') ?></a></li>
                   <li><a href="<?php echo $href_common_information_terms ?>"><?php echo tt('Terms of Service') ?></a></li>
                   <li><a href="<?php echo $href_common_information_licenses ?>"><?php echo tt('Licensing Policy') ?></a></li>
+                  <li><a href="<?php echo $href_account_account_affiliate ?>"><?php echo tt('Affiliate Program') ?></a></li>
                 </ul>
               </li>
             </ul>

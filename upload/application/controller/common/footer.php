@@ -23,6 +23,8 @@ class ControllerCommonFooter extends Controller {
         $data['href_catalog_search'] = $this->url->link('catalog/search', '&q=');
         $data['href_common_contact'] = $this->url->link('common/contact');
 
+        $data['href_account_account_affiliate'] = $this->url->link('account/account/affiliate');
+
         $data['href_account_account_forgot']  = $this->url->link('account/account/forgot', 'redirect=' . $redirect);
         $data['href_account_account_create']  = $this->url->link('account/account/create', 'redirect=' . $redirect);
         $data['action_account_account_login'] = $this->url->link('account/account/login', 'redirect=' . $redirect);
