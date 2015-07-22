@@ -125,9 +125,9 @@
               <span><?php echo tt('Simple Link') ?></span>
               <pre><?php echo $href_ref ?></pre>
               <span><?php echo tt('HTML') ?></span>
-              <pre>&lt;a href=&quot;<?php echo $href_ref ?>&quot;&gt;<?php echo sprintf(tt('%s - Sell and Buy Digital Creative with BitCoin'), PROJECT_NAME) ?>&lt;/a&gt;</pre>
+              <pre>&lt;a href=&quot;<?php echo $href_ref ?>&quot;&gt;<?php echo sprintf(tt('%s - Marketplace for Digital Creative with BitCoin'), PROJECT_NAME) ?>&lt;/a&gt;</pre>
               <span><?php echo tt('BBC') ?></span>
-              <pre>[URL=<?php echo $href_ref ?>]<?php echo sprintf(tt('%s - Sell and Buy Digital Creative with BitCoin'), PROJECT_NAME) ?>[/URL]</pre>
+              <pre>[URL=<?php echo $href_ref ?>]<?php echo sprintf(tt('%s - Marketplace for Digital Creative with BitCoin'), PROJECT_NAME) ?>[/URL]</pre>
             </div>
           </div>
         </div>
