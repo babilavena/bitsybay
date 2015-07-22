@@ -28,7 +28,7 @@ class ControllerCommonHome extends Controller {
 
     public function index() {
 
-        $this->document->setTitle(tt('BitsyBay - Sell and Buy Digital Content with BitCoin'), false);
+        $this->document->setTitle(tt('BitsyBay - Sell and Buy Digital Creative with BitCoin'), false);
 
         if (isset($this->request->get['route'])) {
             $this->document->addLink(URL_BASE, 'canonical');
