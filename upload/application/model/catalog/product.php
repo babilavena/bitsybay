@@ -751,7 +751,7 @@ class ModelCatalogProduct extends Model {
     public function getTotalProducts($filter_data) {
 
         try {
-            $statement = $this->db->prepare('SELECT COUNT(*) AS total FROM `product`');
+            $statement = $this->db->prepare('SELECT COUNT(*) AS total FROM `product` WHERE `status` = 1');
             $statement->execute();
 
 
@@ -850,7 +850,7 @@ class ModelCatalogProduct extends Model {
                 `alias`            = "",
                 `withdraw_address` = :withdraw_address,
                 `viewed`           = 0,
-                `status`           = 1,
+                `status`           = 0,
                 `date_added`       = NOW(),
                 `date_modified`    = NOW()');
 
@@ -1663,6 +1663,7 @@ class ModelCatalogProduct extends Model {
                 `exclusive_price`  = :exclusive_price,
                 `alias`            = CONCAT(`product_id`, "-", :alias),
                 `withdraw_address` = :withdraw_address,
+                `status`           = 0,
                 `date_modified`    = NOW()
 
                 WHERE

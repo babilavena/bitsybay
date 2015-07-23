@@ -83,7 +83,7 @@
                 <td class="text-center"><?php echo $product['viewed'] ?></td>
                 <td class="text-center"><?php echo $product['favorites'] ?></td>
                 <td class="text-center"><?php echo $product['sales'] ?></td>
-                <td class="text-center <?php echo !$product['status'] ? 'text-danger' : 'text-success' ?>"><?php echo !$product['status'] ? tt('Disabled') : tt('Active') ?></td>
+                <td class="text-center <?php echo !$product['status'] ? 'text-warning' : 'text-success' ?>"><?php echo !$product['status'] ? tt('Pending') : tt('Active') ?></td>
                 <td>
                   <div class="btn-group">
                     <a href="<?php echo $product['href_edit'] ?>" class="btn btn-warning"><?php echo tt('Edit') ?></a>
