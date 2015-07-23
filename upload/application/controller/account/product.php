@@ -129,7 +129,8 @@ class ControllerAccountProduct extends Controller {
                                                                         $this->request->post['regular_price'],
                                                                         $this->request->post['exclusive_price'],
                                                                         $this->request->post['withdraw_address'],
-                                                                        FilterUri::alias($this->request->post['product_description'][DEFAULT_LANGUAGE_ID]['title']));
+                                                                        FilterUri::alias($this->request->post['product_description'][DEFAULT_LANGUAGE_ID]['title']),
+                                                                        (int) $this->auth->isVerified());
 
             // Add product description
             foreach ($this->request->post['product_description'] as $language_id => $product_description) {
@@ -284,11 +285,13 @@ class ControllerAccountProduct extends Controller {
             // Set success message
             $this->session->setUserMessage(array('success' => tt('Product successfully published!')));
 
-            // Admin alert
-            $this->mail->setTo(MAIL_EMAIL_SUPPORT_ADDRESS);
-            $this->mail->setSubject(sprintf(tt('New product has been created - %s'), PROJECT_NAME));
-            $this->mail->setText(sprintf(tt('New product ID %s by %s has been created and waiting for approving'), $product_id, $this->auth->getUsername()));
-            $this->mail->send();
+            // Admin alert if current user is not verified (created product has been disabled)
+            if (!$this->auth->isVerified()) {
+                $this->mail->setTo(MAIL_EMAIL_SUPPORT_ADDRESS);
+                $this->mail->setSubject(sprintf(tt('New product has been created - %s'), PROJECT_NAME));
+                $this->mail->setText(sprintf(tt('New product ID %s by %s has been created and waiting for approving'), $product_id, $this->auth->getUsername()));
+                $this->mail->send();
+            }
 
             $this->response->redirect($this->url->link('account/product'));
         }
@@ -348,7 +351,8 @@ class ControllerAccountProduct extends Controller {
                                                         $this->request->post['regular_price'],
                                                         $this->request->post['exclusive_price'],
                                                         $this->request->post['withdraw_address'],
-                                                        FilterUri::alias($this->request->post['product_description'][DEFAULT_LANGUAGE_ID]['title']));
+                                                        FilterUri::alias($this->request->post['product_description'][DEFAULT_LANGUAGE_ID]['title']),
+                                                        (int) $this->auth->isVerified());
 
             // Add 301 rule if product has new URI
 
@@ -513,11 +517,13 @@ class ControllerAccountProduct extends Controller {
             // Set success message
             $this->session->setUserMessage(array('success' => tt('Product successfully updated!')));
 
-            // Admin alert
-            $this->mail->setTo(MAIL_EMAIL_SUPPORT_ADDRESS);
-            $this->mail->setSubject(sprintf(tt('Product has been updated - %s'), PROJECT_NAME));
-            $this->mail->setText(sprintf(tt('Product ID %s by %s has been updated and waiting for approving!'), $product_id, $this->auth->getUsername()));
-            $this->mail->send();
+            // Admin alert if current user is not verified (updated product has been disabled)
+            if (!$this->auth->isVerified()) {
+                $this->mail->setTo(MAIL_EMAIL_SUPPORT_ADDRESS);
+                $this->mail->setSubject(sprintf(tt('Product has been updated - %s'), PROJECT_NAME));
+                $this->mail->setText(sprintf(tt('Product ID %s by %s has been updated and waiting for approving!'), $product_id, $this->auth->getUsername()));
+                $this->mail->send();
+            }
 
             $this->response->redirect($this->url->link('account/product'));
         }

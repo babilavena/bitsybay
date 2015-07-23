@@ -834,9 +834,10 @@ class ModelCatalogProduct extends Model {
     * @param float $exclusive_price
     * @param string $withdraw_address
     * @param string $alias
+    * @param int $status
     * @return int|bool product_id or FALSE/rollBack if throw exception
     */
-    public function createProduct($user_id, $category_id, $currency_id, $regular_price, $exclusive_price, $withdraw_address, $alias) {
+    public function createProduct($user_id, $category_id, $currency_id, $regular_price, $exclusive_price, $withdraw_address, $alias, $status) {
 
         try {
             // Product
@@ -847,10 +848,11 @@ class ModelCatalogProduct extends Model {
                 `currency_id`      = :currency_id,
                 `regular_price`    = :regular_price,
                 `exclusive_price`  = :exclusive_price,
-                `alias`            = "",
+                `status`           = :status,
                 `withdraw_address` = :withdraw_address,
+
                 `viewed`           = 0,
-                `status`           = 0,
+                `alias`            = "",
                 `date_added`       = NOW(),
                 `date_modified`    = NOW()');
 
@@ -860,7 +862,8 @@ class ModelCatalogProduct extends Model {
                 ':currency_id'      => $currency_id,
                 ':regular_price'    => $regular_price,
                 ':exclusive_price'  => $exclusive_price,
-                ':withdraw_address' => $withdraw_address
+                ':withdraw_address' => $withdraw_address,
+                ':status'           => $status
             ));
 
             $product_id = $this->db->lastInsertId();
@@ -1648,9 +1651,10 @@ class ModelCatalogProduct extends Model {
     * @param float $exclusive_price
     * @param string $withdraw_address
     * @param string $alias
+    * @param int $status
     * @return int|bool affected rows or FALSE/rollBack if throw exception
     */
-    public function updateProduct($product_id, $category_id, $currency_id, $regular_price, $exclusive_price, $withdraw_address, $alias) {
+    public function updateProduct($product_id, $category_id, $currency_id, $regular_price, $exclusive_price, $withdraw_address, $alias, $status) {
 
         try {
             // Product
@@ -1663,7 +1667,7 @@ class ModelCatalogProduct extends Model {
                 `exclusive_price`  = :exclusive_price,
                 `alias`            = CONCAT(`product_id`, "-", :alias),
                 `withdraw_address` = :withdraw_address,
-                `status`           = 0,
+                `status`           = :status,
                 `date_modified`    = NOW()
 
                 WHERE
@@ -1679,7 +1683,8 @@ class ModelCatalogProduct extends Model {
                 ':regular_price'    => $regular_price,
                 ':exclusive_price'  => $exclusive_price,
                 ':withdraw_address' => $withdraw_address,
-                ':alias'            => $alias
+                ':alias'            => $alias,
+                ':status'           => $status,
             ));
 
             return $statement->rowCount();
