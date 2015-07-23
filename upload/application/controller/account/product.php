@@ -281,7 +281,15 @@ class ControllerAccountProduct extends Controller {
             // Reset cache
             $this->cache->clean($this->auth->getId());
 
+            // Set success message
             $this->session->setUserMessage(array('success' => tt('Product successfully published!')));
+
+            // Admin alert
+            $this->mail->setTo(MAIL_EMAIL_SUPPORT_ADDRESS);
+            $this->mail->setSubject(sprintf(tt('New product has been created - %s'), PROJECT_NAME));
+            $this->mail->setText(sprintf(tt('New product ID %s by %s has been created and waiting for approving'), $product_id, $this->auth->getUsername()));
+            $this->mail->send();
+
             $this->response->redirect($this->url->link('account/product'));
         }
 
@@ -502,7 +510,15 @@ class ControllerAccountProduct extends Controller {
             $this->cache->clean($this->auth->getId());
             $this->storage->clean($this->auth->getId());
 
+            // Set success message
             $this->session->setUserMessage(array('success' => tt('Product successfully updated!')));
+
+            // Admin alert
+            $this->mail->setTo(MAIL_EMAIL_SUPPORT_ADDRESS);
+            $this->mail->setSubject(sprintf(tt('Product has been updated - %s'), PROJECT_NAME));
+            $this->mail->setText(sprintf(tt('Product ID %s by %s has been updated and waiting for approving!'), $product_id, $this->auth->getUsername()));
+            $this->mail->send();
+
             $this->response->redirect($this->url->link('account/product'));
         }
 
