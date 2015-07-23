@@ -29,6 +29,8 @@ class ControllerCommonHome extends Controller {
     public function index() {
 
         $this->document->setTitle(tt('BitsyBay - Sell and Buy Digital Creative with BitCoin'), false);
+        $this->document->setDescription(tt('BTC Marketplace for royalty-free photos, arts, templates, codes, books and other digital creative with BitCoin. Only quality and legal content from them authors. Free seller fee up to 2016!'));
+        $this->document->setKeywords(tt('bitsybay, bitcoin, btc, indie, marketplace, store, buy, sell, royalty-free, photos, arts, illustrations, 3d, templates, codes, extensions, books, content, digital, creative, quality, legal'));
 
         if (isset($this->request->get['route'])) {
             $this->document->addLink(URL_BASE, 'canonical');
