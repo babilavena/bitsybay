@@ -13,12 +13,12 @@
  ?>
 
 <div class="bs-component">
-  <ul class="breadcrumb">
+  <ul class="breadcrumb" xmlns:v="http://rdf.data-vocabulary.org/#">
     <?php foreach ($breadcrumbs as $breadcrumb) { ?>
     <?php if ($breadcrumb['active']) { ?>
-        <li class="active"><a href="<?php echo $breadcrumb['href'] ?>"><?php echo $breadcrumb['name'] ?></a></li>
+        <li class="active" typeof="v:Breadcrumb"><a href="<?php echo $breadcrumb['href'] ?>" rel="v:url" property="v:title"><?php echo $breadcrumb['name'] ?></a></li>
       <?php } else { ?>
-        <li><a href="<?php echo $breadcrumb['href'] ?>"><?php echo $breadcrumb['name'] ?></a></li>
+        <li typeof="v:Breadcrumb"><a href="<?php echo $breadcrumb['href'] ?>" rel="v:url" property="v:title"><?php echo $breadcrumb['name'] ?></a></li>
       <?php } ?>
     <?php } ?>
   </ul>
