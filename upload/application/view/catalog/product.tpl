@@ -72,7 +72,7 @@
           </div>
         </div>
       </div>
-      <div id="zoomVideo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="zoomImage" aria-hidden="true">
+      <div id="zoomVideo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="zoomVideo" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
               <div class="modal-header">
@@ -80,12 +80,12 @@
                  <h4 class="modal-title"><?php echo $product_title ?></h4>
                </div>
               <div class="modal-body">
-                <iframe src="" width="570" height="400" frameborder="0"></iframe>
+                <iframe width="570" height="400"></iframe>
               </div>
           </div>
         </div>
       </div>
-      <div id="zoomAudio" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="zoomImage" aria-hidden="true">
+      <div id="zoomAudio" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="zoomAudio" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
               <div class="modal-header">
@@ -93,7 +93,7 @@
                  <h4 class="modal-title"><?php echo $product_title ?></h4>
                </div>
               <div class="modal-body">
-                <iframe src="" width="100%" height="166" frameborder="0"></iframe>
+                <iframe width="570" height="166"></iframe>
               </div>
           </div>
         </div>
@@ -235,9 +235,7 @@
         </div>
 
         <div class="row hide" id="paymentResult">
-          <div class="col-lg-4">
-            <img src="" />
-          </div>
+          <div class="col-lg-4" id="paymentResultImg"></div>
           <div class="col-lg-8 text-left" style="padding: 20px">
             <div class="row">
               <div class="col-lg-12">
@@ -287,7 +285,7 @@
                 $('#productPurchase .modal-loading').hide();
                 $('#productPurchase pre').html(e['address']);
                 $('#productPurchase p').html(e['text']);
-                $('#productPurchase img').attr('src', e['src']);
+                $('#paymentResultImg').html('<img src="' + e['src'] + '" alt="' + e['address'] + '" />');
                 $('#initBitcoinWallet').attr('href', e['href']);
 
                 timer(900, document.getElementById('paymentTimer'));

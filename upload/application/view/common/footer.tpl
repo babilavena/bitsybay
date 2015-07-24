@@ -106,10 +106,10 @@
                   <form class="form-horizontal" action="<?php echo $action_account_account_login ?>" method="POST">
                     <fieldset>
                       <div class="form-group">
-                        <input type="text" name="login" class="form-control" id="inputLogin" placeholder="<?php echo tt('Email or username') ?>" value="">
+                        <input type="text" name="login" class="form-control" placeholder="<?php echo tt('Email or username') ?>" value="">
                       </div>
                       <div class="form-group">
-                        <input type="password" name="password" class="form-control" id="inputPassword" placeholder="<?php echo tt('Password') ?>" value="">
+                        <input type="password" name="password" class="form-control" placeholder="<?php echo tt('Password') ?>" value="">
                       </div>
                       <div class="form-group text-left">
                         <button type="submit" class="btn btn-primary sign-in-button"><?php echo tt('Sign In') ?></button>

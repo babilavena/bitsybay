@@ -28,21 +28,14 @@
   <?php if ($keywords) { ?>
     <meta name="keywords" content= "<?php echo $keywords ?>" />
   <?php } ?>
-  <?php foreach ($schemas as $type => $schema) { ?>
-    <div itemscope itemtype="http://schema.org/<?php echo $type ?>">
-      <?php foreach ($schema as $schema) { ?>
-        <meta itemprop="<?php echo $schema['itemprop'] ?>" content="<?php echo $schema['content'] ?>" />
-      <?php } ?>
-    </div>
-  <?php } ?>
   <?php if ($icon) { ?>
-    <link href="<?php echo $icon ?>" rel="icon" type="image/x-icon" />
+    <link href="<?php echo $icon ?>" rel="icon" property="icon" type="image/x-icon" />
   <?php } ?>
   <?php foreach ($links as $link) { ?>
-    <link href="<?php echo $link['href'] ?>" rel="<?php echo $link['rel'] ?>" />
+    <link href="<?php echo $link['href'] ?>" rel="<?php echo $link['rel'] ?>" property="<?php echo $link['rel'] ?>" />
   <?php } ?>
   <?php foreach ($styles as $style) { ?>
-    <link href="<?php echo $style['href'] ?>" type="text/css" rel="<?php echo $style['rel'] ?>" media="<?php echo $style['media'] ?>" />
+    <link href="<?php echo $style['href'] ?>" type="text/css" rel="<?php echo $style['rel'] ?>" property="<?php echo $style['rel'] ?>" media="<?php echo $style['media'] ?>" />
   <?php } ?>
   <?php foreach ($scripts as $script) { ?>
     <script src="<?php echo $script ?>" type="text/javascript"></script>
@@ -129,3 +122,10 @@
   </nav>
 </header>
 <div class="container">
+  <?php foreach ($schemas as $type => $schema) { ?>
+    <div itemscope itemtype="http://schema.org/<?php echo $type ?>">
+      <?php foreach ($schema as $schema) { ?>
+        <meta itemprop="<?php echo $schema['itemprop'] ?>" content="<?php echo $schema['content'] ?>" />
+      <?php } ?>
+    </div>
+  <?php } ?>

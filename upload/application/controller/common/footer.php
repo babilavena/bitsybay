@@ -20,7 +20,7 @@ class ControllerCommonFooter extends Controller {
 
         $redirect = base64_encode($this->url->getCurrentLink());
 
-        $data['href_catalog_search'] = $this->url->link('catalog/search', '&q=');
+        $data['href_catalog_search'] = $this->url->link('catalog/search', 'q=');
         $data['href_common_contact'] = $this->url->link('common/contact');
 
         $data['href_account_account_affiliate'] = $this->url->link('account/account/affiliate');

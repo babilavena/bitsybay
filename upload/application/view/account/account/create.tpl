@@ -65,7 +65,7 @@
           </div>
           <div class="form-group<?php if (isset($error['captcha'])) { ?> has-error<?php } ?>">
             <div class="col-lg-12">
-              <img src="<?php echo $captcha ?>" />
+              <img src="<?php echo $captcha ?>" alt="captcha" />
               <input type="text" name="captcha" class="form-control input-lg" id="inputCaptcha" placeholder="<?php echo tt('Magic word ↑') ?>" style="width:160px;margin-top:15px">
               <?php if (isset($error['captcha'])) { ?>
                 <div class="text-danger"><?php echo $error['captcha'] ?></div>

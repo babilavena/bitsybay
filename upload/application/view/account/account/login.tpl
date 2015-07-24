@@ -50,7 +50,7 @@
           <legend><?php echo tt('Who are you?') ?></legend>
           <div class="form-group<?php if (isset($error['login'])) { ?> has-error<?php } ?>">
             <div class="col-lg-12">
-              <input type="text" name="login" class="form-control" id="inputLogin" placeholder="<?php echo tt('Email or username') ?>" value="<?php echo $login ?>">
+              <input type="text" name="login" class="form-control" placeholder="<?php echo tt('Email or username') ?>" value="<?php echo $login ?>">
               <?php if (isset($error['login'])) { ?>
                 <div class="text-danger"><?php echo $error['login'] ?></div>
               <?php } ?>
@@ -58,7 +58,7 @@
           </div>
           <div class="form-group<?php if (isset($error['password'])) { ?> has-error<?php } ?>">
             <div class="col-lg-12">
-              <input type="password" name="password" class="form-control" id="inputPassword" placeholder="<?php echo tt('Password') ?>" value="<?php echo $password ?>">
+              <input type="password" name="password" class="form-control" placeholder="<?php echo tt('Password') ?>" value="<?php echo $password ?>">
               <?php if (isset($error['password'])) { ?>
                 <div class="text-danger"><?php echo $error['password'] ?></div>
               <?php } ?>
