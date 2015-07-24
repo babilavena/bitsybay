@@ -231,18 +231,24 @@ class ControllerCatalogProduct extends Controller {
             }
         }
 
-        // Create meta-tags
+        // Add meta-tags
         $this->document->setTitle(sprintf(tt('Buy %s with BitCoin'), $product_info->title) . ' | Royalty Free ' . implode(' ', $categories));
 
         $this->document->setDescription(sprintf(tt('Royalty-free %s %s by %s with BitCoin. %s. Buy with BTC easy - Download instantly!'),   $categories[0],
                                                                                                                                             $product_info->title,
                                                                                                                                             $product_info->username,
-                                                                                                                                            FilterMeta::description($product_info->description),
+                                                                                                                                            FilterMeta::description($product_info->description, 100),
                                                                                                                                             implode(' and ', $categories)));
 
         $this->document->setKeywords(sprintf(tt('bitsybay, bitcoin, btc, indie, marketplace, store, buy, sell, royalty-free, %s, %s, %s'),  $product_info->username,
                                                                                                                                             strtolower(implode(', ', $categories)),
                                                                                                                                             implode(', ', $meta_tags)));
+
+        // Add schema
+        $this->document->addSchema('Product', 'name', $product_info->title);
+        $this->document->addSchema('Product', 'description', FilterMeta::description($product_info->description));
+        $this->document->addSchema('Product', 'category', $categories[0]);
+        $this->document->addSchema('Product', 'image', $data['product_image_url']);
 
         // Load layout
         $data['title']  = $product_info->title;

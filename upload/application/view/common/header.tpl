@@ -28,6 +28,13 @@
   <?php if ($keywords) { ?>
     <meta name="keywords" content= "<?php echo $keywords ?>" />
   <?php } ?>
+  <?php foreach ($schemas as $type => $schema) { ?>
+    <div itemscope itemtype="http://data-vocabulary.org/<?php echo $type ?>">
+      <?php foreach ($schema as $schema) { ?>
+        <meta itemprop="<?php echo $schema['itemprop'] ?>" content="<?php echo $schema['content'] ?>" />
+      <?php } ?>
+    </div>
+  <?php } ?>
   <?php if ($icon) { ?>
     <link href="<?php echo $icon ?>" rel="icon" type="image/x-icon" />
   <?php } ?>

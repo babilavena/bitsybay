@@ -45,6 +45,11 @@ final class Document {
     private $scripts = array();
 
     /**
+     * @var array
+     */
+    private $schemas = array();
+
+    /**
     * Set page title
     *
     * @param string $title
@@ -167,5 +172,29 @@ final class Document {
     */
     public function getScripts() {
         return $this->scripts;
+    }
+
+    /**
+    * Set page schema
+    *
+    * @param string $itemtype
+    * @param string $itemprop
+    * @param string $content
+    * @return null
+    */
+    public function addSchema($itemtype, $itemprop, $content) {
+        $this->schemas[$itemtype][] = array(
+            'itemprop'  => $itemprop,
+            'content'   => $content
+        );
+    }
+
+    /**
+    * Get page schemas
+    *
+    * @return array
+    */
+    public function getSchemas() {
+        return $this->schemas;
     }
 }
