@@ -17,13 +17,14 @@ class FilterMeta {
     /**
     * Filter meta description
     *
-    * @param $string
+    * @param string $string
+    * @param int $limit
     * @return string
     */
-    static public function description($string) {
+    static public function description($string, $limit = 10000) {
 
         $string = html_entity_decode($string, ENT_QUOTES, 'UTF-8');
-        $string = (strlen($string) > 100) ? substr($string, 0, strpos($string, ' ', 100)) : $string;
+        $string = (strlen($string) > $limit) ? substr($string, 0, strpos($string, ' ', $limit)) : $string;
         $string = trim(preg_replace('/\s+/', ' ', $string), '.,:;-/+"');
 
         return $string;
