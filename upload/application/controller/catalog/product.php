@@ -250,6 +250,11 @@ class ControllerCatalogProduct extends Controller {
         $this->document->addSchema('Product', 'category', $categories[0]);
         $this->document->addSchema('Product', 'image', $data['product_image_url']);
 
+        $this->document->addSchema('Offer', 'seller', $product_info->username);
+        $this->document->addSchema('Offer', 'availability', 'in_stock');
+        $this->document->addSchema('Offer', 'currency', $this->currency->getCode());
+        $this->document->addSchema('Offer', 'price', $product_info->special_regular_price > 0 ? $product_info->special_regular_price : $product_info->regular_price);
+
         // Load layout
         $data['title']  = $product_info->title;
 
