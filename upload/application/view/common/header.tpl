@@ -29,7 +29,7 @@
     <meta name="keywords" content= "<?php echo $keywords ?>" />
   <?php } ?>
   <?php foreach ($schemas as $type => $schema) { ?>
-    <div itemscope itemtype="http://data-vocabulary.org/<?php echo $type ?>">
+    <div itemscope itemtype="http://schema.org/<?php echo $type ?>">
       <?php foreach ($schema as $schema) { ?>
         <meta itemprop="<?php echo $schema['itemprop'] ?>" content="<?php echo $schema['content'] ?>" />
       <?php } ?>
