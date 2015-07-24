@@ -169,8 +169,11 @@ class ControllerCatalogProduct extends Controller {
                     'url'   => $audio->iframe_url . $audio->id);
         }
 
+        $meta_tags            = array();
         $data['product_tags'] = array();
+
         foreach ($this->model_catalog_product->getProductTags($product_info->product_id, $this->language->getId()) as $tag) {
+            $meta_tags[] = $tag->name;
             $data['product_tags'][] = array('name' => $tag->name, 'url' => $this->url->link('catalog/search', 'q=' . urlencode($tag->name)));
         }
 
@@ -227,8 +230,22 @@ class ControllerCatalogProduct extends Controller {
             }
         }
 
-        // Create SEO titles
+        // Create meta-tags
         $this->document->setTitle(sprintf(tt('Buy %s with BitCoin'), $product_info->title) . ' | Royalty Free ' . implode(' ', $categories));
+
+        $meta_description = html_entity_decode($product_info->description, ENT_QUOTES, 'UTF-8');
+        $meta_description = (strlen($meta_description) > 100) ? substr($meta_description, 0, strpos($meta_description, ' ', 100)) : $meta_description;
+        $meta_description = trim(preg_replace('/\s+/', ' ', $meta_description), '.,:;-/+"');
+
+        $this->document->setDescription(sprintf(tt('Royalty-free %s %s by %s with BitCoin. %s. Buy with BTC easy - Download instantly!'),   $categories[0],
+                                                                                                                                            $product_info->title,
+                                                                                                                                            $product_info->username,
+                                                                                                                                            $meta_description,
+                                                                                                                                            implode(' and ', $categories)));
+
+        $this->document->setKeywords(sprintf(tt('bitsybay, bitcoin, btc, indie, marketplace, store, buy, sell, royalty-free, %s, %s, %s'),  $product_info->username,
+                                                                                                                                            strtolower(implode(', ', $categories)),
+                                                                                                                                            implode(', ', $meta_tags)));
 
         // Load layout
         $data['title']  = $product_info->title;

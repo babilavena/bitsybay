@@ -147,8 +147,10 @@ class ControllerCatalogCategory extends Controller {
         }
 
 
-        // Create SEO title
+        // Create meta-tags
         $this->document->setTitle(sprintf(tt('Buy %s with BitCoin | Royalty Free %s Store'), implode(' ', $categories), $categories[0]));
+        $this->document->setDescription(sprintf(tt('Royalty-free %s with BitCoin. Only quality and legal %s from them authors. Buy with BTC easy - Download instantly!'), implode(' ', $categories), implode(' and ', $categories)));
+        $this->document->setKeywords(sprintf(tt('bitsybay, bitcoin, btc, indie, marketplace, store, buy, sell, royalty-free, %s'), strtolower(implode(', ', $categories))));
 
         // Load layout
         $data['title']  = $category_info->title;
