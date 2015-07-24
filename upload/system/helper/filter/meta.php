@@ -15,7 +15,7 @@
 class FilterMeta {
 
     /**
-    * Filter uri alias
+    * Filter meta description
     *
     * @param $string
     * @return string
