@@ -13,13 +13,15 @@
  ?>
 
 <div class="bs-component">
-  <ul class="breadcrumb" xmlns:v="http://rdf.data-vocabulary.org/#">
+  <ul class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
+    <?php $i = 1 ?>
     <?php foreach ($breadcrumbs as $breadcrumb) { ?>
-    <?php if ($breadcrumb['active']) { ?>
-        <li typeof="v:Breadcrumb" class="active"><a href="<?php echo $breadcrumb['href'] ?>" rel="v:url" property="v:title"><?php echo $breadcrumb['name'] ?></a></li>
-      <?php } else { ?>
-        <li typeof="v:Breadcrumb"><a href="<?php echo $breadcrumb['href'] ?>" rel="v:url" property="v:title"><?php echo $breadcrumb['name'] ?></a></li>
-      <?php } ?>
+      <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem" <?php echo ($breadcrumb['active'] ? 'class="active"' : false) ?>>
+        <a href="<?php echo $breadcrumb['href'] ?>" itemprop="item">
+          <span itemprop="name"><?php echo $breadcrumb['name'] ?></span>
+        </a>
+        <meta itemprop="position" content="<?php echo $i++ ?>" />
+      </li>
     <?php } ?>
   </ul>
 </div>
