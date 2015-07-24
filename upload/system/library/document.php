@@ -50,6 +50,11 @@ final class Document {
     private $schemas = array();
 
     /**
+     * @var array
+     */
+    private $opengraph = array();
+
+    /**
     * Set page title
     *
     * @param string $title
@@ -196,5 +201,28 @@ final class Document {
     */
     public function getSchemas() {
         return $this->schemas;
+    }
+
+    /**
+    * Set page open graph
+    *
+    * @param string $property
+    * @param string $content
+    * @return null
+    */
+    public function addOpenGraph($property, $content) {
+        $this->opengraph[] = array(
+            'property'  => $property,
+            'content'   => $content
+        );
+    }
+
+    /**
+    * Get page open graphs
+    *
+    * @return array
+    */
+    public function getOpenGraphs() {
+        return $this->opengraph;
     }
 }

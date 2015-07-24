@@ -248,13 +248,28 @@ class ControllerCatalogProduct extends Controller {
         $this->document->addSchema('Product', 'name', $product_info->title);
         $this->document->addSchema('Product', 'description', FilterMeta::description($product_info->description));
         $this->document->addSchema('Product', 'category', $categories[0]);
-        $this->document->addSchema('Product', 'image', $data['product_image_url']);
+        $this->document->addSchema('Product', 'image', $data['product_image_orig_url']);
 
         $this->document->addSchema('Offer', 'seller', $product_info->username);
         $this->document->addSchema('Offer', 'category', $categories[0]);
         $this->document->addSchema('Offer', 'availability', 'in_stock');
         $this->document->addSchema('Offer', 'priceCurrency', $this->currency->getCode());
         $this->document->addSchema('Offer', 'price', $product_info->special_regular_price > 0 ? $product_info->special_regular_price : $product_info->regular_price);
+
+        // Add Open Graph
+        $this->document->addOpenGraph('og:site_name', PROJECT_NAME);
+        $this->document->addOpenGraph('og:type', 'product');
+        $this->document->addOpenGraph('og:url', $this->url->getCurrentLink());
+        $this->document->addOpenGraph('og:name', $product_info->title);
+        $this->document->addOpenGraph('og:brand', $product_info->username);
+        $this->document->addOpenGraph('og:image', $data['product_image_orig_url']);
+        $this->document->addOpenGraph('og:description', FilterMeta::description($product_info->description));
+        $this->document->addOpenGraph('og:updated_time', $product_info->date_modified);
+
+        $this->document->addOpenGraph('product:original_price:amount', $product_info->special_regular_price > 0 ? $product_info->special_regular_price : $product_info->regular_price);
+        $this->document->addOpenGraph('product:original_price:currency', $this->currency->getCode());
+        $this->document->addOpenGraph('product:availability', 'instock');
+        $this->document->addOpenGraph('product:category', $categories[0]);
 
         // Load layout
         $data['title']  = $product_info->title;

@@ -129,3 +129,6 @@
       <?php } ?>
     </div>
   <?php } ?>
+  <?php foreach ($opengraphs as $opengraph) { ?>
+    <meta property="<?php echo $opengraph['property'] ?>" content="<?php echo $opengraph['content'] ?>" />
+  <?php } ?>

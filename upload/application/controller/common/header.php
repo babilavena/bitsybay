@@ -34,6 +34,7 @@ class ControllerCommonHeader extends Controller {
         $data['styles']      = $this->document->getStyles();
         $data['scripts']     = $this->document->getScripts();
         $data['schemas']     = $this->document->getSchemas();
+        $data['opengraphs']  = $this->document->getOpenGraphs();
 
         $data['lang']        = $this->language->getCode();
         $data['icon']        = '/image/template/favicon.ico';
