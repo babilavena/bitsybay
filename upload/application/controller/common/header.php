@@ -35,7 +35,7 @@ class ControllerCommonHeader extends Controller {
         $data['scripts']     = $this->document->getScripts();
 
         $data['lang']        = $this->language->getCode();
-        $data['icon']        = '';
+        $data['icon']        = '/image/template/favicon.ico';
         $data['logo']        = '';
         $data['base']        = URL_BASE;
 

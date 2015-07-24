@@ -29,7 +29,7 @@
     <meta name="keywords" content= "<?php echo $keywords ?>" />
   <?php } ?>
   <?php if ($icon) { ?>
-    <link href="<?php echo $icon ?>" rel="icon" />
+    <link href="<?php echo $icon ?>" rel="icon" type="image/x-icon" />
   <?php } ?>
   <?php foreach ($links as $link) { ?>
     <link href="<?php echo $link['href'] ?>" rel="<?php echo $link['rel'] ?>" />
