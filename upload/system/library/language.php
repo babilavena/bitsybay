@@ -61,8 +61,8 @@ final class Language {
 
         } catch (PDOException $e) {
 
-            if ($this->db->inTransaction()) {
-                $this->db->rollBack();
+            if ($this->_db->inTransaction()) {
+                $this->_db->rollBack();
             }
 
             trigger_error($e->getMessage());
