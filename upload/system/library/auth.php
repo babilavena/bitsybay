@@ -262,7 +262,7 @@ final class Auth {
             // Login by username
             } else {
                 $statement = $this->_db->prepare('SELECT *  FROM `user`
-                                                            WHERE `username` = LOWER(:username) AND
+                                                            WHERE `username` = :username AND
                                                                   `password` = SHA1(CONCAT(`salt`, SHA1(CONCAT(`salt`, SHA1(:password))))) AND
                                                                   `status`   = 1
                                                             LIMIT 1');
