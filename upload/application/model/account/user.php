@@ -366,7 +366,7 @@ class ModelAccountUser extends Model {
                                             `approved`      = :approved,
 
                                             `referrer_user_id`      = ' . ($referrer_user_id ? (int) $referrer_user_id : 'NULL') . ',
-                                            `contributor`           = 0,
+                                            `contributor`           = "0",
                                             `affiliate_address`     = NULL,
                                             `affiliate_currency_id` = NULL,
                                             `date_added`            = NOW(),
