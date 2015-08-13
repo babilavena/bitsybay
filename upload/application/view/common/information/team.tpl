@@ -34,7 +34,7 @@
           <p>Project Creator, Developer</p>
         </div>
         <div class="col-lg-4 text-center jumbotron">
-          <p>Our team is only peoples, who love this project and make it better!</p>
+          <p>Our team is only peoples, who love this project and make it better <i class="glyphicon glyphicon-thumbs-up"></i></p>
           <p>There are no corporation and authorized fund. We fund our support and contribution instead money.</p>
         </div>
         <div class="col-lg-4 text-center">
