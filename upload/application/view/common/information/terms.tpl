@@ -49,7 +49,7 @@
                 <li>You represent and warrant that you are the owner of, or that you have all rights to all your submissions;</li>
                 <li>You responsible for any copyright violations;</li>
                 <li>If you provide any content that is fraudulent, untrue, inaccurate, incomplete, not current, or illegal to <?php echo HOST_COUNTRY ?> laws, we reserve the right to suspend or terminate your account without notice and to refuse any and all current and future use of the website.</li>
-                <li>We charge a 11% fee (0% fee up to 2016) on the selling price;</li>
+                <li>We charge a 11% fee (0% fee up to 2016) on the selling price except <a href="team">project contributors</a>. It's free for them forever.</li>
               </ul>
             </div>
           </div>
