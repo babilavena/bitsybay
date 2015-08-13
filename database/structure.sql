@@ -699,6 +699,7 @@ CREATE TABLE `user` (
   `status` enum('1','0') NOT NULL,
   `buyer` enum('1','0') NOT NULL,
   `seller` enum('1','0') NOT NULL,
+  `contributor` enum('1','0') NOT NULL,
   `approved` enum('1','0') NOT NULL,
   `verified` enum('1','0') NOT NULL,
   `affiliate_currency_id` int(10) unsigned NULL,
