@@ -347,9 +347,10 @@ class ModelAccountUser extends Model {
     public function createUser($username, $email, $password, $buyer, $seller, $status, $verified, $file_quota, $approval_code, $approved, $referrer_user_id = false) {
 
         try {
-            $email     = mb_strtolower($email);
-            $salt      = substr(md5(uniqid(rand(), true)), 0, 9);
-            $password  = sha1($salt . sha1($salt . sha1($password)));
+            $email       = mb_strtolower($email);
+            $salt        = substr(md5(uniqid(rand(), true)), 0, 9);
+            $password    = sha1($salt . sha1($salt . sha1($password)));
+            $contributor = 0;
 
             $statement = $this->db->prepare('INSERT INTO `user` SET
 
@@ -357,6 +358,7 @@ class ModelAccountUser extends Model {
                                             `status`        = :status,
                                             `buyer`         = :buyer,
                                             `seller`        = :seller,
+                                            `contributor`   = :contributor,
                                             `verified`      = :verified,
                                             `username`      = :username,
                                             `password`      = :password,
@@ -366,7 +368,7 @@ class ModelAccountUser extends Model {
                                             `approved`      = :approved,
 
                                             `referrer_user_id`      = ' . ($referrer_user_id ? (int) $referrer_user_id : 'NULL') . ',
-                                            `contributor`           = "0",
+
                                             `affiliate_address`     = NULL,
                                             `affiliate_currency_id` = NULL,
                                             `date_added`            = NOW(),
@@ -378,6 +380,7 @@ class ModelAccountUser extends Model {
                                         ':status'        => $status,
                                         ':buyer'         => $buyer,
                                         ':seller'        => $seller,
+                                        ':contributor'   => $contributor,
                                         ':verified'      => $verified,
                                         ':username'      => $username,
                                         ':password'      => $password,
