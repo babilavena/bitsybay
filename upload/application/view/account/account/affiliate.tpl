@@ -41,7 +41,7 @@
         <div class="col-lg-12">
           <div class="well">
             <p>
-              <?php echo tt('When a new user clicks your referral link, signs up for an account and purchases an item, you will receive 5% of that purchase amount. Project contributors are excluded.') ?>
+              <?php echo tt('When a new user clicks your referral link, signs up for an account and purchases an item, you will receive 5% of that purchase amount. Sales from contributors are excluded.') ?>
               Note that this offer will be <strong>available after 2016</strong> but all your referrals will be saved.
             </p>
             <p>
