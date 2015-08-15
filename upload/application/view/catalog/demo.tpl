@@ -47,12 +47,12 @@
       <div class="navbar navbar-default navbar-fixed-top demo-toolbar">
         <div class="container">
           <div class="row">
-            <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
               <a href="/" class="brand-logo">
                 <span>B</span><span>i</span><span>t</span><span>s</span><span>y</span>Bay
               </a>
             </div>
-            <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
+            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 text-muted small">
               <h1><i class="glyphicon glyphicon-eye-open"></i> <?php echo $title ?></h1>
             </div>
             <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
@@ -62,7 +62,7 @@
                 <?php } else { ?>
                   <a class="btn btn-primary" href="<?php echo $href_view ?>"><i class="glyphicon glyphicon-shopping-cart"></i> <?php echo tt('Buy') ?></a>
                 <?php } ?>
-                <a class="btn btn-default" href="<?php echo $href_original ?>"><i class="glyphicon glyphicon-remove-circle"></i> <?php echo tt('Remove Frame') ?></a>
+                <a class="btn btn-default" href="<?php echo $href_original ?>" rel="nofollow"><i class="glyphicon glyphicon-remove-circle"></i> <?php echo tt('Remove Frame') ?></a>
               </div>
             </div>
           </div>
@@ -70,6 +70,6 @@
       </div>
     </nav>
   </header>
-  <iframe class="demo fs" frameborder="0" width="100%" src="http://demo.opencart.com"><?php echo tt('The external iframe view is not allowed from your browser') ?></iframe>
+  <iframe class="demo fs" frameborder="0" width="100%" src="<?php echo $href_original ?>"><?php echo tt('The external iframe view is not allowed from your browser') ?></iframe>
 </body>
 </html>
