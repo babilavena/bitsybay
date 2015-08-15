@@ -308,7 +308,7 @@ class ControllerCatalogProduct extends Controller {
         $this->document->addStyle('/bootstrap/3.3.2/css/bootstrap.min.css');
         $this->document->addStyle('/stylesheet/common.css');
 
-        $this->document->setTitle($product_info->title . ' (' . $product_demo_info->title . ')');
+        $this->document->setTitle($product_demo_info->title);
 
         $data['description'] = $this->document->getDescription();
         $data['keywords']    = $this->document->getKeywords();
@@ -322,7 +322,7 @@ class ControllerCatalogProduct extends Controller {
         $data['base']        = '';
 
         $data['bool_is_logged'] = $this->auth->isLogged();
-        $data['title']          = $product_info->title . ' (' . $product_demo_info->title . ')';
+        $data['title']          = $product_demo_info->title;
 
         $data['meta_title']     = $this->document->getTitle();
 

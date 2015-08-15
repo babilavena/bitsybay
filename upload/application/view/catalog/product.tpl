@@ -145,17 +145,19 @@
         </div>
         <div class="product-action">
           <?php if ($product_demo) { ?>
-            <div class="btn-group">
-              <a class="btn btn-primary btn-lg" href="<?php echo $product_href_demo ?>" target="_blank"><i class="glyphicon glyphicon-eye-open"></i> <?php echo tt('Live preview') ?></a>
-              <a href="#" class="btn btn-primary btn-lg dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
-              <?php if ($product_demos) { ?>
+            <?php if ($product_demos) { ?>
+              <div class="btn-group">
+                <a class="btn btn-primary btn-lg" href="<?php echo $product_href_demo ?>" target="_blank"><i class="glyphicon glyphicon-eye-open"></i> <?php echo tt('Live preview') ?></a>
+                <a href="#" class="btn btn-primary btn-lg dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
                 <ul class="dropdown-menu">
                   <?php foreach ($product_demos as $demo) { ?>
                     <li><a href="<?php echo $demo['url'] ?>" target="_blank"><?php echo $demo['title'] ?></a></li>
                   <?php } ?>
                 </ul>
-              <?php } ?>
-            </div>
+              </div>
+            <?php } else { ?>
+              <a class="btn btn-primary btn-lg" href="<?php echo $product_href_demo ?>" target="_blank"><i class="glyphicon glyphicon-eye-open"></i> <?php echo tt('Live preview') ?></a>
+            <?php } ?>
           <?php } ?>
           <?php if ($product_order_status == 'approved') { ?>
             <div class="btn-group">
